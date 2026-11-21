@@ -5,6 +5,7 @@
 [![Kaggle Dataset](https://img.shields.io/badge/Kaggle-aurlienplissier%2Fabrank-20BEFF.svg)](https://www.kaggle.com/datasets/aurlienplissier/abrank)
 [![Kaggle Co-Folded 3D](https://img.shields.io/badge/Kaggle_3D-aurlienplissier%2Fabrank--cofolded--3d-20BEFF.svg)](https://www.kaggle.com/datasets/aurlienplissier/abrank-cofolded-3d)
 [![Companion: LogiCA](https://img.shields.io/badge/LogiCA-AbLang2%2BESM--2-purple.svg)](https://github.com/AI-SysBio/LogiCA/tree/main/applications/antibodies-abrank)
+[![Manuscript](https://img.shields.io/badge/Manuscript-PDF-red.svg)](manuscript/AbRank_manuscript.pdf)
 
 **AbRank v2** is a standardized, sequence- and lineage-disjoint (`<50%` antigen identity, `<80%` antibody clonal-lineage identity) benchmark for evaluating sequence-based, multi-chain PLM, 3D inverse-folding/GNN, co-folding, and generative antibody–antigen binding models across **local mutational landscapes (`L1`–`L3`)**, **same-antigen candidate ranking (`Candidate`, `Lev > 3`)**, **unfiltered continuous variant panels (`*_pointwise.tsv`)**, **cross-antigen discovery (`Global`)**, **cross-modal experimental readouts (`Enrichment`, `ELISA`, `DDG`, `EC50`, `DMS`)**, **viral neutralization & escape transfer (`IC50`, `Escape`)**, and **single-domain nanobodies (`VHH`)**.
 
