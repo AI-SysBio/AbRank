@@ -15,9 +15,9 @@ Usage:
   python scripts/00_prepare_kaggle_bundle.py \\
       --source-data /path/to/Abrank/data \\
       --out-dir /tmp/abrank-kaggle-bundle \\
-      --slug aisysbio/abrank \\
+      --slug aurlienplissier/abrank \\
       --include-wt-structures
-  kaggle datasets create -p /tmp/abrank-kaggle-bundle --dir-mode zip
+  kaggle datasets version -p /tmp/abrank-kaggle-bundle --dir-mode zip -t -m "AbRank v2 release"
 """
 
 from __future__ import annotations
@@ -50,8 +50,8 @@ def build_dataset_metadata(slug: str, title: str) -> dict:
     return {
         "title": title,
         "id": slug,
-        "licenses": [{"name": "CC-BY-NC-4.0"}],
-        "subtitle": "Sequence- and Lineage-Disjoint 3-State Antibody-Antigen Affinity Ranking Benchmark",
+        "licenses": [{"name": "CC-BY-NC-SA-4.0"}],
+        "subtitle": "Sequence- and Lineage-Disjoint 3-State Antibody-Antigen Affinity Ranking Benchmark (v2)",
         "description": (
             "AbRank v2 is a standardized, sequence- and lineage-disjoint (<50% antigen identity, "
             "<80% antibody clonal-lineage identity) benchmark for antibody-antigen and single-domain "
@@ -96,13 +96,13 @@ def main() -> None:
     parser.add_argument(
         "--slug",
         type=str,
-        default="aisysbio/abrank",
-        help="Kaggle dataset slug `<owner>/<dataset-name>` (default: aisysbio/abrank).",
+        default="aurlienplissier/abrank",
+        help="Kaggle dataset slug `<owner>/<dataset-name>` (default: aurlienplissier/abrank).",
     )
     parser.add_argument(
         "--title",
         type=str,
-        default="AbRank v2: Antibody-Antigen Affinity Ranking Benchmark",
+        default="AbRank: Antibody Affinity Ranking",
         help="Kaggle dataset title.",
     )
     parser.add_argument(
@@ -167,8 +167,8 @@ def main() -> None:
         json.dumps(meta_json, indent=2) + "\n", encoding="utf-8"
     )
     print(f"\nBundle written to: {args.out_dir}")
-    print("Next step — upload to Kaggle:")
-    print(f"  kaggle datasets create -p {args.out_dir} --dir-mode zip --public")
+    print("Next step — upload a new version to Kaggle (preserves previous versions, keeps .tsv intact):")
+    print(f"  kaggle datasets version -p {args.out_dir} --dir-mode zip -t -m 'AbRank v2 release'")
 
 
 if __name__ == "__main__":

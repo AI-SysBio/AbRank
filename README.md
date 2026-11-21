@@ -2,7 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](pyproject.toml)
-[![Kaggle Dataset](https://img.shields.io/badge/Kaggle-aisysbio%2Fabrank-20BEFF.svg)](https://www.kaggle.com/datasets/aisysbio/abrank)
+[![Kaggle Dataset](https://img.shields.io/badge/Kaggle-aurlienplissier%2Fabrank-20BEFF.svg)](https://www.kaggle.com/datasets/aurlienplissier/abrank)
 [![Companion: LogiCA](https://img.shields.io/badge/LogiCA-AbLang2%2BESM--2-purple.svg)](https://github.com/AI-SysBio/logica/tree/main/antibodies-abrank)
 
 **AbRank v2** is a standardized, sequence- and lineage-disjoint (`<50%` antigen identity, `<80%` antibody clonal-lineage identity) benchmark for evaluating sequence-based, multi-chain PLM, 3D inverse-folding/GNN, co-folding, and generative antibody–antigen binding models across **local mutational landscapes (`L1`–`L3`)**, **same-antigen candidate ranking (`Candidate`, `Lev > 3`)**, **unfiltered continuous variant panels (`*_pointwise.tsv`)**, **cross-antigen discovery (`Global`)**, **cross-modal experimental readouts (`Enrichment`, `ELISA`, `DDG`, `EC50`, `DMS`)**, **viral neutralization & escape transfer (`IC50`, `Escape`)**, and **single-domain nanobodies (`VHH`)**.
@@ -74,8 +74,8 @@ git clone https://github.com/AI-SysBio/AbRank.git
 cd AbRank
 pip install -e ".[dev,kaggle]"
 
-# Downloads `aisysbio/abrank` from Kaggle and links `data/benchmark/` + `data/structures/`
-python scripts/00_download_from_kaggle.py --dataset aisysbio/abrank
+# Downloads `aurlienplissier/abrank` from Kaggle and links `data/benchmark/` + `data/structures/`
+python scripts/00_download_from_kaggle.py --dataset aurlienplissier/abrank
 ```
 
 You can also evaluate directly against Kaggle or a custom directory without copying files into the repo:
@@ -83,7 +83,7 @@ You can also evaluate directly against Kaggle or a custom directory without copy
 ```bash
 python -m abrank.evaluate \
   --suite maturation \
-  --kaggle-dataset aisysbio/abrank \
+  --kaggle-dataset aurlienplissier/abrank \
   --preds my_predictions.tsv
 ```
 
@@ -93,7 +93,7 @@ Or in Python (for external repos such as [`AI-SysBio/logica`](https://github.com
 from abrank.kaggle_io import resolve_benchmark_dir
 import pandas as pd
 
-bdir = resolve_benchmark_dir(kaggle_dataset="aisysbio/abrank")
+bdir = resolve_benchmark_dir(kaggle_dataset="aurlienplissier/abrank")
 assays_kd = pd.read_csv(bdir / "assays_kd.tsv", sep="\t")
 test_pairs = pd.read_csv(bdir / "splits/unseen_ag/test.tsv", sep="\t")
 ```
@@ -172,8 +172,8 @@ git clone https://github.com/AI-SysBio/logica.git
 cd logica && pip install -e ".[all]"
 
 # Train & evaluate AbLang2-Paired + ESM-2 LogiCA directly on AbRank from Kaggle:
-python antibodies-abrank/scripts/02_train_ablang_esm_logica.py --kaggle-dataset aisysbio/abrank
-python antibodies-abrank/scripts/03_evaluate_on_abrank.py --suite maturation --kaggle-dataset aisysbio/abrank
+python antibodies-abrank/scripts/02_train_ablang_esm_logica.py --kaggle-dataset aurlienplissier/abrank
+python antibodies-abrank/scripts/03_evaluate_on_abrank.py --suite maturation --kaggle-dataset aurlienplissier/abrank
 ```
 
 ---
@@ -186,7 +186,7 @@ AbRank/
 │   └── benchmark.yaml                # Single source of truth (m=1.0, m_neutral=0.30, caps, clustering thresholds)
 ├── metadata/
 │   ├── croissant.json                # MLCommons Croissant 1.0 + Responsible AI (RAI) dataset metadata
-│   ├── kaggle-dataset-metadata.json  # Kaggle dataset release metadata (`aisysbio/abrank`)
+│   ├── kaggle-dataset-metadata.json  # Kaggle dataset release metadata (`aurlienplissier/abrank`)
 │   ├── cofolding_manifest.tsv        # All 851 WT parental Fv/VHH + Ag scaffolds (340 solved + 511 unresolved)
 │   ├── sources_manifest.yaml         # Citations, DOIs, licenses, and download URLs for all 24 raw sources
 │   ├── antigen_catalog.tsv           # Curated reference antigen sequences

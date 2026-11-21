@@ -1,13 +1,13 @@
 {
-  "title": "AbRank v2: Antibody-Antigen Affinity Ranking Benchmark",
-  "id": "aisysbio/abrank",
+  "title": "AbRank: Antibody Affinity Ranking",
+  "id": "aurlienplissier/abrank",
   "licenses": [
     {
-      "name": "CC-BY-NC-4.0"
+      "name": "CC-BY-NC-SA-4.0"
     }
   ],
-  "subtitle": "Sequence- and Lineage-Disjoint 3-State Antibody-Antigen Affinity Ranking Benchmark",
-  "description": "AbRank v2 standardizes 20-AA sequence-complete antibody-antigen and single-domain nanobody (VHH) binding measurements across 24 public experimental sources under zero-leakage (<50% antigen, <80% antibody lineage) 3-state noise-buffered ranking ({-1, 0, +1}). Code & evaluator: https://github.com/AI-SysBio/AbRank. LogiCA baseline: https://github.com/AI-SysBio/logica/tree/main/antibodies-abrank.",
+  "subtitle": "Sequence- and Lineage-Disjoint 3-State Antibody-Antigen Affinity Ranking Benchmark (v2)",
+  "description": "AbRank v2 standardizes 20-AA sequence-complete antibody-antigen and single-domain nanobody (VHH) binding measurements across 24 public experimental sources under zero-leakage (<50% antigen identity, <80% antibody clonal-lineage identity) 3-state noise-buffered ranking ({-1: Depleted, 0: Neutral, +1: Improved}). Covers 4 Core Community Suites: AbRank-Maturation (22-cluster LOACO local L1-L3 edits), AbRank-Discovery (25 unfiltered continuous panels + VHH), AbRank-Generative (1,354 wet-lab generative AI designs), and AbRank-Transfer (Viral IC50, RBD Escape, ELISA, DDG, and AbAgym DMS), plus 851 wild-type 3D parental scaffolds. Code, curation & official evaluator: https://github.com/AI-SysBio/AbRank. Companion AbLang2 + ESM-2 LogiCA implementation: https://github.com/AI-SysBio/logica/tree/main/antibodies-abrank.",
   "keywords": [
     "biology",
     "bioinformatics",

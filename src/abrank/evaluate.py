@@ -712,7 +712,7 @@ def main() -> None:
     parser.add_argument("--split", type=Path, default=None, help="Ground-truth pairwise split TSV (when not using `--suite`)")
     parser.add_argument("--preds", type=Path, required=True, help="Predictions TSV/CSV (`pair_id` + `pred_diff` or pointwise `AbAgID` + `pred_score`)")
     parser.add_argument("--data-dir", type=Path, default=None, help="Path to AbRank benchmark data directory (or set ABRANK_DATA_DIR)")
-    parser.add_argument("--kaggle-dataset", type=str, default=None, help="Optional Kaggle dataset slug (e.g. `aisysbio/abrank`) to auto-fetch if local data is absent")
+    parser.add_argument("--kaggle-dataset", type=str, default=None, help="Optional Kaggle dataset slug (e.g. `aurlienplissier/abrank`) to auto-fetch if local data is absent")
     parser.add_argument("--bootstrap", type=int, default=500, help="Bootstrap replicates for 95%% CI")
     parser.add_argument("--out", type=Path, default=None, help="Optional output JSON path")
     args = parser.parse_args()

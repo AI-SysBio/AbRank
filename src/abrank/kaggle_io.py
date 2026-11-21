@@ -4,7 +4,7 @@ Supports loading AbRank benchmark tables seamlessly from:
   1. An explicit ``--data-dir`` / ``data_dir`` path,
   2. The ``ABRANK_DATA_DIR`` environment variable,
   3. A local checkout's ``data/benchmark/`` directory, or
-  4. The public Kaggle dataset (default ``aisysbio/abrank``) via ``kagglehub`` or the ``kaggle`` CLI.
+  4. The public Kaggle dataset (default ``aurlienplissier/abrank``) via ``kagglehub`` or the ``kaggle`` CLI.
 """
 
 from __future__ import annotations
@@ -14,7 +14,7 @@ from pathlib import Path
 import shutil
 import subprocess
 
-DEFAULT_KAGGLE_DATASET = "aisysbio/abrank"
+DEFAULT_KAGGLE_DATASET = "aurlienplissier/abrank"
 SENTINEL_FILES = (
     "assays_kd.tsv",
     "splits/unseen_ag/test.tsv",
@@ -105,7 +105,7 @@ def resolve_benchmark_dir(
       1. Explicit ``data_dir`` argument (if provided),
       2. ``ABRANK_DATA_DIR`` environment variable (if set),
       3. Local ``<repo_root>/data/benchmark`` (if populated),
-      4. Kaggle download of ``kaggle_dataset`` (or ``ABRANK_KAGGLE_DATASET`` / ``aisysbio/abrank``).
+      4. Kaggle download of ``kaggle_dataset`` (or ``ABRANK_KAGGLE_DATASET`` / ``aurlienplissier/abrank``).
     """
     if data_dir is not None:
         found = _find_benchmark_root(Path(data_dir))
