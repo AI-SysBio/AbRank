@@ -60,7 +60,7 @@ def build_dataset_metadata(slug: str, title: str) -> dict:
             "AbRank-Generative (1,354 wet-lab generative AI designs), and AbRank-Transfer (Viral IC50, "
             "RBD Escape, ELISA, DDG, and AbAgym DMS). See https://github.com/AI-SysBio/AbRank for full "
             "code, evaluation CLI (`python -m abrank.evaluate`), and curation scripts, and "
-            "https://github.com/AI-SysBio/logica/tree/main/antibodies-abrank for the AbLang2 + ESM-2 LogiCA baseline."
+            "https://github.com/AI-SysBio/LogiCA/tree/main/applications/antibodies-abrank for the AbLang2 + ESM-2 LogiCA baseline."
         ),
         "keywords": [
             "biology",

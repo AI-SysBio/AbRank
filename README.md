@@ -4,7 +4,7 @@
 [![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](pyproject.toml)
 [![Kaggle Dataset](https://img.shields.io/badge/Kaggle-aurlienplissier%2Fabrank-20BEFF.svg)](https://www.kaggle.com/datasets/aurlienplissier/abrank)
 [![Kaggle Co-Folded 3D](https://img.shields.io/badge/Kaggle_3D-aurlienplissier%2Fabrank--cofolded--3d-20BEFF.svg)](https://www.kaggle.com/datasets/aurlienplissier/abrank-cofolded-3d)
-[![Companion: LogiCA](https://img.shields.io/badge/LogiCA-AbLang2%2BESM--2-purple.svg)](https://github.com/AI-SysBio/logica/tree/main/antibodies-abrank)
+[![Companion: LogiCA](https://img.shields.io/badge/LogiCA-AbLang2%2BESM--2-purple.svg)](https://github.com/AI-SysBio/LogiCA/tree/main/applications/antibodies-abrank)
 
 **AbRank v2** is a standardized, sequence- and lineage-disjoint (`<50%` antigen identity, `<80%` antibody clonal-lineage identity) benchmark for evaluating sequence-based, multi-chain PLM, 3D inverse-folding/GNN, co-folding, and generative antibody–antigen binding models across **local mutational landscapes (`L1`–`L3`)**, **same-antigen candidate ranking (`Candidate`, `Lev > 3`)**, **unfiltered continuous variant panels (`*_pointwise.tsv`)**, **cross-antigen discovery (`Global`)**, **cross-modal experimental readouts (`Enrichment`, `ELISA`, `DDG`, `EC50`, `DMS`)**, **viral neutralization & escape transfer (`IC50`, `Escape`)**, and **single-domain nanobodies (`VHH`)**.
 
@@ -13,7 +13,7 @@
 </p>
 
 > **Looking for the `AbLang2-Paired + ESM-2` LogiCA baseline on AbRank?**
-> See the companion [**AI-SysBio/logica → `antibodies-abrank/`**](https://github.com/AI-SysBio/logica/tree/main/antibodies-abrank) suite, which loads AbRank directly from Kaggle (or a local checkout of this repo), trains & evaluates `AbLang2-Paired ↔ ESM-2` LogiCA, and outputs submission files compatible with `python -m abrank.evaluate`.
+> See the companion [**AI-SysBio/LogiCA → `applications/antibodies-abrank/`**](https://github.com/AI-SysBio/LogiCA/tree/main/applications/antibodies-abrank) suite, which loads AbRank directly from Kaggle (or a local checkout of this repo), trains & evaluates `AbLang2-Paired ↔ ESM-2` LogiCA, and outputs submission files compatible with `python -m abrank.evaluate`.
 
 ---
 
@@ -88,7 +88,7 @@ python -m abrank.evaluate \
   --preds my_predictions.tsv
 ```
 
-Or in Python (for external repos such as [`AI-SysBio/logica`](https://github.com/AI-SysBio/logica/tree/main/antibodies-abrank)):
+Or in Python (for external repos such as [`AI-SysBio/LogiCA`](https://github.com/AI-SysBio/LogiCA/tree/main/applications/antibodies-abrank)):
 
 ```python
 from abrank.kaggle_io import resolve_benchmark_dir
@@ -178,12 +178,12 @@ PYTHONPATH=src python3 scripts/cofolding/03_ingest_and_evaluate_cofolded.py --me
 For end-to-end native-logit cross-attention training, evaluation on all 4 AbRank Core Suites, 2D paratope dependency maps, and antigen-conditioned CDR Coordinate Gibbs affinity maturation, use the modular **`logica`** toolbox in the companion repository:
 
 ```bash
-git clone https://github.com/AI-SysBio/logica.git
-cd logica && pip install -e ".[all]"
+git clone https://github.com/AI-SysBio/LogiCA.git
+cd LogiCA && pip install -e ".[all]"
 
 # Train & evaluate AbLang2-Paired + ESM-2 LogiCA directly on AbRank from Kaggle:
-python antibodies-abrank/scripts/02_train_ablang_esm_logica.py --kaggle-dataset aurlienplissier/abrank
-python antibodies-abrank/scripts/03_evaluate_on_abrank.py --suite maturation --kaggle-dataset aurlienplissier/abrank
+python applications/antibodies-abrank/scripts/02_train_ablang_esm_logica.py --kaggle-dataset aurlienplissier/abrank
+python applications/antibodies-abrank/scripts/03_evaluate_on_abrank.py --suite maturation --kaggle-dataset aurlienplissier/abrank
 ```
 
 ---

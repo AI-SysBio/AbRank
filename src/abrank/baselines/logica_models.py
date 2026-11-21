@@ -5,7 +5,7 @@ For the full end-to-end `AbLang2-Paired` + `ESM-2` token-level LogiCA implementa
 (including Stage-1 InfoNCE pretraining, Stage-2 3-state LoRA fine-tuning, 2D paratope
 dependency maps, and antigen-conditioned CDR Coordinate Gibbs sampling), see the companion
 LogiCA repository:
-  https://github.com/AI-SysBio/logica/tree/main/antibodies-abrank
+  https://github.com/AI-SysBio/LogiCA/tree/main/applications/antibodies-abrank
 
 Key Components Implemented Here (Cached-Feature Fast 1D Baseline):
   1. Stage-1 Self-Supervised Interface Pretraining (`_DualLMLogiCANet.stage1_infonce_loss`):

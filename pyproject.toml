@@ -26,7 +26,7 @@ dependencies = [
 [project.urls]
 Homepage = "https://github.com/AI-SysBio/AbRank"
 Repository = "https://github.com/AI-SysBio/AbRank"
-LogiCA = "https://github.com/AI-SysBio/logica/tree/main/antibodies-abrank"
+LogiCA = "https://github.com/AI-SysBio/LogiCA/tree/main/applications/antibodies-abrank"
 
 [project.optional-dependencies]
 dev = [
