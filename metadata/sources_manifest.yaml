@@ -1,0 +1,413 @@
+# AbRank v2 — Raw Dataset Provenance & Reproducible Download Manifest
+# Every raw source is documented with its citation, DOI, license, benchmark track,
+# local path under `data/raw/`, and direct public download URLs.
+#
+# Bulk mirror of pre-archived raw files (>100 MB tables not tracked in git):
+#   https://drive.google.com/drive/folders/1Cez3MwqMtw6BBCr0cI16RLnNhFlLmfgV
+
+gdrive_archive_url: "https://drive.google.com/drive/folders/1Cez3MwqMtw6BBCr0cI16RLnNhFlLmfgV"
+
+sources:
+  AbBibench:
+    title: "AbBiBench: Antibody Binding Benchmark Dataset"
+    year: 2025
+    doi: "https://arxiv.org/abs/2506.04235"
+    upstream_url: "https://huggingface.co/datasets/AbBibench/Antibody_Binding_Benchmark_Dataset"
+    license: "CC BY 4.0"
+    tracks: ["kd_core", "cross_modal"]
+    local_dir: "data/raw/AbBibench"
+    required_files:
+      - path: "Raw/1mhp_LC_benchmarking_data.csv"
+        url: "https://huggingface.co/datasets/AbBibench/Antibody_Binding_Benchmark_Dataset/resolve/main/1mhp_LC_benchmarking_data.csv"
+      - path: "Raw/1mlc_benchmarking_data.csv"
+        url: "https://huggingface.co/datasets/AbBibench/Antibody_Binding_Benchmark_Dataset/resolve/main/1mlc_benchmarking_data.csv"
+      - path: "Raw/1mlc_LC_benchmarking_data.csv"
+        url: "https://huggingface.co/datasets/AbBibench/Antibody_Binding_Benchmark_Dataset/resolve/main/1mlc_LC_benchmarking_data.csv"
+      - path: "Raw/1n8z_benchmarking_data.csv"
+        url: "https://huggingface.co/datasets/AbBibench/Antibody_Binding_Benchmark_Dataset/resolve/main/1n8z_benchmarking_data.csv"
+      - path: "Raw/2fjg_benchmarking_data.csv"
+        url: "https://huggingface.co/datasets/AbBibench/Antibody_Binding_Benchmark_Dataset/resolve/main/2fjg_benchmarking_data.csv"
+      - path: "Raw/2fjg_LC_benchmarking_data.csv"
+        url: "https://huggingface.co/datasets/AbBibench/Antibody_Binding_Benchmark_Dataset/resolve/main/2fjg_LC_benchmarking_data.csv"
+      - path: "Raw/3gbn_h1_benchmarking_data.csv"
+        url: "https://huggingface.co/datasets/AbBibench/Antibody_Binding_Benchmark_Dataset/resolve/main/3gbn_h1_benchmarking_data.csv"
+      - path: "Raw/3gbn_h9_benchmarking_data.csv"
+        url: "https://huggingface.co/datasets/AbBibench/Antibody_Binding_Benchmark_Dataset/resolve/main/3gbn_h9_benchmarking_data.csv"
+      - path: "Raw/4d5_her2_benchmarking_data.csv"
+        url: "https://huggingface.co/datasets/AbBibench/Antibody_Binding_Benchmark_Dataset/resolve/main/4d5_her2_benchmarking_data.csv"
+      - path: "Raw/4fqi_h1_benchmarking_data.csv"
+        url: "https://huggingface.co/datasets/AbBibench/Antibody_Binding_Benchmark_Dataset/resolve/main/4fqi_h1_benchmarking_data.csv"
+      - path: "Raw/4fqi_h3_benchmarking_data.csv"
+        url: "https://huggingface.co/datasets/AbBibench/Antibody_Binding_Benchmark_Dataset/resolve/main/4fqi_h3_benchmarking_data.csv"
+      - path: "Raw/5a12_ang2_benchmarking_data.csv"
+        url: "https://huggingface.co/datasets/AbBibench/Antibody_Binding_Benchmark_Dataset/resolve/main/5a12_ang2_benchmarking_data.csv"
+      - path: "Raw/5a12_vegf_benchmarking_data.csv"
+        url: "https://huggingface.co/datasets/AbBibench/Antibody_Binding_Benchmark_Dataset/resolve/main/5a12_vegf_benchmarking_data.csv"
+      - path: "Raw/aayl49_benchmarking_data.csv"
+        url: "https://huggingface.co/datasets/AbBibench/Antibody_Binding_Benchmark_Dataset/resolve/main/aayl49_benchmarking_data.csv"
+      - path: "Raw/aayl49_ML_benchmarking_data.csv"
+        url: "https://huggingface.co/datasets/AbBibench/Antibody_Binding_Benchmark_Dataset/resolve/main/aayl49_ML_benchmarking_data.csv"
+      - path: "Raw/aayl50_LC_benchmarking_data.csv"
+        url: "https://huggingface.co/datasets/AbBibench/Antibody_Binding_Benchmark_Dataset/resolve/main/aayl50_LC_benchmarking_data.csv"
+      - path: "Raw/aayl51_benchmarking_data.csv"
+        url: "https://huggingface.co/datasets/AbBibench/Antibody_Binding_Benchmark_Dataset/resolve/main/aayl51_benchmarking_data.csv"
+      - path: "Raw/aayl52_LC_benchmarking_data.csv"
+        url: "https://huggingface.co/datasets/AbBibench/Antibody_Binding_Benchmark_Dataset/resolve/main/aayl52_LC_benchmarking_data.csv"
+
+  SKEMPIv2:
+    title: "SKEMPI 2.0: Structural Database of Kinetics and Energetics of Mutant Protein Interactions"
+    year: 2019
+    doi: "https://doi.org/10.1093/bioinformatics/bty635"
+    upstream_url: "https://life.bsc.es/pid/skempi2"
+    license: "Academic / Open Scientific Use"
+    tracks: ["kd_core", "vhh"]
+    local_dir: "data/raw/SKEMPIv2"
+    required_files:
+      - path: "SKEMPI_preprocessed.csv"
+      - path: "skempi_v2_original.csv"
+      - path: "skempiv2_ab_seqres.fasta"
+      - path: "skempiv2_ag_seqres.fasta"
+
+  SabDab:
+    title: "SAbDab & SAbDab-nano: The Structural Antibody & Nanobody Database (Affinity Subset)"
+    year: 2022
+    doi: "https://doi.org/10.1093/nar/gkab1050"
+    upstream_url: "https://opig.stats.ox.ac.uk/webapps/sabdab-sabpred/sabdab"
+    license: "CC BY 4.0"
+    tracks: ["kd_core", "vhh"]
+    local_dir: "data/raw/SabDab"
+    required_files:
+      - path: "SabDab_preprocessed.csv"
+      - path: "SabDab_aff_summary.tsv"
+      - path: "SabDab_vhh_rcsb_seqs.tsv"
+
+  Origin1:
+    title: "Origin-1: De Novo Epitope-Specific Antibody Generation & Lead Optimization SPR"
+    year: 2026
+    doi: "https://doi.org/10.64898/2026.01.14.699389v1"
+    upstream_url: "https://github.com/AbSciBio/origin-1"
+    license: "Apache-2.0 / Open Data"
+    tracks: ["kd_core"]
+    local_dir: "data/raw/Origin1"
+    required_files:
+      - path: "lead_optimization_spr_data.csv"
+        url: "https://raw.githubusercontent.com/AbSciBio/origin-1/main/data/lead_optimization_spr_data.csv"
+
+  IgDesign:
+    title: "IgDesign: In Vitro Validated Antibody Design Against Therapeutic Antigens"
+    year: 2024
+    doi: "https://doi.org/10.1101/2023.12.08.570889"
+    upstream_url: "https://github.com/AbSciBio/igdesign"
+    license: "Non-Commercial Research"
+    tracks: ["kd_core"]
+    local_dir: "data/raw/IgDesign"
+    required_files:
+      - path: "IgDesign.csv"
+
+  HER2:
+    title: "Unlocking De Novo Antibody Design With Generative AI (Trastuzumab SPR)"
+    year: 2023
+    doi: "https://doi.org/10.1101/2023.01.08.523187"
+    upstream_url: "https://github.com/AbSciBio/unlocking-de-novo-antibody-design"
+    license: "Apache-2.0 / Open Data"
+    tracks: ["kd_core"]
+    local_dir: "data/raw/HER2"
+    required_files:
+      - path: "HER2_binders_control.csv"
+      - path: "HER2_binders_zeroshot.csv"
+
+  OVA:
+    title: "Anti-Ovalbumin (OVA) Monoclonal Antibody SPR Panel"
+    year: 2024
+    doi: "Curated anti-OVA SPR panel"
+    upstream_url: "https://drive.google.com/drive/folders/1Cez3MwqMtw6BBCr0cI16RLnNhFlLmfgV"
+    license: "Academic Research"
+    tracks: ["kd_core"]
+    local_dir: "data/raw/OVA"
+    required_files:
+      - path: "OVA_processed.csv"
+
+  AbCoV:
+    title: "AbCoV: Coronavirus Antibody & Nanobody Binding Affinity & Neutralization Database"
+    year: 2022
+    doi: "https://doi.org/10.1093/bioinformatics/btac225"
+    upstream_url: "https://web.iitm.ac.in/bioinfo2/abcov/"
+    license: "Academic / Open Access"
+    tracks: ["kd_core", "transfer", "vhh"]
+    local_dir: "data/raw/AbCoV"
+    required_files:
+      - path: "AbCoV_AbAg_affinity.csv"
+      - path: "AbCoV_antibody_details.csv"
+
+  AIntibody:
+    title: "AIntibody Prospective Antibody Discovery Challenge (Final Experimental Results)"
+    year: 2026
+    doi: "https://doi.org/10.1038/s41587-026-03238-6"
+    upstream_url: "https://aintibody.org"
+    license: "CC BY 4.0"
+    tracks: ["kd_core"]
+    local_dir: "data/raw/AIntibody"
+    required_files:
+      - path: "41587_2026_3238_MOESM4_ESM.xlsx"
+        url: "https://static-content.springer.com/esm/art%3A10.1038%2Fs41587-026-03238-6/MediaObjects/41587_2026_3238_MOESM4_ESM.xlsx"
+
+  Abbate-GFRAL:
+    title: "Integrating Computational and Experimental Approaches to Identify GFRAL-Specific Antibodies"
+    year: 2026
+    doi: "https://doi.org/10.3389/fimmu.2026.1951538"
+    upstream_url: "https://github.com/statbiophys/STAR"
+    license: "CC BY 4.0"
+    tracks: ["kd_core"]
+    local_dir: "data/raw/Abbate-GFRAL"
+    required_files:
+      - path: "df_GFRAL.tsv"
+        url: "https://raw.githubusercontent.com/statbiophys/STAR/main/GFRAL-paper-figures/data/single_cell/df_GFRAL.tsv"
+      - path: "GFRAL_tag.xlsx"
+        url: "https://raw.githubusercontent.com/statbiophys/STAR/main/GFRAL-paper-figures/data/single_cell/GFRAL_tag.xlsx"
+      - path: "Positive.tsv"
+        url: "https://raw.githubusercontent.com/statbiophys/STAR/main/GFRAL-paper-figures/data/single_cell/Positive.tsv"
+
+  Germinal:
+    title: "Efficient Generation of Epitope-Targeted De Novo Antibodies with Germinal"
+    year: 2026
+    doi: "https://doi.org/10.1038/s41587-026-03187-0"
+    upstream_url: "https://github.com/SantiagoMille/germinal"
+    license: "CC BY 4.0"
+    tracks: ["kd_core", "vhh"]
+    local_dir: "data/raw/Germinal"
+    required_files:
+      - path: "41587_2026_3187_MOESM5_ESM.xlsx"
+        url: "https://static-content.springer.com/esm/art%3A10.1038%2Fs41587-026-03187-0/MediaObjects/41587_2026_3187_MOESM5_ESM.xlsx"
+      - path: "41587_2026_3187_MOESM6_ESM.xlsx"
+        url: "https://static-content.springer.com/esm/art%3A10.1038%2Fs41587-026-03187-0/MediaObjects/41587_2026_3187_MOESM6_ESM.xlsx"
+
+  BoltzGen:
+    title: "BoltzGen: Toward Universal Binder Design (14-Target Adaptyv SPR/BLI Campaign)"
+    year: 2025
+    doi: "https://doi.org/10.1101/2025.11.20.689494"
+    upstream_url: "https://huggingface.co/datasets/boltzgen/adaptyv_data1"
+    license: "MIT / CC BY 4.0"
+    tracks: ["vhh"]
+    local_dir: "data/raw/BoltzGen"
+    archive_zip_url: "https://huggingface.co/datasets/boltzgen/adaptyv_data1/resolve/main/adaptyv_data.zip"
+    required_files:
+      - path: "adaptyv_summaries/PDL1 binders_summary.csv"
+      - path: "adaptyv_summaries/IL-7RA binders_summary.csv"
+      - path: "adaptyv_summaries/PDGFR binders_summary.csv"
+      - path: "adaptyv_summaries/Insulin binders_summary.csv"
+      - path: "adaptyv_summaries/PMVK Binders_summary.csv"
+      - path: "adaptyv_summaries/RFK Binders_summary.csv"
+      - path: "adaptyv_summaries/HNMT binders_summary.csv"
+      - path: "adaptyv_summaries/IDI2 binders_summary.csv"
+      - path: "adaptyv_summaries/MZB1 Binders_summary.csv"
+      - path: "adaptyv_summaries/PHYH_summary.csv"
+
+  FLAb-Kothiwal:
+    title: "High-Throughput Machine Learning-Aided Antibody Discovery for Cell Surface Antigens"
+    year: 2026
+    doi: "https://doi.org/10.1101/2025.05.15.650607"
+    upstream_url: "https://github.com/Graylab/FLAb"
+    license: "CC BY-NC 4.0 (via FLAb)"
+    tracks: ["kd_core", "cross_modal"]
+    local_dir: "data/raw/FLAb-Kothiwal"
+    required_files:
+      - path: "kothiwal2025htp_DCC_spr.csv"
+        url: "https://raw.githubusercontent.com/Graylab/FLAb/main/data/binding/kothiwal2025htp_DCC_spr.csv"
+      - path: "kothiwal2025htp_DKK_1.00_spr.csv"
+        url: "https://raw.githubusercontent.com/Graylab/FLAb/main/data/binding/kothiwal2025htp_DKK_1.00_spr.csv"
+      - path: "kothiwal2025htp_IL23R_spr.csv"
+        url: "https://raw.githubusercontent.com/Graylab/FLAb/main/data/binding/kothiwal2025htp_IL23R_spr.csv"
+      - path: "kothiwal2025htp_LOX1_spr.csv"
+        url: "https://raw.githubusercontent.com/Graylab/FLAb/main/data/binding/kothiwal2025htp_LOX1_spr.csv"
+      - path: "kothiwal2025htp_PDL1_spr.csv"
+        url: "https://raw.githubusercontent.com/Graylab/FLAb/main/data/binding/kothiwal2025htp_PDL1_spr.csv"
+      - path: "kothiwal2025htp_PDL2_spr.csv"
+        url: "https://raw.githubusercontent.com/Graylab/FLAb/main/data/binding/kothiwal2025htp_PDL2_spr.csv"
+      - path: "kothiwal2025htp_ROBO1_spr.csv"
+        url: "https://raw.githubusercontent.com/Graylab/FLAb/main/data/binding/kothiwal2025htp_ROBO1_spr.csv"
+      - path: "kothiwal2025htp_ROBO2N_hROBO2N_spr.csv"
+        url: "https://raw.githubusercontent.com/Graylab/FLAb/main/data/binding/kothiwal2025htp_ROBO2N_hROBO2N_spr.csv"
+      - path: "kothiwal2025htp_Syncytin2_spr.csv"
+        url: "https://raw.githubusercontent.com/Graylab/FLAb/main/data/binding/kothiwal2025htp_Syncytin2_spr.csv"
+      - path: "kothiwal2025htp_TIGIT_spr.csv"
+        url: "https://raw.githubusercontent.com/Graylab/FLAb/main/data/binding/kothiwal2025htp_TIGIT_spr.csv"
+      - path: "kothiwal2025htp_DCC_ec50.csv"
+        url: "https://raw.githubusercontent.com/Graylab/FLAb/main/data/binding/kothiwal2025htp_DCC_ec50.csv"
+      - path: "kothiwal2025htp_DKK_1.00_ec50.csv"
+        url: "https://raw.githubusercontent.com/Graylab/FLAb/main/data/binding/kothiwal2025htp_DKK_1.00_ec50.csv"
+      - path: "kothiwal2025htp_IL23R_ec50.csv"
+        url: "https://raw.githubusercontent.com/Graylab/FLAb/main/data/binding/kothiwal2025htp_IL23R_ec50.csv"
+      - path: "kothiwal2025htp_LOX1_ec50.csv"
+        url: "https://raw.githubusercontent.com/Graylab/FLAb/main/data/binding/kothiwal2025htp_LOX1_ec50.csv"
+      - path: "kothiwal2025htp_PDL1_ec50.csv"
+        url: "https://raw.githubusercontent.com/Graylab/FLAb/main/data/binding/kothiwal2025htp_PDL1_ec50.csv"
+      - path: "kothiwal2025htp_PDL2_ec50.csv"
+        url: "https://raw.githubusercontent.com/Graylab/FLAb/main/data/binding/kothiwal2025htp_PDL2_ec50.csv"
+      - path: "kothiwal2025htp_ROBO1_ec50.csv"
+        url: "https://raw.githubusercontent.com/Graylab/FLAb/main/data/binding/kothiwal2025htp_ROBO1_ec50.csv"
+      - path: "kothiwal2025htp_ROBO2N_hROBO2N_ec50.csv"
+        url: "https://raw.githubusercontent.com/Graylab/FLAb/main/data/binding/kothiwal2025htp_ROBO2N_hROBO2N_ec50.csv"
+      - path: "kothiwal2025htp_Syncytin2_ec50.csv"
+        url: "https://raw.githubusercontent.com/Graylab/FLAb/main/data/binding/kothiwal2025htp_Syncytin2_ec50.csv"
+      - path: "kothiwal2025htp_TIGIT_ec50.csv"
+        url: "https://raw.githubusercontent.com/Graylab/FLAb/main/data/binding/kothiwal2025htp_TIGIT_ec50.csv"
+
+  FLAb-Shanker:
+    title: "Unsupervised Evolution of Protein and Antibody Complexes with a Structure-Informed LM"
+    year: 2024
+    doi: "https://doi.org/10.1126/science.adk8946"
+    upstream_url: "https://github.com/Graylab/FLAb"
+    license: "CC BY 4.0"
+    tracks: ["kd_core", "transfer"]
+    local_dir: "data/raw/FLAb-Shanker"
+    required_files:
+      - path: "shanker2024unsupervised_Ly1404-BQ.1.1_Kd.csv"
+        url: "https://raw.githubusercontent.com/Graylab/FLAb/main/data/binding/shanker2024unsupervised_Ly1404-BQ.1.1_Kd.csv"
+      - path: "shanker2024unsupervised_SA58-BQ.1.1_Kd.csv"
+        url: "https://raw.githubusercontent.com/Graylab/FLAb/main/data/binding/shanker2024unsupervised_SA58-BQ.1.1_Kd.csv"
+      - path: "shanker2024unsupervised_SA58-XBB.1.5_Kd.csv"
+        url: "https://raw.githubusercontent.com/Graylab/FLAb/main/data/binding/shanker2024unsupervised_SA58-XBB.1.5_Kd.csv"
+      - path: "shanker2024unsupervised_Ly1404-BQ.1.1_IC50.csv"
+        url: "https://raw.githubusercontent.com/Graylab/FLAb/main/data/binding/shanker2024unsupervised_Ly1404-BQ.1.1_IC50.csv"
+      - path: "shanker2024unsupervised_Ly1404_Wuhan_IC50.csv"
+        url: "https://raw.githubusercontent.com/Graylab/FLAb/main/data/binding/shanker2024unsupervised_Ly1404_Wuhan_IC50.csv"
+      - path: "shanker2024unsupervised_SA58-BA.1_IC50.csv"
+        url: "https://raw.githubusercontent.com/Graylab/FLAb/main/data/binding/shanker2024unsupervised_SA58-BA.1_IC50.csv"
+      - path: "shanker2024unsupervised_SA58-BQ.1.1_IC50.csv"
+        url: "https://raw.githubusercontent.com/Graylab/FLAb/main/data/binding/shanker2024unsupervised_SA58-BQ.1.1_IC50.csv"
+
+  MAGMAseq-Peterson:
+    title: "MAGMA-seq Quantitative Wide Mutational Scanning of Anti-H1 HA Anchor Antibodies"
+    year: 2024
+    doi: "https://doi.org/10.1038/s41467-024-48072-z"
+    upstream_url: "https://github.com/Graylab/FLAb"
+    license: "CC BY 4.0"
+    tracks: ["kd_core"]
+    local_dir: "data/raw/MAGMAseq-Peterson"
+    required_files:
+      - path: "peterson2024integrated_ab_H1HA_kd.csv"
+        url: "https://raw.githubusercontent.com/Graylab/FLAb/main/data/binding/peterson2024integrated_ab_H1HA_kd.csv"
+      - path: "Petersen2024_SupplementaryData2_MLE_estimates.xlsx"
+        url: "https://static-content.springer.com/esm/art%3A10.1038%2Fs41467-024-48072-z/MediaObjects/41467_2024_48072_MOESM6_ESM.xlsx"
+
+  MAGMAseq-Kirby:
+    title: "Retrospective SARS-CoV-2 Human Antibody Development Trajectories (MAGMA-seq)"
+    year: 2025
+    doi: "https://doi.org/10.1073/pnas.2412787122"
+    upstream_url: "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11789010/supplementaryFiles"
+    license: "CC BY 4.0"
+    tracks: ["kd_core"]
+    local_dir: "data/raw/MAGMAseq-Kirby"
+    required_files:
+      - path: "kirby2024retrospective_ab-SARSCoV2_kd.csv"
+        url: "https://raw.githubusercontent.com/Graylab/FLAb/main/data/binding/kirby2024retrospective_ab-SARSCoV2_kd.csv"
+      - path: "pnas.2412787122.sd01.xlsx"
+
+  Porebski:
+    title: "Rapid Discovery of High-Affinity Antibodies via Massively Parallel Sequencing & Ribosome Display"
+    year: 2024
+    doi: "https://doi.org/10.1038/s41551-023-01093-3"
+    upstream_url: "https://doi.org/10.1038/s41551-023-01093-3"
+    license: "CC BY 4.0"
+    tracks: ["kd_core", "vhh"]
+    local_dir: "data/raw/Porebski"
+    required_files:
+      - path: "Affinity_data_Porebski_curated.xlsx"
+      - path: "41551_2023_1093_MOESM5_ESM.xlsx"
+        url: "https://static-content.springer.com/esm/art%3A10.1038%2Fs41551-023-01093-3/MediaObjects/41551_2023_1093_MOESM5_ESM.xlsx"
+
+  Adaptyv-EGFR:
+    title: "Adaptyv Bio EGFR De Novo Protein & Nanobody Design Competitions (Rounds 1 & 2)"
+    year: 2025
+    doi: "https://github.com/adaptyvbio/egfr_competition_2"
+    upstream_url: "https://github.com/adaptyvbio/egfr_competition_2"
+    license: "MIT / Open Competition Data"
+    tracks: ["vhh"]
+    local_dir: "data/raw/Adaptyv-EGFR"
+    required_files:
+      - path: "egfr_round1_result_summary.csv"
+        url: "https://raw.githubusercontent.com/adaptyvbio/egfr_competition_1/main/results/result_summary.csv"
+      - path: "egfr_round2_result_summary.csv"
+        url: "https://raw.githubusercontent.com/adaptyvbio/egfr_competition_2/main/results/result_summary.csv"
+
+  Bennett-RFantibody:
+    title: "Atomically Accurate De Novo Design of Antibodies with RFdiffusion (Cryo-EM & SPR VHH)"
+    year: 2026
+    doi: "https://doi.org/10.1038/s41586-025-09721-5"
+    upstream_url: "https://www.rcsb.org/structure/9NH7"
+    license: "CC BY 4.0 / PDB Open Access"
+    tracks: ["vhh"]
+    local_dir: "data/raw/Bennett-RFantibody"
+    required_files:
+      - path: "9NH7.fasta"
+        url: "https://www.rcsb.org/fasta/entry/9NH7"
+
+  NbBench:
+    title: "NbBench: High-Throughput VHH Deep Sequencing Affinity Enrichment Against Human Galectin-3"
+    year: 2025
+    doi: "https://huggingface.co/datasets/ZYMScott/vhh_affinity-seq"
+    upstream_url: "https://huggingface.co/datasets/ZYMScott/vhh_affinity-seq"
+    license: "CC BY 4.0"
+    tracks: ["cross_modal"]
+    local_dir: "data/raw/NbBench"
+    required_files:
+      - path: "train.csv"
+        url: "https://huggingface.co/datasets/ZYMScott/vhh_affinity-seq/resolve/main/train.csv"
+      - path: "val.csv"
+        url: "https://huggingface.co/datasets/ZYMScott/vhh_affinity-seq/resolve/main/val.csv"
+      - path: "test.csv"
+        url: "https://huggingface.co/datasets/ZYMScott/vhh_affinity-seq/resolve/main/test.csv"
+
+  AbDesign:
+    title: "AbDesign: Antibody Mutational ddG & ELISA Ratio Benchmark"
+    year: 2024
+    doi: "https://drive.google.com/drive/folders/1Cez3MwqMtw6BBCr0cI16RLnNhFlLmfgV"
+    upstream_url: "https://drive.google.com/drive/folders/1Cez3MwqMtw6BBCr0cI16RLnNhFlLmfgV"
+    license: "Academic Research"
+    tracks: ["cross_modal"]
+    local_dir: "data/raw/AbDesign"
+    required_files:
+      - path: "datasets_mut.csv"
+      - path: "datasets_wt.csv"
+
+  AbAgym:
+    title: "AbAgym: Deep Mutational Scanning Benchmark of 68 Antibody-Antigen Complexes"
+    year: 2025
+    doi: "https://doi.org/10.1101/2025.06.09.658639"
+    upstream_url: "https://github.com/3BioCompBio/AbAgym"
+    license: "CC BY 4.0"
+    tracks: ["cross_modal"]
+    local_dir: "data/raw/AbAgym"
+    required_files:
+      - path: "AbAgym_metadata.csv"
+        url: "https://raw.githubusercontent.com/3BioCompBio/AbAgym/main/AbAgym_metadata.csv"
+      - path: "AbAgym_data_non-redundant_interface.csv"
+        url: "https://raw.githubusercontent.com/3BioCompBio/AbAgym/main/AbAgym_data_non-redundant_interface.csv"
+      - path: "PDB_files.zip"
+        url: "https://github.com/3BioCompBio/AbAgym/raw/main/PDB_files.zip"
+
+  CATNAP:
+    title: "CATNAP: Compile, Analyze and Tally Neutralizing Antibody Panels (HIV-1 LANL)"
+    year: 2023
+    doi: "https://doi.org/10.1093/nar/gkv405"
+    upstream_url: "https://www.hiv.lanl.gov/components/sequence/HIV/neutralization/"
+    license: "Public Domain (LANL)"
+    tracks: ["transfer"]
+    local_dir: "data/raw/CATNAP"
+    required_files:
+      - path: "abs.txt"
+      - path: "assay.txt"
+      - path: "heavy_seqs_aa.fasta"
+      - path: "light_seqs_aa.fasta"
+      - path: "virseqs_aa.fasta"
+
+  RBD_Escape_Bloom:
+    title: "SARS-CoV-2 RBD Deep Mutational Scanning Viral Escape Maps (Bloom Lab)"
+    year: 2023
+    doi: "https://doi.org/10.1038/s41586-022-05644-7"
+    upstream_url: "https://github.com/jbloomlab/SARS2-RBD-escape-calc"
+    license: "MIT / CC BY 4.0"
+    tracks: ["transfer"]
+    local_dir: "data/raw/RBD_Escape_Bloom"
+    required_files:
+      - path: "full_dataset.csv"

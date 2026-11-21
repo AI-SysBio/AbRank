@@ -1,0 +1,16 @@
+cff-version: 1.2.0
+title: "AbRank: A Sequence- and Lineage-Disjoint 3-State Antibody-Antigen Affinity Ranking Benchmark"
+message: "If you use AbRank or its 3-state evaluation suite, please cite this repository."
+type: software
+version: "2.0.0"
+authors:
+  - family-names: "Pelissier"
+    given-names: "Aurelien"
+repository-code: "https://github.com/AI-SysBio/AbRank"
+license: MIT
+keywords:
+  - antibody-antigen binding
+  - affinity maturation
+  - nanobody VHH
+  - protein language models
+  - benchmark

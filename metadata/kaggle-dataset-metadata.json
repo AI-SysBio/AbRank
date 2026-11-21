@@ -1,0 +1,19 @@
+{
+  "title": "AbRank v2: Antibody-Antigen Affinity Ranking Benchmark",
+  "id": "aisysbio/abrank",
+  "licenses": [
+    {
+      "name": "CC-BY-NC-4.0"
+    }
+  ],
+  "subtitle": "Sequence- and Lineage-Disjoint 3-State Antibody-Antigen Affinity Ranking Benchmark",
+  "description": "AbRank v2 standardizes 20-AA sequence-complete antibody-antigen and single-domain nanobody (VHH) binding measurements across 24 public experimental sources under zero-leakage (<50% antigen, <80% antibody lineage) 3-state noise-buffered ranking ({-1, 0, +1}). Code & evaluator: https://github.com/AI-SysBio/AbRank. LogiCA baseline: https://github.com/AI-SysBio/logica/tree/main/antibodies-abrank.",
+  "keywords": [
+    "biology",
+    "bioinformatics",
+    "antibodies",
+    "protein language models",
+    "benchmark",
+    "drug discovery"
+  ]
+}

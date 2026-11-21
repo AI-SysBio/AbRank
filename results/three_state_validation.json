@@ -1,0 +1,417 @@
+{
+  "benchmark": "AbRank v2.0.0",
+  "part_a_replicate_uncertainty": {
+    "within_platform_technical_replicates": {
+      "n": 483,
+      "median": 0.0672,
+      "iqr": [
+        0.0369,
+        0.1218
+      ],
+      "p90": 0.2208,
+      "pct_le_0_30": 95.24,
+      "pct_lt_1_00": 99.79
+    },
+    "aintibody_ht_spr_duplicate_clones": {
+      "n": 32,
+      "median": 0.0388,
+      "iqr": [
+        0.0104,
+        0.074
+      ],
+      "p90": 0.0923,
+      "pct_le_0_30": 93.75,
+      "pct_lt_1_00": 96.88
+    },
+    "aintibody_multi_replicate_spr_sd": {
+      "n": 408,
+      "median": 0.0774,
+      "iqr": [
+        0.0444,
+        0.1295
+      ],
+      "p90": 0.2089,
+      "pct_le_0_30": 96.81,
+      "pct_lt_1_00": 100.0
+    },
+    "skempiv2_identical_seq_replicates": {
+      "n": 43,
+      "median": 0.0,
+      "iqr": [
+        0.0,
+        0.0
+      ],
+      "p90": 0.6457,
+      "pct_le_0_30": 81.4,
+      "pct_lt_1_00": 100.0
+    },
+    "cross_platform_spr_vs_kinexa_and_multicrystal": {
+      "n": 109,
+      "median": 0.3979,
+      "iqr": [
+        0.1603,
+        0.5551
+      ],
+      "p90": 0.6458,
+      "pct_le_0_30": 34.86,
+      "pct_lt_1_00": 99.08
+    },
+    "aintibody_paired_spr_vs_kinexa": {
+      "n": 99,
+      "median": 0.4046,
+      "iqr": [
+        0.2046,
+        0.5603
+      ],
+      "p90": 0.634,
+      "pct_le_0_30": 32.32,
+      "pct_lt_1_00": 100.0
+    }
+  },
+  "part_b_margin_sensitivity": {
+    "neu_0.15_imp_0.50": {
+      "ESMC+AbLang2 (1D ZS)": {
+        "auc_dir": 0.4836,
+        "auc_impact": 0.5044,
+        "auc_ordinal": 0.4847,
+        "n_pairs": 33333
+      },
+      "PRODIGY+SASA (3D Energy ZS)": {
+        "auc_dir": 0.5578,
+        "auc_impact": 0.575,
+        "auc_ordinal": 0.5497,
+        "n_pairs": 33333
+      },
+      "ProteinMPNN (3D Complex ZS)": {
+        "auc_dir": 0.5725,
+        "auc_impact": 0.5485,
+        "auc_ordinal": 0.5533,
+        "n_pairs": 33333
+      },
+      "ESMC Multi-Scale (Binary Probe)": {
+        "auc_dir": 0.4794,
+        "auc_impact": 0.5287,
+        "auc_ordinal": 0.4875,
+        "n_pairs": 33333
+      },
+      "ESMC-300M (3-State Hurdle)": {
+        "auc_dir": 0.4552,
+        "auc_impact": 0.5025,
+        "auc_ordinal": 0.4684,
+        "n_pairs": 33333
+      },
+      "SaProt-650M (3-State Hurdle)": {
+        "auc_dir": 0.4481,
+        "auc_impact": 0.4969,
+        "auc_ordinal": 0.4668,
+        "n_pairs": 33333
+      },
+      "ANTIPASTI (Normal-Mode 3D CNN)": {
+        "auc_dir": 0.5554,
+        "auc_impact": 0.5621,
+        "auc_ordinal": 0.5447,
+        "n_pairs": 33333
+      },
+      "LogiCA (1D Logit Cross-Attn)": {
+        "auc_dir": 0.5351,
+        "auc_impact": 0.5373,
+        "auc_ordinal": 0.5233,
+        "n_pairs": 33333
+      }
+    },
+    "neu_0.20_imp_0.75": {
+      "ESMC+AbLang2 (1D ZS)": {
+        "auc_dir": 0.4865,
+        "auc_impact": 0.5117,
+        "auc_ordinal": 0.488,
+        "n_pairs": 28906
+      },
+      "PRODIGY+SASA (3D Energy ZS)": {
+        "auc_dir": 0.5673,
+        "auc_impact": 0.5886,
+        "auc_ordinal": 0.5544,
+        "n_pairs": 28906
+      },
+      "ProteinMPNN (3D Complex ZS)": {
+        "auc_dir": 0.5759,
+        "auc_impact": 0.5626,
+        "auc_ordinal": 0.5534,
+        "n_pairs": 28906
+      },
+      "ESMC Multi-Scale (Binary Probe)": {
+        "auc_dir": 0.4741,
+        "auc_impact": 0.5364,
+        "auc_ordinal": 0.4858,
+        "n_pairs": 28906
+      },
+      "ESMC-300M (3-State Hurdle)": {
+        "auc_dir": 0.4577,
+        "auc_impact": 0.5068,
+        "auc_ordinal": 0.472,
+        "n_pairs": 28906
+      },
+      "SaProt-650M (3-State Hurdle)": {
+        "auc_dir": 0.4471,
+        "auc_impact": 0.4978,
+        "auc_ordinal": 0.4693,
+        "n_pairs": 28906
+      },
+      "ANTIPASTI (Normal-Mode 3D CNN)": {
+        "auc_dir": 0.5493,
+        "auc_impact": 0.5811,
+        "auc_ordinal": 0.5395,
+        "n_pairs": 28906
+      },
+      "LogiCA (1D Logit Cross-Attn)": {
+        "auc_dir": 0.5292,
+        "auc_impact": 0.5554,
+        "auc_ordinal": 0.517,
+        "n_pairs": 28906
+      }
+    },
+    "neu_0.30_imp_1.00": {
+      "ESMC+AbLang2 (1D ZS)": {
+        "auc_dir": 0.4662,
+        "auc_impact": 0.5175,
+        "auc_ordinal": 0.4757,
+        "n_pairs": 29634
+      },
+      "PRODIGY+SASA (3D Energy ZS)": {
+        "auc_dir": 0.5624,
+        "auc_impact": 0.5781,
+        "auc_ordinal": 0.5468,
+        "n_pairs": 29634
+      },
+      "ProteinMPNN (3D Complex ZS)": {
+        "auc_dir": 0.578,
+        "auc_impact": 0.5588,
+        "auc_ordinal": 0.5568,
+        "n_pairs": 29634
+      },
+      "ESMC Multi-Scale (Binary Probe)": {
+        "auc_dir": 0.473,
+        "auc_impact": 0.5403,
+        "auc_ordinal": 0.4828,
+        "n_pairs": 29634
+      },
+      "ESMC-300M (3-State Hurdle)": {
+        "auc_dir": 0.4671,
+        "auc_impact": 0.512,
+        "auc_ordinal": 0.4744,
+        "n_pairs": 29634
+      },
+      "SaProt-650M (3-State Hurdle)": {
+        "auc_dir": 0.4478,
+        "auc_impact": 0.5031,
+        "auc_ordinal": 0.4683,
+        "n_pairs": 29634
+      },
+      "ANTIPASTI (Normal-Mode 3D CNN)": {
+        "auc_dir": 0.5462,
+        "auc_impact": 0.5984,
+        "auc_ordinal": 0.5358,
+        "n_pairs": 29634
+      },
+      "LogiCA (1D Logit Cross-Attn)": {
+        "auc_dir": 0.5183,
+        "auc_impact": 0.5626,
+        "auc_ordinal": 0.5084,
+        "n_pairs": 29634
+      }
+    },
+    "neu_0.40_imp_1.25": {
+      "ESMC+AbLang2 (1D ZS)": {
+        "auc_dir": 0.445,
+        "auc_impact": 0.5079,
+        "auc_ordinal": 0.4717,
+        "n_pairs": 31808
+      },
+      "PRODIGY+SASA (3D Energy ZS)": {
+        "auc_dir": 0.5838,
+        "auc_impact": 0.5681,
+        "auc_ordinal": 0.5494,
+        "n_pairs": 31808
+      },
+      "ProteinMPNN (3D Complex ZS)": {
+        "auc_dir": 0.568,
+        "auc_impact": 0.5594,
+        "auc_ordinal": 0.5517,
+        "n_pairs": 31808
+      },
+      "ESMC Multi-Scale (Binary Probe)": {
+        "auc_dir": 0.4675,
+        "auc_impact": 0.5479,
+        "auc_ordinal": 0.4776,
+        "n_pairs": 31808
+      },
+      "ESMC-300M (3-State Hurdle)": {
+        "auc_dir": 0.4874,
+        "auc_impact": 0.5144,
+        "auc_ordinal": 0.4882,
+        "n_pairs": 31808
+      },
+      "SaProt-650M (3-State Hurdle)": {
+        "auc_dir": 0.4699,
+        "auc_impact": 0.5026,
+        "auc_ordinal": 0.4797,
+        "n_pairs": 31808
+      },
+      "ANTIPASTI (Normal-Mode 3D CNN)": {
+        "auc_dir": 0.5372,
+        "auc_impact": 0.6102,
+        "auc_ordinal": 0.5309,
+        "n_pairs": 31808
+      },
+      "LogiCA (1D Logit Cross-Attn)": {
+        "auc_dir": 0.5122,
+        "auc_impact": 0.5693,
+        "auc_ordinal": 0.507,
+        "n_pairs": 31808
+      }
+    }
+  },
+  "part_b_margin_leaderboard_spearman_vs_canonical": {
+    "neu_0.15_imp_0.50": 0.9833,
+    "neu_0.20_imp_0.75": 0.9333,
+    "neu_0.30_imp_1.00": 1.0,
+    "neu_0.40_imp_1.25": 0.85
+  },
+  "part_b_holdout_cutoff_sensitivity_ordinal_auc": {
+    "Loose (<70% Ag, <90% Ab)": {
+      "ESMC+AbLang2 (1D ZS)": 0.5119,
+      "PRODIGY+SASA (3D ZS)": 0.6841,
+      "ProteinMPNN (3D ZS)": 0.5829,
+      "ESMC-300M (3-State Hurdle)": 0.5322,
+      "SaProt-650M (3-State Hurdle)": 0.4765,
+      "LogiCA (1D Logit Cross-Attn)": 0.5354
+    },
+    "Canonical (<50% Ag, <80% Ab)": {
+      "ESMC+AbLang2 (1D ZS)": 0.5119,
+      "PRODIGY+SASA (3D ZS)": 0.684,
+      "ProteinMPNN (3D ZS)": 0.5829,
+      "ESMC-300M (3-State Hurdle)": 0.5789,
+      "SaProt-650M (3-State Hurdle)": 0.4626,
+      "LogiCA (1D Logit Cross-Attn)": 0.5672
+    },
+    "Ultra-Strict (<35% Ag, <70% Ab)": {
+      "ESMC+AbLang2 (1D ZS)": 0.5119,
+      "PRODIGY+SASA (3D ZS)": 0.6841,
+      "ProteinMPNN (3D ZS)": 0.5829,
+      "ESMC-300M (3-State Hurdle)": 0.5608,
+      "SaProt-650M (3-State Hurdle)": 0.4846,
+      "LogiCA (1D Logit Cross-Attn)": 0.5573
+    }
+  },
+  "part_c_wetlab_hit_selection_22_panels": {
+    "Scalar pKd Ridge Regression": {
+      "n_panels": 25,
+      "mean_spearman_rho": -0.001,
+      "mean_top_binder_auc": 0.5263,
+      "random_hit_rate": 0.2141,
+      "precision_at_top20_pct": 0.3163,
+      "enrichment_factor_top20": 1.478,
+      "precision_at_top3": 0.3267,
+      "neutral_or_worse_fdr_top20": 0.6318,
+      "mean_dpkd_over_median_top20": -0.0396
+    },
+    "Scalar pKd MLP Regression": {
+      "n_panels": 25,
+      "mean_spearman_rho": 0.0152,
+      "mean_top_binder_auc": 0.5252,
+      "random_hit_rate": 0.2141,
+      "precision_at_top20_pct": 0.2184,
+      "enrichment_factor_top20": 1.02,
+      "precision_at_top3": 0.1933,
+      "neutral_or_worse_fdr_top20": 0.7177,
+      "mean_dpkd_over_median_top20": -0.1101
+    },
+    "ESMC+AbLang2 (1D ZS)": {
+      "n_panels": 25,
+      "mean_spearman_rho": -0.0416,
+      "mean_top_binder_auc": 0.4583,
+      "random_hit_rate": 0.2141,
+      "precision_at_top20_pct": 0.1875,
+      "enrichment_factor_top20": 0.876,
+      "precision_at_top3": 0.1733,
+      "neutral_or_worse_fdr_top20": 0.7528,
+      "mean_dpkd_over_median_top20": -0.1748
+    },
+    "PRODIGY+SASA (3D Energy ZS)": {
+      "n_panels": 25,
+      "mean_spearman_rho": 0.0922,
+      "mean_top_binder_auc": 0.5378,
+      "random_hit_rate": 0.2141,
+      "precision_at_top20_pct": 0.2515,
+      "enrichment_factor_top20": 1.175,
+      "precision_at_top3": 0.22,
+      "neutral_or_worse_fdr_top20": 0.7057,
+      "mean_dpkd_over_median_top20": -0.1344
+    },
+    "ProteinMPNN (3D Complex ZS)": {
+      "n_panels": 25,
+      "mean_spearman_rho": 0.1251,
+      "mean_top_binder_auc": 0.5502,
+      "random_hit_rate": 0.2141,
+      "precision_at_top20_pct": 0.2116,
+      "enrichment_factor_top20": 0.988,
+      "precision_at_top3": 0.2,
+      "neutral_or_worse_fdr_top20": 0.6902,
+      "mean_dpkd_over_median_top20": 0.0093
+    },
+    "ESMC Multi-Scale (Binary Probe)": {
+      "n_panels": 25,
+      "mean_spearman_rho": -0.0434,
+      "mean_top_binder_auc": 0.4812,
+      "random_hit_rate": 0.2141,
+      "precision_at_top20_pct": 0.2364,
+      "enrichment_factor_top20": 1.104,
+      "precision_at_top3": 0.26,
+      "neutral_or_worse_fdr_top20": 0.729,
+      "mean_dpkd_over_median_top20": -0.1633
+    },
+    "ESMC-300M (3-State Hurdle)": {
+      "n_panels": 25,
+      "mean_spearman_rho": -0.1003,
+      "mean_top_binder_auc": 0.4567,
+      "random_hit_rate": 0.2141,
+      "precision_at_top20_pct": 0.2294,
+      "enrichment_factor_top20": 1.071,
+      "precision_at_top3": 0.22,
+      "neutral_or_worse_fdr_top20": 0.756,
+      "mean_dpkd_over_median_top20": -0.1646
+    },
+    "SaProt-650M (3-State Hurdle)": {
+      "n_panels": 25,
+      "mean_spearman_rho": -0.0694,
+      "mean_top_binder_auc": 0.4819,
+      "random_hit_rate": 0.2141,
+      "precision_at_top20_pct": 0.2516,
+      "enrichment_factor_top20": 1.175,
+      "precision_at_top3": 0.22,
+      "neutral_or_worse_fdr_top20": 0.7251,
+      "mean_dpkd_over_median_top20": -0.1812
+    },
+    "ANTIPASTI (Normal-Mode 3D CNN)": {
+      "n_panels": 25,
+      "mean_spearman_rho": 0.1128,
+      "mean_top_binder_auc": 0.5447,
+      "random_hit_rate": 0.2141,
+      "precision_at_top20_pct": 0.2758,
+      "enrichment_factor_top20": 1.288,
+      "precision_at_top3": 0.26,
+      "neutral_or_worse_fdr_top20": 0.6224,
+      "mean_dpkd_over_median_top20": 0.0012
+    },
+    "LogiCA (1D Logit Cross-Attn)": {
+      "n_panels": 25,
+      "mean_spearman_rho": 0.0552,
+      "mean_top_binder_auc": 0.5089,
+      "random_hit_rate": 0.2141,
+      "precision_at_top20_pct": 0.2001,
+      "enrichment_factor_top20": 0.934,
+      "precision_at_top3": 0.1733,
+      "neutral_or_worse_fdr_top20": 0.755,
+      "mean_dpkd_over_median_top20": -0.1332
+    }
+  }
+}

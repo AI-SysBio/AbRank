@@ -1,0 +1,67 @@
+# AbRank v2 Benchmark Configuration
+# Single source of truth for dataset curation, 3-state pair construction, and zero-leakage splits.
+
+benchmark_version: "2.0.0"
+seed: 42
+
+# 3-State Noise-Buffered Pairwise Thresholds in log10 affinity units:
+#   - Impactful Improved (+1): binding_diff >= +margin_m       (>=10-fold stronger binding)
+#   - Neutral / No-Effect (0): |binding_diff| <= neutral_margin (<=2-fold change, within replicate noise)
+#   - Impactful Depleted (-1): binding_diff <= -margin_m       (>=10-fold weaker binding)
+# Intermediate twilight pairs (neutral_margin < |binding_diff| < margin_m) are excluded from discrete
+# pairwise class labels to avoid grading against experimental noise, while 100% of variants remain in
+# the unfiltered `*_pointwise.tsv` variant panels for continuous Spearman rank evaluation.
+margin_m: 1.0
+neutral_margin: 0.30
+neutral_pair_ratio: 1.0
+
+# Modality-specific impactful thresholds m (in native log10 / log-enrichment / log-survival units)
+modality_margins:
+  KD: 1.0          # >=10-fold Kd difference
+  EC50: 1.0        # >=10-fold EC50 difference
+  IC50: 1.0        # >=10-fold IC50 difference
+  ELISA: 0.5       # >=3.16-fold ELISA OD ratio
+  DDG: 0.5         # >=0.68 kcal/mol (0.5 log10 Kd-equivalent) ΔΔG difference
+  Enrichment: 0.5  # >=0.5 log-enrichment difference
+  DMS: 0.45        # >=0.45 log-survival / mutdiffsel difference
+  Escape: 0.45     # non-escape (f < 0.01) vs escape (f > 0.65) -> |Delta log10(1-f)| >= 0.45
+
+# Modality-specific neutral thresholds m_neutral (negligible functional change)
+modality_neutral_margins:
+  KD: 0.30         # <=2-fold Kd difference
+  EC50: 0.30       # <=2-fold EC50 difference
+  IC50: 0.30       # <=2-fold IC50 difference
+  ELISA: 0.15      # <=1.41-fold ELISA OD ratio
+  DDG: 0.15        # <=0.20 kcal/mol ΔΔG difference
+  Enrichment: 0.15 # <=0.15 log-enrichment difference
+  DMS: 0.08        # <=0.08 log-survival / mutdiffsel difference
+  Escape: 0.02     # both variants non-escaping (f < 0.01)
+
+# Short-peptide isolation:
+# Retain short linear peptide antigens (SARSCoV2_HR2, 14 AA) strictly inside within-antigen
+# local antibody mutation pairs (L1-L3) where peptide construct and yeast-mating calibration
+# cancel out, while excluding them from cross-antigen Global pairs.
+global_exclude_antigens:
+  - "SARSCoV2_HR2"
+
+# Pair sampling and balancing caps
+global_num_pairs: 25000
+ab_occurrence_cap: 3           # Maximum times a single AbAgID can appear per category & effect stratum
+local_ag_pair_cap: 500         # Maximum impactful (and neutral) pairs per antigen per category
+candidate_ag_pair_cap: 500     # Maximum impactful (and neutral) same-antigen Lev>3 pairs per antigen
+transfer_ab_pair_cap: 15       # Maximum impactful (and neutral) pairs per antibody in IC50 / Escape tracks
+local_exhaustive_seq_limit: 2200
+local_sampling_budget: 1500000
+local_max_l1_per_study: 3000
+
+# Zero-leakage split proportions (applied at the complex / lineage / antigen cluster level FIRST,
+# before pair construction, guaranteeing 0% AbAgID overlap across train / val / test).
+split_fractions:
+  train: 0.75
+  val: 0.10
+  test: 0.15
+
+# Sequence clustering thresholds for OOD generalization tiers
+clustering:
+  unseen_ab_fv_identity: 0.80      # Antibody heavy+light identity threshold for clonal lineage grouping
+  unseen_ag_identity: 0.50         # Antigen sequence identity threshold for Unseen-Ag holdout

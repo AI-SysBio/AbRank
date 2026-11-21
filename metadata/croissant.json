@@ -1,0 +1,171 @@
+{
+  "@context": {
+    "@language": "en",
+    "@vocab": "https://schema.org/",
+    "citeAs": "cr:citeAs",
+    "column": "cr:column",
+    "conformsTo": "dct:conformsTo",
+    "cr": "http://mlcommons.org/croissant/",
+    "rai": "http://mlcommons.org/croissant/RAI/",
+    "data": {
+      "@id": "cr:data",
+      "@type": "@json"
+    },
+    "dataType": {
+      "@id": "cr:dataType",
+      "@type": "@vocab"
+    },
+    "dct": "http://purl.org/dc/terms/",
+    "examples": {
+      "@id": "cr:examples",
+      "@type": "@json"
+    },
+    "extract": "cr:extract",
+    "field": "cr:field",
+    "fileProperty": "cr:fileProperty",
+    "fileObject": "cr:fileObject",
+    "fileSet": "cr:fileSet",
+    "format": "cr:format",
+    "includes": "cr:includes",
+    "isLiveDataset": "cr:isLiveDataset",
+    "jsonPath": "cr:jsonPath",
+    "key": "cr:key",
+    "md5": "cr:md5",
+    "parentField": "cr:parentField",
+    "path": "cr:path",
+    "recordSet": "cr:recordSet",
+    "references": "cr:references",
+    "regex": "cr:regex",
+    "repeated": "cr:repeated",
+    "replace": "cr:replace",
+    "sc": "https://schema.org/",
+    "separator": "cr:separator",
+    "sha256": "cr:sha256",
+    "source": "cr:source",
+    "subField": "cr:subField",
+    "transform": "cr:transform"
+  },
+  "@type": "sc:Dataset",
+  "name": "AbRank: A Sequence- and Lineage-Disjoint 3-State Antibody-Antigen Mutation Effect and Affinity Ranking Benchmark",
+  "conformsTo": [
+    "http://mlcommons.org/croissant/1.0",
+    "http://mlcommons.org/croissant/RAI/1.0"
+  ],
+  "version": "2.0.0",
+  "datePublished": "2026-05-01",
+  "description": "AbRank standardizes 20-amino-acid sequence-complete antibody-antigen and single-domain nanobody (VHH) binding measurements across 24 public experimental sources spanning 192 cataloged antigen groups (161 non-viral, 31 viral; 47 core Kd groups with >=5 measurements, 22 <50%-identity LOACO local mutation clusters, 19 candidate clusters, and 25 unfiltered variant panels) and 851 3D structural scaffolds (340 experimental RCSB PDB co-crystals + 511 unbound IgFold Fv/VHH + RCSB antigen scaffolds) under empirically calibrated 3-state noise-buffered ranking ({-1: Depleted, 0: Neutral, +1: Improved}).",
+  "url": "https://github.com/AI-SysBio/AbRank",
+  "license": "https://creativecommons.org/licenses/by-nc/4.0/deed.en",
+  "isLiveDataset": false,
+  "keywords": [
+    "antibody-antigen binding",
+    "nanobody VHH",
+    "affinity maturation",
+    "mutation effect prediction",
+    "protein language models",
+    "geometric deep learning",
+    "out-of-distribution generalization",
+    "benchmark"
+  ],
+  "rai:dataCollection": "Curated and harmonized from 24 publicly released peer-reviewed biophysical and functional screening datasets (SPR, BLI, KinExA, ITC, yeast/phage/ribosome display enrichment, interface DMS, ELISA, pseudovirus IC50, and viral escape DMS), with full provenance and upstream licenses documented in metadata/sources_manifest.yaml.",
+  "rai:dataCollectionType": [
+    "Secondary data aggregation and sequence/structural standardization"
+  ],
+  "rai:dataPreprocessingProtocol": [
+    "Stripping recombinant signal peptides, His/Avi/Strep/foldon tags, and CH1/CL constant regions to exact variable Fv/VHH and assayed ectodomain constructs",
+    "Strict 20-standard-amino-acid verification and removal of unresolved X/censored-floor artifacts",
+    "Log10 replicate aggregation within identical (VH, VL, Ag, Dataset, Modality) tuples",
+    "Pre-pair connected-component clustering of homologous antigens (>=50% global sequence identity + >=25 AA substring containment) and antibody clonal lineages (>=80% Fv/VHH identity)"
+  ],
+  "rai:personalSensitiveInformation": "None. All records consist exclusively of non-personal molecular amino acid sequences (recombinant or in vitro-assayed antibodies, nanobodies, and purified protein antigens) and biochemical binding measurements.",
+  "rai:dataBiases": "Public antibody binding databases overrepresent viral surface glycoproteins (Influenza HA, SARS-CoV-2 Spike, HIV-1 Env) and oncology targets (HER2, EGFR, PD-1/PD-L1). AbRank mitigates target-volume skew via sublinear sqrt(N) pair sampling caps, equal-weight per-antigen macro-averaging (>=5 pairs), and 22-cluster Leave-One-Antigen-Cluster-Out (LOACO) evaluation.",
+  "rai:dataLimitations": "3D inverse-folding scores are strongest when wild-type experimental co-crystal coordinates are available (Regime I); de novo candidate panels without solved co-crystals rely on unbound IgFold Fv/VHH models (Regime II). Dual-use biosafety note: viral neutralization and escape tracks include published historical HIV-1 and coronavirus strain sequences solely for defensive vaccine/therapeutic research.",
+  "rai:dataUseCases": [
+    "Benchmarking sequence-based and 3D structure-conditioned antibody/nanobody affinity predictors",
+    "Evaluating hot-spot impact detection (neutral vs. consequential mutations) and directional affinity ranking on unseen biological targets",
+    "Studying cross-assay transfer from monomeric Kd to ELISA, ΔΔG, DMS, viral IC50 neutralization, and escape"
+  ],
+  "distribution": [
+    {
+      "@type": "cr:FileObject",
+      "@id": "assays_kd.tsv",
+      "name": "assays_kd.tsv",
+      "contentUrl": "data/benchmark/assays_kd.tsv",
+      "contentSize": "198638052 B",
+      "sha256": "fdb8fea1ae262abc539a012d62fa7c4cb59f4e218321d96888bdf4121dcad7b5",
+      "encodingFormat": "text/tab-separated-values",
+      "description": "Core paired-chain dissociation constant (Kd) master table (16 sources, 148 cataloged antigen groups, 47 groups with >=5 assays, and 262 clonal lineages)."
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "assays_cross_modal.tsv",
+      "name": "assays_cross_modal.tsv",
+      "encodingFormat": "text/tab-separated-values",
+      "contentUrl": "data/benchmark/assays_cross_modal.tsv",
+      "contentSize": "109422051 B",
+      "sha256": "1e60f352dbe51e35633248047d4d93da4326bddd44e7eef1020ee8777d912171",
+      "description": "Cross-modal relative binding readouts across Enrichment (incl. NbBench Galectin-3 VHH), AbAgym 45-complex DMS, AbDesign ELISA & ΔΔG, and Kothiwal EC50."
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "assays_transfer.tsv",
+      "name": "assays_transfer.tsv",
+      "encodingFormat": "text/tab-separated-values",
+      "contentUrl": "data/benchmark/assays_transfer.tsv",
+      "contentSize": "366990267 B",
+      "sha256": "d95a99f9be2f7a01571c9e87451a4593d2a92c6184d1c524a6655d3191aaf3a3",
+      "description": "Functional viral neutralization IC50 (HIV-1 Env and Coronavirus Spike) and SARS-CoV-2 RBD escape DMS master table."
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "assays_vhh.tsv",
+      "name": "assays_vhh.tsv",
+      "encodingFormat": "text/tab-separated-values",
+      "contentUrl": "data/benchmark/assays_vhh.tsv",
+      "contentSize": "619142 B",
+      "sha256": "239ed4b026c3ee4329665826fec3c26201c877f4e58c4aa1524771ed36417979",
+      "description": "Single-domain nanobody (VHH) Kd master table (8 sources, 50 cataloged antigen groups, 11 groups with >=5 evaluable pairs)."
+    },
+    {
+      "@type": "cr:FileSet",
+      "@id": "unseen_ag_splits",
+      "name": "unseen_ag_splits",
+      "encodingFormat": "text/tab-separated-values",
+      "includes": "data/benchmark/splits/unseen_ag/*.tsv",
+      "description": "Canonical zero-leakage unseen-antigen (<50% Ag identity, <80% Ab identity) 3-state pairwise splits and unfiltered pointwise variant panels."
+    }
+  ],
+  "recordSet": [
+    {
+      "@type": "cr:RecordSet",
+      "@id": "kd_assays",
+      "name": "kd_assays",
+      "description": "Standardized pointwise antibody-antigen Kd complexes.",
+      "field": [
+        {"@type": "cr:Field", "@id": "kd_assays/AbAgID", "name": "AbAgID", "dataType": "sc:Text", "source": {"fileObject": {"@id": "assays_kd.tsv"}, "extract": {"column": "AbAgID"}}},
+        {"@type": "cr:Field", "@id": "kd_assays/Dataset", "name": "Dataset", "dataType": "sc:Text", "source": {"fileObject": {"@id": "assays_kd.tsv"}, "extract": {"column": "Dataset"}}},
+        {"@type": "cr:Field", "@id": "kd_assays/Ag_group", "name": "Ag_group", "dataType": "sc:Text", "source": {"fileObject": {"@id": "assays_kd.tsv"}, "extract": {"column": "Ag_group"}}},
+        {"@type": "cr:Field", "@id": "kd_assays/Ag_cluster", "name": "Ag_cluster", "dataType": "sc:Text", "source": {"fileObject": {"@id": "assays_kd.tsv"}, "extract": {"column": "Ag_cluster"}}},
+        {"@type": "cr:Field", "@id": "kd_assays/Ab_lineage", "name": "Ab_lineage", "dataType": "sc:Text", "source": {"fileObject": {"@id": "assays_kd.tsv"}, "extract": {"column": "Ab_lineage"}}},
+        {"@type": "cr:Field", "@id": "kd_assays/binding_score", "name": "binding_score", "dataType": "sc:Float", "description": "Standardized pKd = 9 - log10(Kd [nM]), higher means stronger binding.", "source": {"fileObject": {"@id": "assays_kd.tsv"}, "extract": {"column": "binding_score"}}},
+        {"@type": "cr:Field", "@id": "kd_assays/Ab_heavy_chain_seq", "name": "Ab_heavy_chain_seq", "dataType": "sc:Text", "source": {"fileObject": {"@id": "assays_kd.tsv"}, "extract": {"column": "Ab_heavy_chain_seq"}}},
+        {"@type": "cr:Field", "@id": "kd_assays/Ab_light_chain_seq", "name": "Ab_light_chain_seq", "dataType": "sc:Text", "source": {"fileObject": {"@id": "assays_kd.tsv"}, "extract": {"column": "Ab_light_chain_seq"}}},
+        {"@type": "cr:Field", "@id": "kd_assays/Ag_seq", "name": "Ag_seq", "dataType": "sc:Text", "source": {"fileObject": {"@id": "assays_kd.tsv"}, "extract": {"column": "Ag_seq"}}}
+      ]
+    },
+    {
+      "@type": "cr:RecordSet",
+      "@id": "three_state_pairs",
+      "name": "three_state_pairs",
+      "description": "3-state noise-buffered pairwise comparisons ({-1: Depleted, 0: Neutral, +1: Improved}).",
+      "field": [
+        {"@type": "cr:Field", "@id": "three_state_pairs/pair_id", "name": "pair_id", "dataType": "sc:Text", "source": {"fileSet": {"@id": "unseen_ag_splits"}, "extract": {"column": "pair_id"}}},
+        {"@type": "cr:Field", "@id": "three_state_pairs/AbAgID_1", "name": "AbAgID_1", "dataType": "sc:Text", "source": {"fileSet": {"@id": "unseen_ag_splits"}, "extract": {"column": "AbAgID_1"}}},
+        {"@type": "cr:Field", "@id": "three_state_pairs/AbAgID_2", "name": "AbAgID_2", "dataType": "sc:Text", "source": {"fileSet": {"@id": "unseen_ag_splits"}, "extract": {"column": "AbAgID_2"}}},
+        {"@type": "cr:Field", "@id": "three_state_pairs/binding_diff", "name": "binding_diff", "dataType": "sc:Float", "source": {"fileSet": {"@id": "unseen_ag_splits"}, "extract": {"column": "binding_diff"}}},
+        {"@type": "cr:Field", "@id": "three_state_pairs/label", "name": "label", "dataType": "sc:Integer", "description": "3-state label in {-1, 0, +1}.", "source": {"fileSet": {"@id": "unseen_ag_splits"}, "extract": {"column": "label"}}},
+        {"@type": "cr:Field", "@id": "three_state_pairs/Category", "name": "Category", "dataType": "sc:Text", "source": {"fileSet": {"@id": "unseen_ag_splits"}, "extract": {"column": "Category"}}}
+      ]
+    }
+  ]
+}

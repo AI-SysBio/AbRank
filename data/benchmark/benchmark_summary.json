@@ -1,0 +1,367 @@
+{
+  "benchmark_version": "2.0.0",
+  "margin_m": 1.0,
+  "neutral_margin": 0.3,
+  "kd_core": {
+    "total_assays": 120721,
+    "unique_antibodies": 111743,
+    "unique_antigens_seq": 543,
+    "unique_ag_groups": 148,
+    "unique_ab_lineages": 262,
+    "viral_ag_groups": 24,
+    "nonviral_ag_groups": 124,
+    "by_dataset": {
+      "AIntibody": {
+        "assays": 550,
+        "unique_abs": 550,
+        "ag_groups": 1,
+        "ag_types": [
+          "Viral"
+        ]
+      },
+      "AbBibench": {
+        "assays": 115540,
+        "unique_abs": 106976,
+        "ag_groups": 6,
+        "ag_types": [
+          "Non-Viral",
+          "Viral"
+        ]
+      },
+      "AbCoV": {
+        "assays": 304,
+        "unique_abs": 296,
+        "ag_groups": 5,
+        "ag_types": [
+          "Viral"
+        ]
+      },
+      "Abbate": {
+        "assays": 42,
+        "unique_abs": 42,
+        "ag_groups": 1,
+        "ag_types": [
+          "Non-Viral"
+        ]
+      },
+      "Germinal": {
+        "assays": 7,
+        "unique_abs": 7,
+        "ag_groups": 2,
+        "ag_types": [
+          "Non-Viral"
+        ]
+      },
+      "HER2": {
+        "assays": 758,
+        "unique_abs": 758,
+        "ag_groups": 1,
+        "ag_types": [
+          "Non-Viral"
+        ]
+      },
+      "IgDesign": {
+        "assays": 319,
+        "unique_abs": 319,
+        "ag_groups": 7,
+        "ag_types": [
+          "Non-Viral"
+        ]
+      },
+      "Kirby": {
+        "assays": 611,
+        "unique_abs": 611,
+        "ag_groups": 1,
+        "ag_types": [
+          "Viral"
+        ]
+      },
+      "Kothiwal": {
+        "assays": 364,
+        "unique_abs": 364,
+        "ag_groups": 10,
+        "ag_types": [
+          "Non-Viral"
+        ]
+      },
+      "OVA": {
+        "assays": 89,
+        "unique_abs": 89,
+        "ag_groups": 1,
+        "ag_types": [
+          "Non-Viral"
+        ]
+      },
+      "Origin1": {
+        "assays": 354,
+        "unique_abs": 354,
+        "ag_groups": 4,
+        "ag_types": [
+          "Non-Viral"
+        ]
+      },
+      "Peterson": {
+        "assays": 544,
+        "unique_abs": 544,
+        "ag_groups": 1,
+        "ag_types": [
+          "Viral"
+        ]
+      },
+      "Porebski": {
+        "assays": 26,
+        "unique_abs": 26,
+        "ag_groups": 1,
+        "ag_types": [
+          "Non-Viral"
+        ]
+      },
+      "SKEMPIv2": {
+        "assays": 913,
+        "unique_abs": 550,
+        "ag_groups": 19,
+        "ag_types": [
+          "Non-Viral",
+          "Viral"
+        ]
+      },
+      "SabDab": {
+        "assays": 238,
+        "unique_abs": 215,
+        "ag_groups": 123,
+        "ag_types": [
+          "Non-Viral",
+          "Viral"
+        ]
+      },
+      "Shanker": {
+        "assays": 62,
+        "unique_abs": 57,
+        "ag_groups": 1,
+        "ag_types": [
+          "Viral"
+        ]
+      }
+    }
+  },
+  "cross_modal": {
+    "AbAgym (DMS)": {
+      "assays": 26883,
+      "ag_groups": 11
+    },
+    "AbBibench (Enrichment)": {
+      "assays": 38754,
+      "ag_groups": 4
+    },
+    "AbDesign (DDG)": {
+      "assays": 490,
+      "ag_groups": 13
+    },
+    "AbDesign (ELISA)": {
+      "assays": 672,
+      "ag_groups": 7
+    },
+    "Kothiwal (EC50)": {
+      "assays": 345,
+      "ag_groups": 10
+    },
+    "NbBench (Enrichment)": {
+      "assays": 12735,
+      "ag_groups": 1
+    }
+  },
+  "transfer": {
+    "AbCoV (IC50)": {
+      "assays": 1294,
+      "unique_abs": 1281,
+      "unique_ags": 5
+    },
+    "CATNAP (IC50)": {
+      "assays": 39779,
+      "unique_abs": 596,
+      "unique_ags": 2283
+    },
+    "RBD_Escape_Bloom (Escape)": {
+      "assays": 188523,
+      "unique_abs": 1273,
+      "unique_ags": 2172
+    },
+    "Shanker (IC50)": {
+      "assays": 142,
+      "unique_abs": 96,
+      "unique_ags": 3
+    }
+  },
+  "vhh": {
+    "AbCoV_VHH": {
+      "assays": 146,
+      "ag_groups": 2
+    },
+    "Adaptyv_EGFR_VHH": {
+      "assays": 5,
+      "ag_groups": 1
+    },
+    "Bennett_VHH": {
+      "assays": 1,
+      "ag_groups": 1
+    },
+    "BoltzGen_VHH": {
+      "assays": 37,
+      "ag_groups": 10
+    },
+    "Germinal_VHH": {
+      "assays": 20,
+      "ag_groups": 4
+    },
+    "Porebski_VHH": {
+      "assays": 13,
+      "ag_groups": 1
+    },
+    "SKEMPIv2_VHH": {
+      "assays": 6,
+      "ag_groups": 1
+    },
+    "SabDab_VHH": {
+      "assays": 70,
+      "ag_groups": 34
+    }
+  },
+  "splits": {
+    "unseen_ag": {
+      "train": {
+        "n_pairs": 21836,
+        "n_impactful": 16448,
+        "n_neutral": 5388,
+        "impactful_pos_frac": 0.4998,
+        "by_category": {
+          "Global": 11756,
+          "L2": 3999,
+          "L3": 3236,
+          "L1": 2845
+        },
+        "n_groups": 15,
+        "by_modality": {
+          "KD": 21836
+        },
+        "n_pointwise_variants": 59962
+      },
+      "val": {
+        "n_pairs": 1906,
+        "n_impactful": 925,
+        "n_neutral": 981,
+        "impactful_pos_frac": 0.4984,
+        "by_category": {
+          "L2": 704,
+          "L3": 534,
+          "L1": 393,
+          "Global": 275
+        },
+        "n_groups": 7,
+        "by_modality": {
+          "KD": 1906
+        },
+        "n_pointwise_variants": 1004
+      },
+      "test": {
+        "n_pairs": 1010,
+        "n_impactful": 538,
+        "n_neutral": 472,
+        "impactful_pos_frac": 0.5,
+        "by_category": {
+          "Global": 454,
+          "L2": 214,
+          "L3": 209,
+          "L1": 133
+        },
+        "n_groups": 8,
+        "by_modality": {
+          "KD": 1010
+        },
+        "n_pointwise_variants": 363
+      },
+      "test_candidates": {
+        "n_pairs": 583,
+        "n_impactful": 178,
+        "n_neutral": 405,
+        "impactful_pos_frac": 0.5,
+        "by_category": {
+          "Candidate": 583
+        },
+        "n_groups": 5,
+        "by_modality": {
+          "KD": 583
+        }
+      }
+    },
+    "cross_modal": {
+      "n_pairs": 29879,
+      "n_impactful": 12487,
+      "n_neutral": 17392,
+      "impactful_pos_frac": 0.4998,
+      "by_category": {
+        "L2": 15089,
+        "L1": 12282,
+        "L3": 2358,
+        "Candidate": 150
+      },
+      "n_groups": 39,
+      "by_modality": {
+        "DMS": 16754,
+        "Enrichment": 9653,
+        "ELISA": 2517,
+        "DDG": 938,
+        "EC50": 17
+      },
+      "by_ag_regime": {
+        "Seen-Ag": 22216,
+        "Unseen-Ag": 7663
+      }
+    },
+    "transfer_ic50": {
+      "n_pairs": 2967,
+      "n_impactful": 1345,
+      "n_neutral": 1622,
+      "impactful_pos_frac": 0.5004,
+      "by_category": {
+        "L2": 1453,
+        "L1": 988,
+        "L3": 526
+      },
+      "n_groups": 7,
+      "by_modality": {
+        "IC50": 2967
+      }
+    },
+    "transfer_escape": {
+      "n_pairs": 8336,
+      "n_impactful": 4275,
+      "n_neutral": 4061,
+      "impactful_pos_frac": 0.5001,
+      "by_category": {
+        "L2": 7715,
+        "L1": 621
+      },
+      "n_groups": 4,
+      "by_modality": {
+        "Escape": 8336
+      }
+    },
+    "vhh_ranking": {
+      "n_pairs": 813,
+      "n_impactful": 534,
+      "n_neutral": 279,
+      "impactful_pos_frac": 0.4981,
+      "by_category": {
+        "Candidate": 495,
+        "Global": 293,
+        "L3": 12,
+        "L2": 9,
+        "L1": 4
+      },
+      "n_groups": 19,
+      "by_modality": {
+        "KD": 813
+      }
+    }
+  }
+}

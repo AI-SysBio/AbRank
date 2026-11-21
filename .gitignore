@@ -1,0 +1,25 @@
+# Python & tooling
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+dist/
+build/
+.DS_Store
+
+# Heavy data & caches (hosted on Kaggle or regenerated via scripts/01-09)
+data/raw/
+data/processed/
+data/embeddings/
+data/structures/
+data/benchmark/assays_*.tsv
+data/benchmark/sequences/
+data/benchmark/splits/
+
+# Checkpoints & scratch outputs
+results/checkpoints/
+*.pt
+*.pth
+*.ckpt
+*.tar.gz
+*.zip

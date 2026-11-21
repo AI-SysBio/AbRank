@@ -1,0 +1,67 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "abrank"
+version = "2.0.0"
+description = "AbRank: A Sequence- and Lineage-Disjoint 3-State Antibody-Antigen Affinity Ranking Benchmark"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT (code); per-source licenses in metadata/sources_manifest.yaml"}
+authors = [
+    {name = "Aurelien Pelissier"}
+]
+dependencies = [
+    "numpy>=1.24",
+    "pandas>=2.0",
+    "pyyaml>=6.0",
+    "openpyxl>=3.1",
+    "Levenshtein>=0.23",
+    "scipy>=1.10",
+    "scikit-learn>=1.3",
+    "matplotlib>=3.7",
+]
+
+[project.urls]
+Homepage = "https://github.com/AI-SysBio/AbRank"
+Repository = "https://github.com/AI-SysBio/AbRank"
+LogiCA = "https://github.com/AI-SysBio/logica/tree/main/antibodies-abrank"
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4",
+]
+kaggle = [
+    "kagglehub>=0.2.9",
+    "kaggle>=1.6.14",
+]
+baselines = [
+    "torch>=2.0",
+    "transformers>=4.40",
+    "ablang2>=0.2",
+    "xgboost>=2.0",
+]
+structures = [
+    "gemmi>=0.6",
+    "freesasa>=2.2",
+    "biotite>=0.38,<1.0",
+    "igfold>=1.0",
+    "antiberty>=1.0",
+    "antifold>=0.3",
+    "ANTIPASTI>=1.2",
+]
+
+[project.scripts]
+abrank-download = "abrank.download:main"
+abrank-curate = "abrank.curate.cli:main"
+abrank-build = "abrank.splits:main"
+abrank-stats = "abrank.stats:main"
+abrank-eval = "abrank.evaluate:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]

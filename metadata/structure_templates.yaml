@@ -1,0 +1,98 @@
+# Canonical Experimental 3D Structure Templates for AbRank v2
+# Maps:
+#   1. `cocrystal_wt_pdbs`: Wild-type `(WT_Abname)` or `(Dataset::WT_Abname)` -> RCSB co-crystal PDB ID
+#      containing both the parental antibody/nanobody and cognate antigen in experimental complex.
+#   2. `antigen_pdbs`: Canonical `Ag_name` / `Ag_group` -> Experimental RCSB antigen crystal/cryo-EM PDB ID
+#      used alongside `IgFold` antibody/VHH structures whenever an Ab-Ag co-crystal does not exist.
+
+cocrystal_wt_pdbs:
+  # IgDesign therapeutic co-crystal templates (Shanehsazzadeh et al., 2023)
+  Tezepelumab: "5J13"
+  Bimagrumab: "5NH3"
+  Utomilumab: "6A3W"
+  Spesolimab: "6U6U"
+  Afasevikumab: "6PPG"
+  Eculizumab: "5I5K"
+  Osocimab: "6HHC"
+
+  # MAGMA-seq SARS-CoV-2 & Influenza H1 HA co-crystal templates (Kirby et al., 2025; Petersen et al., 2024)
+  Kirby_2-15: "7L5B"
+  Kirby_C118: "7RKV"
+  Kirby_002-S21F2: "7U0P"
+  Peterson_222-1C06: "7T3D"
+
+  # FLAb-Shanker Omicron BLI maturation templates (Shanker et al., 2024)
+  Ly1404: "7MMO"
+  SA58: "7Y0W"
+
+  # AbBiBench multi-antigen PDB suffixes -> 4-char RCSB IDs
+  3GBN_H1: "3GBN"
+  3GBN_H9: "3GBN"
+  4FQI_H1: "4FQI"
+  4FQI_H3: "4FQI"
+
+antigen_pdbs:
+  # Unseen-Ag & Kothiwal cell-surface receptors
+  TSLP: "5J13"
+  HCMV_gB: "5C6T"
+  HCMV-gB: "5C6T"
+  DKK1: "3S2K"
+  IL23R: "8OE4"
+  LOX1: "6TLA"
+  PDL1: "3BIK"
+  PDL2: "3BP5"
+  DCC: "4URT"
+  ROBO1: "5OPE"
+  ROBO2N: "2V9Q"
+  TIGIT: "3Q0H"
+  Syncytin2: "7O7F"
+
+  # Core KD & Cross-Modal targets
+  SARSCoV2_HR2: "6LVN"
+  SARSCoV2_RBD: "6M0J"
+  SARSCoV2_S1: "7L5B"
+  SARSCoV2_NTD: "7C2L"
+  SARSCoV2_S2: "6LVN"
+  SARSCoV2_Spike: "7L5B"
+  MERSCoV_RBD: "4L72"
+  MERSCoV_Spike: "4L72"
+  Influenza_AH1: "3GBN"
+  Influenza_H1_HA: "3GBN"
+  Influenza_AH3: "4FQI"
+  Influenza_H3_HA: "4FQI"
+  Influenza_AH9: "3GBN"
+  Influenza_H9_HA: "3GBN"
+  HIV_gp120: "3NGB"
+  HIV1_Env: "3NGB"
+  HER2_ECD: "1N8Z"
+  EGFR: "1YY9"
+  HEWL: "1BVK"
+  ITGA1: "1MHP"
+  VEGF: "1BJ1"
+  OVA: "1OVA"
+  IL13: "4I77"
+  IL17A: "6PPG"
+  IL36R: "6U6U"
+  ACVR2B: "5NH3"
+  TNFRSF9: "6A3W"
+  C5_MG7: "5I5K"
+  FXI: "6HHC"
+  Galectin3: "8ITX"
+
+  # BoltzGen & Germinal VHH targets
+  AMBP: "3QKG"
+  GM2A: "1G13"
+  HNMT: "1JQD"
+  IDI2: "2PNY"
+  IL7RA: "3DI2"
+  InsulinR: "2HR7"
+  MZB1: "7AAH"
+  ORM2: "3APW"
+  PDGFRB: "3MJG"
+  PHYH: "2A1X"
+  PMVK: "3CH4"
+  RFK: "1NB9"
+  TNFa: "2AZ5"
+  EBV_BHRF1: "2WH6"
+  IL20: "4DOH"
+  IL3: "5UV8"

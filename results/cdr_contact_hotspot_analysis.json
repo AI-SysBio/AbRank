@@ -1,0 +1,890 @@
+{
+  "n_local_pairs": 12267,
+  "n_wt_cocrystal_scaffolds_in_loaco_local": 47,
+  "mutation_region_breakdown": {
+    "Ag-Mut": {
+      "n_pairs": 734,
+      "pct_of_local": 5.98,
+      "impactful_rate_pct": 47.68,
+      "neutral_rate_pct": 52.32
+    },
+    "CDR+Framework": {
+      "n_pairs": 3175,
+      "pct_of_local": 25.88,
+      "impactful_rate_pct": 52.0,
+      "neutral_rate_pct": 48.0
+    },
+    "CDR-Only": {
+      "n_pairs": 7078,
+      "pct_of_local": 57.7,
+      "impactful_rate_pct": 44.01,
+      "neutral_rate_pct": 55.99
+    },
+    "Framework-Only": {
+      "n_pairs": 1280,
+      "pct_of_local": 10.43,
+      "impactful_rate_pct": 24.22,
+      "neutral_rate_pct": 75.78
+    }
+  },
+  "hotspot_impact_auc_benchmarks": {
+    "Naive 1D CDR vs. Framework (Yes/No)": {
+      "family": "1D Sequence Heuristic",
+      "all_loaco_22_clusters": {
+        "n_clusters": 19,
+        "coverage": "19/22",
+        "mean": 0.511,
+        "sd": 0.0417,
+        "median": 0.5,
+        "iqr": [
+          0.5,
+          0.5064
+        ],
+        "cluster_ci95": [
+          0.4972,
+          0.5329
+        ]
+      },
+      "ab_mut_only": {
+        "n_clusters": 15,
+        "coverage": "15/18",
+        "mean": 0.5118,
+        "sd": 0.047,
+        "median": 0.5,
+        "iqr": [
+          0.4981,
+          0.5064
+        ],
+        "cluster_ci95": [
+          0.4947,
+          0.5386
+        ]
+      },
+      "cdr_only_pairs": {
+        "n_clusters": 15,
+        "coverage": "15/18",
+        "mean": 0.5,
+        "sd": 0.0,
+        "median": 0.5,
+        "iqr": [
+          0.5,
+          0.5
+        ],
+        "cluster_ci95": [
+          0.5,
+          0.5
+        ]
+      },
+      "same_cocrystal_clusters_bound_wt": {
+        "n_clusters": 17,
+        "coverage": "17/19",
+        "mean": 0.5126,
+        "sd": 0.044,
+        "median": 0.5,
+        "iqr": [
+          0.5,
+          0.5128
+        ],
+        "cluster_ci95": [
+          0.4974,
+          0.5357
+        ]
+      },
+      "same_cocrystal_clusters_unbound_igfold": {
+        "n_clusters": 17,
+        "coverage": "17/19",
+        "mean": 0.5126,
+        "sd": 0.044,
+        "median": 0.5,
+        "iqr": [
+          0.5,
+          0.5128
+        ],
+        "cluster_ci95": [
+          0.4974,
+          0.5357
+        ]
+      }
+    },
+    "Naive 1D CDR Fraction (#CDR / #Edits)": {
+      "family": "1D Sequence Heuristic",
+      "all_loaco_22_clusters": {
+        "n_clusters": 19,
+        "coverage": "19/22",
+        "mean": 0.506,
+        "sd": 0.0693,
+        "median": 0.5,
+        "iqr": [
+          0.4862,
+          0.5
+        ],
+        "cluster_ci95": [
+          0.4789,
+          0.5413
+        ]
+      },
+      "ab_mut_only": {
+        "n_clusters": 15,
+        "coverage": "15/18",
+        "mean": 0.5039,
+        "sd": 0.0768,
+        "median": 0.5,
+        "iqr": [
+          0.473,
+          0.5
+        ],
+        "cluster_ci95": [
+          0.4728,
+          0.5468
+        ]
+      },
+      "cdr_only_pairs": {
+        "n_clusters": 15,
+        "coverage": "15/18",
+        "mean": 0.5,
+        "sd": 0.0,
+        "median": 0.5,
+        "iqr": [
+          0.5,
+          0.5
+        ],
+        "cluster_ci95": [
+          0.5,
+          0.5
+        ]
+      },
+      "same_cocrystal_clusters_bound_wt": {
+        "n_clusters": 17,
+        "coverage": "17/19",
+        "mean": 0.5083,
+        "sd": 0.073,
+        "median": 0.5,
+        "iqr": [
+          0.5,
+          0.5
+        ],
+        "cluster_ci95": [
+          0.4779,
+          0.5453
+        ]
+      },
+      "same_cocrystal_clusters_unbound_igfold": {
+        "n_clusters": 17,
+        "coverage": "17/19",
+        "mean": 0.5083,
+        "sd": 0.073,
+        "median": 0.5,
+        "iqr": [
+          0.5,
+          0.5
+        ],
+        "cluster_ci95": [
+          0.4779,
+          0.5453
+        ]
+      }
+    },
+    "Naive 1D CDR-H3 Priority": {
+      "family": "1D Sequence Heuristic",
+      "all_loaco_22_clusters": {
+        "n_clusters": 19,
+        "coverage": "19/22",
+        "mean": 0.5001,
+        "sd": 0.0382,
+        "median": 0.5,
+        "iqr": [
+          0.4855,
+          0.5038
+        ],
+        "cluster_ci95": [
+          0.4839,
+          0.518
+        ]
+      },
+      "ab_mut_only": {
+        "n_clusters": 15,
+        "coverage": "15/18",
+        "mean": 0.5052,
+        "sd": 0.0521,
+        "median": 0.4933,
+        "iqr": [
+          0.4836,
+          0.5055
+        ],
+        "cluster_ci95": [
+          0.4807,
+          0.531
+        ]
+      },
+      "cdr_only_pairs": {
+        "n_clusters": 15,
+        "coverage": "15/18",
+        "mean": 0.4926,
+        "sd": 0.0657,
+        "median": 0.5,
+        "iqr": [
+          0.4621,
+          0.5052
+        ],
+        "cluster_ci95": [
+          0.4609,
+          0.522
+        ]
+      },
+      "same_cocrystal_clusters_bound_wt": {
+        "n_clusters": 17,
+        "coverage": "17/19",
+        "mean": 0.5048,
+        "sd": 0.0347,
+        "median": 0.5,
+        "iqr": [
+          0.487,
+          0.5076
+        ],
+        "cluster_ci95": [
+          0.4903,
+          0.5226
+        ]
+      },
+      "same_cocrystal_clusters_unbound_igfold": {
+        "n_clusters": 17,
+        "coverage": "17/19",
+        "mean": 0.5048,
+        "sd": 0.0347,
+        "median": 0.5,
+        "iqr": [
+          0.487,
+          0.5076
+        ],
+        "cluster_ci95": [
+          0.4903,
+          0.5226
+        ]
+      }
+    },
+    "ESMC+AbLang2 (1D PLM Zero-Shot)": {
+      "family": "1D PLM Zero-Shot",
+      "all_loaco_22_clusters": {
+        "n_clusters": 19,
+        "coverage": "19/22",
+        "mean": 0.5308,
+        "sd": 0.1085,
+        "median": 0.5642,
+        "iqr": [
+          0.4418,
+          0.5925
+        ],
+        "cluster_ci95": [
+          0.4819,
+          0.5791
+        ]
+      },
+      "ab_mut_only": {
+        "n_clusters": 15,
+        "coverage": "15/18",
+        "mean": 0.5281,
+        "sd": 0.1002,
+        "median": 0.5642,
+        "iqr": [
+          0.4723,
+          0.5925
+        ],
+        "cluster_ci95": [
+          0.4799,
+          0.5736
+        ]
+      },
+      "cdr_only_pairs": {
+        "n_clusters": 15,
+        "coverage": "15/18",
+        "mean": 0.5184,
+        "sd": 0.108,
+        "median": 0.5199,
+        "iqr": [
+          0.4368,
+          0.6049
+        ],
+        "cluster_ci95": [
+          0.4633,
+          0.5694
+        ]
+      },
+      "same_cocrystal_clusters_bound_wt": {
+        "n_clusters": 17,
+        "coverage": "17/19",
+        "mean": 0.5355,
+        "sd": 0.111,
+        "median": 0.5642,
+        "iqr": [
+          0.4485,
+          0.5936
+        ],
+        "cluster_ci95": [
+          0.4815,
+          0.5883
+        ]
+      },
+      "same_cocrystal_clusters_unbound_igfold": {
+        "n_clusters": 17,
+        "coverage": "17/19",
+        "mean": 0.5355,
+        "sd": 0.111,
+        "median": 0.5642,
+        "iqr": [
+          0.4485,
+          0.5936
+        ],
+        "cluster_ci95": [
+          0.4815,
+          0.5883
+        ]
+      }
+    },
+    "WT 3D Interface Distance (-min C\u03b2 dist)": {
+      "family": "Single-WT 3D Geometry",
+      "all_loaco_22_clusters": {
+        "n_clusters": 19,
+        "coverage": "19/22",
+        "mean": 0.6065,
+        "sd": 0.1396,
+        "median": 0.5889,
+        "iqr": [
+          0.506,
+          0.7304
+        ],
+        "cluster_ci95": [
+          0.5469,
+          0.6665
+        ]
+      },
+      "ab_mut_only": {
+        "n_clusters": 15,
+        "coverage": "15/18",
+        "mean": 0.622,
+        "sd": 0.1221,
+        "median": 0.6087,
+        "iqr": [
+          0.5236,
+          0.7024
+        ],
+        "cluster_ci95": [
+          0.5635,
+          0.6838
+        ]
+      },
+      "cdr_only_pairs": {
+        "n_clusters": 15,
+        "coverage": "15/18",
+        "mean": 0.6075,
+        "sd": 0.1348,
+        "median": 0.5889,
+        "iqr": [
+          0.4936,
+          0.6738
+        ],
+        "cluster_ci95": [
+          0.5422,
+          0.678
+        ]
+      },
+      "same_cocrystal_clusters_bound_wt": {
+        "n_clusters": 17,
+        "coverage": "17/19",
+        "mean": 0.6017,
+        "sd": 0.1317,
+        "median": 0.5889,
+        "iqr": [
+          0.5395,
+          0.7242
+        ],
+        "cluster_ci95": [
+          0.5391,
+          0.6631
+        ]
+      },
+      "same_cocrystal_clusters_unbound_igfold": {
+        "n_clusters": 17,
+        "coverage": "17/19",
+        "mean": 0.5372,
+        "sd": 0.1415,
+        "median": 0.5072,
+        "iqr": [
+          0.4604,
+          0.5477
+        ],
+        "cluster_ci95": [
+          0.4757,
+          0.6032
+        ]
+      }
+    },
+    "WT 3D Mutated-Site Buried \u0394SASA": {
+      "family": "Single-WT 3D Geometry",
+      "all_loaco_22_clusters": {
+        "n_clusters": 19,
+        "coverage": "19/22",
+        "mean": 0.5625,
+        "sd": 0.1104,
+        "median": 0.5298,
+        "iqr": [
+          0.4999,
+          0.6095
+        ],
+        "cluster_ci95": [
+          0.5168,
+          0.6118
+        ]
+      },
+      "ab_mut_only": {
+        "n_clusters": 15,
+        "coverage": "15/18",
+        "mean": 0.5766,
+        "sd": 0.1049,
+        "median": 0.5298,
+        "iqr": [
+          0.4999,
+          0.6095
+        ],
+        "cluster_ci95": [
+          0.5275,
+          0.63
+        ]
+      },
+      "cdr_only_pairs": {
+        "n_clusters": 15,
+        "coverage": "15/18",
+        "mean": 0.5687,
+        "sd": 0.1039,
+        "median": 0.5585,
+        "iqr": [
+          0.4945,
+          0.6095
+        ],
+        "cluster_ci95": [
+          0.5192,
+          0.6203
+        ]
+      },
+      "same_cocrystal_clusters_bound_wt": {
+        "n_clusters": 17,
+        "coverage": "17/19",
+        "mean": 0.5557,
+        "sd": 0.0978,
+        "median": 0.5298,
+        "iqr": [
+          0.5022,
+          0.6048
+        ],
+        "cluster_ci95": [
+          0.5097,
+          0.5995
+        ]
+      },
+      "same_cocrystal_clusters_unbound_igfold": {
+        "n_clusters": 17,
+        "coverage": "17/19",
+        "mean": 0.5079,
+        "sd": 0.1054,
+        "median": 0.4883,
+        "iqr": [
+          0.4494,
+          0.5805
+        ],
+        "cluster_ci95": [
+          0.4553,
+          0.5557
+        ]
+      }
+    },
+    "ProteinMPNN (WT 3D Complex ZS)": {
+      "family": "Single-WT 3D Inv. Fold",
+      "all_loaco_22_clusters": {
+        "n_clusters": 19,
+        "coverage": "19/22",
+        "mean": 0.6059,
+        "sd": 0.108,
+        "median": 0.5833,
+        "iqr": [
+          0.5486,
+          0.6685
+        ],
+        "cluster_ci95": [
+          0.5599,
+          0.6538
+        ]
+      },
+      "ab_mut_only": {
+        "n_clusters": 15,
+        "coverage": "15/18",
+        "mean": 0.5652,
+        "sd": 0.1094,
+        "median": 0.5701,
+        "iqr": [
+          0.5345,
+          0.5878
+        ],
+        "cluster_ci95": [
+          0.5142,
+          0.6177
+        ]
+      },
+      "cdr_only_pairs": {
+        "n_clusters": 15,
+        "coverage": "15/18",
+        "mean": 0.5511,
+        "sd": 0.1183,
+        "median": 0.5577,
+        "iqr": [
+          0.4964,
+          0.6036
+        ],
+        "cluster_ci95": [
+          0.495,
+          0.6096
+        ]
+      },
+      "same_cocrystal_clusters_bound_wt": {
+        "n_clusters": 17,
+        "coverage": "17/19",
+        "mean": 0.6212,
+        "sd": 0.0974,
+        "median": 0.5924,
+        "iqr": [
+          0.5512,
+          0.6705
+        ],
+        "cluster_ci95": [
+          0.5786,
+          0.67
+        ]
+      },
+      "same_cocrystal_clusters_unbound_igfold": {
+        "n_clusters": 17,
+        "coverage": "17/19",
+        "mean": 0.5882,
+        "sd": 0.0984,
+        "median": 0.6194,
+        "iqr": [
+          0.5153,
+          0.6647
+        ],
+        "cluster_ci95": [
+          0.5428,
+          0.633
+        ]
+      }
+    },
+    "PRODIGY+SASA (WT 3D Energy ZS)": {
+      "family": "Single-WT 3D Energy",
+      "all_loaco_22_clusters": {
+        "n_clusters": 19,
+        "coverage": "19/22",
+        "mean": 0.6149,
+        "sd": 0.0949,
+        "median": 0.6127,
+        "iqr": [
+          0.561,
+          0.6706
+        ],
+        "cluster_ci95": [
+          0.5756,
+          0.6593
+        ]
+      },
+      "ab_mut_only": {
+        "n_clusters": 15,
+        "coverage": "15/18",
+        "mean": 0.6031,
+        "sd": 0.1075,
+        "median": 0.5972,
+        "iqr": [
+          0.5323,
+          0.6415
+        ],
+        "cluster_ci95": [
+          0.5535,
+          0.6577
+        ]
+      },
+      "cdr_only_pairs": {
+        "n_clusters": 15,
+        "coverage": "15/18",
+        "mean": 0.5849,
+        "sd": 0.1059,
+        "median": 0.5741,
+        "iqr": [
+          0.502,
+          0.6494
+        ],
+        "cluster_ci95": [
+          0.5356,
+          0.6406
+        ]
+      },
+      "same_cocrystal_clusters_bound_wt": {
+        "n_clusters": 17,
+        "coverage": "17/19",
+        "mean": 0.6237,
+        "sd": 0.0919,
+        "median": 0.6127,
+        "iqr": [
+          0.5631,
+          0.6843
+        ],
+        "cluster_ci95": [
+          0.5858,
+          0.6681
+        ]
+      },
+      "same_cocrystal_clusters_unbound_igfold": {
+        "n_clusters": 17,
+        "coverage": "17/19",
+        "mean": 0.5448,
+        "sd": 0.1208,
+        "median": 0.5319,
+        "iqr": [
+          0.476,
+          0.6243
+        ],
+        "cluster_ci95": [
+          0.4906,
+          0.5986
+        ]
+      }
+    },
+    "ESM-IF1 (WT 3D Complex ZS)": {
+      "family": "Single-WT 3D Inv. Fold",
+      "all_loaco_22_clusters": {
+        "n_clusters": 19,
+        "coverage": "19/22",
+        "mean": 0.6192,
+        "sd": 0.0871,
+        "median": 0.6321,
+        "iqr": [
+          0.5342,
+          0.6809
+        ],
+        "cluster_ci95": [
+          0.5813,
+          0.6589
+        ]
+      },
+      "ab_mut_only": {
+        "n_clusters": 15,
+        "coverage": "15/18",
+        "mean": 0.6031,
+        "sd": 0.108,
+        "median": 0.6282,
+        "iqr": [
+          0.5212,
+          0.6724
+        ],
+        "cluster_ci95": [
+          0.5493,
+          0.654
+        ]
+      },
+      "cdr_only_pairs": {
+        "n_clusters": 15,
+        "coverage": "15/18",
+        "mean": 0.5971,
+        "sd": 0.1122,
+        "median": 0.5751,
+        "iqr": [
+          0.5387,
+          0.6852
+        ],
+        "cluster_ci95": [
+          0.5433,
+          0.6514
+        ]
+      },
+      "same_cocrystal_clusters_bound_wt": {
+        "n_clusters": 17,
+        "coverage": "17/19",
+        "mean": 0.6165,
+        "sd": 0.0889,
+        "median": 0.6321,
+        "iqr": [
+          0.5288,
+          0.6782
+        ],
+        "cluster_ci95": [
+          0.5749,
+          0.6598
+        ]
+      },
+      "same_cocrystal_clusters_unbound_igfold": {
+        "n_clusters": 17,
+        "coverage": "17/19",
+        "mean": 0.5583,
+        "sd": 0.0894,
+        "median": 0.5357,
+        "iqr": [
+          0.5157,
+          0.6178
+        ],
+        "cluster_ci95": [
+          0.5191,
+          0.6017
+        ]
+      }
+    },
+    "ANTIPASTI (WT 3D Normal-Mode CNN)": {
+      "family": "Single-WT 3D Dynamics",
+      "all_loaco_22_clusters": {
+        "n_clusters": 19,
+        "coverage": "19/22",
+        "mean": 0.6119,
+        "sd": 0.1194,
+        "median": 0.6106,
+        "iqr": [
+          0.5624,
+          0.7068
+        ],
+        "cluster_ci95": [
+          0.5599,
+          0.6629
+        ]
+      },
+      "ab_mut_only": {
+        "n_clusters": 15,
+        "coverage": "15/18",
+        "mean": 0.5936,
+        "sd": 0.1338,
+        "median": 0.6037,
+        "iqr": [
+          0.5193,
+          0.7103
+        ],
+        "cluster_ci95": [
+          0.5284,
+          0.661
+        ]
+      },
+      "cdr_only_pairs": {
+        "n_clusters": 15,
+        "coverage": "15/18",
+        "mean": 0.5752,
+        "sd": 0.1361,
+        "median": 0.5778,
+        "iqr": [
+          0.4585,
+          0.7111
+        ],
+        "cluster_ci95": [
+          0.5075,
+          0.6429
+        ]
+      },
+      "same_cocrystal_clusters_bound_wt": {
+        "n_clusters": 17,
+        "coverage": "17/19",
+        "mean": 0.6329,
+        "sd": 0.1017,
+        "median": 0.6196,
+        "iqr": [
+          0.5905,
+          0.7101
+        ],
+        "cluster_ci95": [
+          0.5846,
+          0.6793
+        ]
+      },
+      "same_cocrystal_clusters_unbound_igfold": {
+        "n_clusters": 17,
+        "coverage": "17/19",
+        "mean": 0.5853,
+        "sd": 0.0912,
+        "median": 0.57,
+        "iqr": [
+          0.5351,
+          0.6203
+        ],
+        "cluster_ci95": [
+          0.5432,
+          0.6287
+        ]
+      }
+    },
+    "LogiCA (1D Logit Cross-Attn)": {
+      "family": "1D Logit Cross-Attention",
+      "all_loaco_22_clusters": {
+        "n_clusters": 19,
+        "coverage": "19/22",
+        "mean": 0.5547,
+        "sd": 0.1115,
+        "median": 0.5612,
+        "iqr": [
+          0.4929,
+          0.6595
+        ],
+        "cluster_ci95": [
+          0.506,
+          0.6042
+        ]
+      },
+      "ab_mut_only": {
+        "n_clusters": 15,
+        "coverage": "15/18",
+        "mean": 0.5641,
+        "sd": 0.1156,
+        "median": 0.5673,
+        "iqr": [
+          0.5138,
+          0.6595
+        ],
+        "cluster_ci95": [
+          0.5072,
+          0.618
+        ]
+      },
+      "cdr_only_pairs": {
+        "n_clusters": 15,
+        "coverage": "15/18",
+        "mean": 0.5477,
+        "sd": 0.119,
+        "median": 0.5451,
+        "iqr": [
+          0.4908,
+          0.6202
+        ],
+        "cluster_ci95": [
+          0.4912,
+          0.6067
+        ]
+      },
+      "same_cocrystal_clusters_bound_wt": {
+        "n_clusters": 17,
+        "coverage": "17/19",
+        "mean": 0.5458,
+        "sd": 0.1067,
+        "median": 0.5612,
+        "iqr": [
+          0.4821,
+          0.6569
+        ],
+        "cluster_ci95": [
+          0.4972,
+          0.5956
+        ]
+      },
+      "same_cocrystal_clusters_unbound_igfold": {
+        "n_clusters": 17,
+        "coverage": "17/19",
+        "mean": 0.5458,
+        "sd": 0.1067,
+        "median": 0.5612,
+        "iqr": [
+          0.4821,
+          0.6569
+        ],
+        "cluster_ci95": [
+          0.4972,
+          0.5956
+        ]
+      }
+    }
+  }
+}

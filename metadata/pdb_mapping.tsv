@@ -1,0 +1,68 @@
+PDB_ID	Antigen_name	Ag_type	Antibody_name	Comment
+1AHW	Tissue_Factor	Non-Viral	5G9	extracellular domain
+1BJ1	VEGF	Non-Viral	Fab-12	
+1BVK	HEWL	Non-Viral	D1.3	
+1CZ8	VEGF	Non-Viral	Fab-12	
+1DQJ	HEWL	Non-Viral	HyHEL-63	
+1JRH	IFNGR1	Non-Viral	A6	Interferon-gamma receptor alpha chain
+1KIP	HEWL	Non-Viral	D1.3	
+1KIQ	HEWL	Non-Viral	D1.3	
+1KIR	HEWL	Non-Viral	D1.3	
+1MHP	ITGA1	Non-Viral	AQC2	
+1MLC	HEWL	Non-Viral	D44.1	
+1N8Z	HER2_ECD	Non-Viral	Trastuzumab	
+1NCA	Influenza_Neuraminidase	Viral	NC41	
+1NMB	Influenza_Neuraminidase	Viral	NC41	
+1VFB	HEWL	Non-Viral	D1.3	
+1XGP	HEWL	Non-Viral	HyHEL-63	
+1XGQ	HEWL	Non-Viral	HyHEL-63	
+1XGR	HEWL	Non-Viral	HyHEL-63	
+1XGT	HEWL	Non-Viral	HyHEL-63	
+1XGU	HEWL	Non-Viral	HyHEL-63	
+1YQV	HEWL	Non-Viral	HyHEL5	
+1YY9	EGFR	Non-Viral	Cetuximab	
+2B2X	ITGA1	Non-Viral	AQC2	
+2BDN	CCL2	Non-Viral	11K2	MCP-1
+2FJG	VEGF	Non-Viral	G6.31	
+2JEL	HPr	Non-Viral	Jel42	
+2NY7	HIV_gp120	Viral	b12	
+2NYY	Botulinum_Neurotoxin_A	Non-Viral	CR1	
+2NZ9	Botulinum_Neurotoxin_A	Non-Viral	AR2	
+2VIR	Influenza_AH3	Viral	HC19	
+2VIS	Influenza_AH3	Viral	HC19	escape mutant
+2YSS	HEWL	Non-Viral	HyHEL-10	
+3BDY	VEGF	Non-Viral	bH1	
+3BE1	HER2_ECD	Non-Viral	bH1	
+3BN9	Matriptase	Non-Viral	E2	MT-SP1 / ST14
+3G6D	IL13	Non-Viral	CNTO607	
+3GBN_H1	Influenza_AH1	Viral	CR6261	
+3GBN_H9	Influenza_AH9	Viral	CR6261	
+3HFM	HEWL	Non-Viral	HyHEL-10	
+3IDX	HIV_gp120	Viral	b13	
+3L5X	IL13	Non-Viral	H2L6	
+3N85	HER2_ECD	Non-Viral	Fab37	
+3NGB	HIV_gp120	Viral	VRC01	
+3NPS	Matriptase	Non-Viral	S4-inhib	MT-SP1
+3SE8	HIV_gp120	Viral	VRC03	
+3SE9	HIV_gp120	Viral	VRC-PG04	
+3W2D	Staphylococcal_Enterotoxin_B	Non-Viral	3E2	
+4FQI_H1	Influenza_AH1	Viral	CR9114	
+4FQI_H3	Influenza_AH3	Viral	CR9114	
+4I77	IL13	Non-Viral	Lebrikizumab	
+4JPK	HIV_gp120	Viral	VRC01	eOD-GT6
+4U6H	Vaccinia_L1	Viral	M12B9	
+4ZFF	VEGF	Non-Viral	5A12	
+4ZFG	ANG2	Non-Viral	5A12	
+4ZS6	MERSCoV_RBD	Viral	27 Fab	
+5C6T	HCMV-gB	Viral	1G2	cytomegalovirus glycoprotein B
+5F9W	HIV_gp120	Viral	CH235	
+5GGS	PD1	Non-Viral	Pembrolizumab	
+5GGV	CTLA4	Non-Viral	Tremelimumab	
+6MFP	HIV_gp120	Viral	DH677.3	
+6NMS	SIRPa	Non-Viral	Fab136	
+6NMU	SIRPa	Non-Viral	Fab115	
+6RP8	CTLA4	Non-Viral	Ipilimumab	
+6XKR	PD1	Non-Viral	Sasanlimab	
+7BEJ	SARSCoV2_RBD	Viral	COVOX-222	
+7JMO	SARSCoV2_RBD	Viral	COVOX-269	
+7KF0	VEGF	Non-Viral	bH1	
