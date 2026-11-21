@@ -7,12 +7,2225 @@
     }
   ],
   "subtitle": "Zero-Leakage 3-State Antibody\u2013Antigen & Nanobody Affinity Ranking Benchmark (v2)",
-  "description": "# AbRank v2: Sequence- and Lineage-Disjoint 3-State Antibody\u2013Antigen Affinity Ranking Benchmark\n\n> **Version Notice \u2014 AbRank v2 replaces AbRank v1 as the default release.**\n> The original **AbRank v1** release (`AbRank_dataset.csv` and `AbRank_structures/`) remains permanently preserved and accessible via the Kaggle **Version** selector (`Versions 1–4`, latest v1 = `Version 4`) or programmatically via `kagglehub.dataset_download(\"aurlienplissier/abrank/versions/4\")`.\n>\n> **What changed from v1 \u2192 v2?**\n> - **Expanded & Newly Public Data (`9 \u2192 24` sources):** Adds 15 new experimental datasets \u2014 including the now-public `CC BY 4.0` **AIntibody**, **Origin-1**, **Germinal**, **BoltzGen**, **Abbate-GFRAL**, **FLAb (Kothiwal & Shanker)**, **MAGMA-seq (Kirby & Peterson)**, **AbBiBench**, **AbAgym** (45-complex DMS), and **NbBench** \u2014 expanding to `192` antigen groups, single-domain **VHH nanobodies**, and `1,354` wet-lab generative AI designs.\n> - **3-State Noise-Buffered Evaluation (`{-1, 0, +1}`):** Upgrades v1's binary `10\u00d7` ranking to empirically calibrated 3-state evaluation with a replicate-noise neutral band (`|\u0394pKd| \u2264 0.30`, `\u22642\u00d7`), jointly scoring Directional Sign, Hot-Spot Impact, and 3-Class Ordinal AUC alongside unfiltered continuous panels (`*_pointwise.tsv`).\n> - **Strict Zero-Leakage Splits & 4 Core Community Suites:** Replaces v1's single table with pre-clustered `<50%` antigen-identity and `<80%` clonal-lineage disjoint splits across `AbRank-Maturation`, `AbRank-Discovery`, `AbRank-Generative`, and `AbRank-Transfer`.\n> - **851 Wild-Type 3D Scaffolds & Standardized Hygiene:** Replaces v1's antigen-only structures with `340` experimental RCSB PDB co-crystals + `511` unbound IgFold Fv/VHH scaffolds (`structures_wt/`), strict 20-AA Fab-to-Fv / tag trimming, and MLCommons Croissant 1.0 metadata (`metadata/croissant.json`).\n\n---\n\n## Links & Companion Code\n\n- **Official Code, Curation Pipeline & Evaluator**: [github.com/AI-SysBio/AbRank](https://github.com/AI-SysBio/AbRank)\n- **Companion `AbLang2-Paired + ESM-2` LogiCA Implementation**: [github.com/AI-SysBio/logica/tree/main/antibodies-abrank](https://github.com/AI-SysBio/logica/tree/main/antibodies-abrank)\n\n---\n\n## Dataset Overview\n\nAll assay tables enforce strict 20-standard-amino-acid variable-region hygiene (`VH`, `VL`, or `VHH` + assayed antigen ectodomain) and a unified sign convention (**higher `binding_score` always means stronger binding**, e.g., `pKd = 9 - log10(Kd [nM])`):\n\n- **`120,721`** deduplicated paired-chain `KD` assays (`111,743` unique antibodies across `262` clonal lineages, `148` antigen groups)\n- **`192`** cataloged antigen groups (`161` non-viral, `31` viral) spanning `KD`, `Enrichment`, `ELISA`, `DDG`, `EC50`, `AbAgym DMS`, viral `IC50`, `RBD Escape`, and single-domain **`VHH` nanobodies**\n- **`851`** wild-type parental 3D scaffolds (`340` solved RCSB PDB co-crystals + `511` unbound IgFold Fv/VHH + RCSB antigen scaffolds) + `68` AbAgym complex PDBs\n\n### 3-State Noise-Buffered Labels (`{-1, 0, +1}`)\nWithin-assay pairs are labeled across three states calibrated against empirical replicate noise (`95.2%` of within-platform SPR replicates fall within `|\u0394pKd| \u2264 0.30`):\n- **`+1` (Improved):** `\u0394binding_score \u2265 +1.0` (`\u226510\u00d7` tighter `Kd`)\n- **`0` (Neutral):** `|\u0394binding_score| \u2264 0.30` (`\u22642\u00d7` `Kd` change)\n- **`-1` (Depleted):** `\u0394binding_score \u2264 -1.0` (`\u226510\u00d7` weaker `Kd`)\n\n### The 4 Core AbRank Community Suites\n\n| Suite (`--suite`) | Scope (`<50%` Ag, `<80%` Ab) | Headline Metrics |\n| :--- | :--- | :--- |\n| **`AbRank-Maturation`** (`maturation`) | 22-Cluster LOACO Local Edits (`12,267` `L1\u2013L3` `Kd` pairs; `5,426` impactful `\u00b11`) | Cluster-Macro **3-Class Ordinal AUC**, Sign AUC, Impact AUC |\n| **`AbRank-Discovery`** (`discovery`) | 25 Unfiltered LOACO Library Panels (`6\u2013200` clones) + `VHH` `Kd` (`11` targets) | Panel-Macro **Top-Binder AUC**, **Precision@Top-20%**, `VHH` Ord AUC |\n| **`AbRank-Generative`** (`generative`) | `1,354` Wet-Lab Generative AI Designs (`20` panels, `5,069` pairs: `IgDesign`, `Origin1`, `BoltzGen_VHH`, `Germinal`, `AIntibody`, `Shanker`) | **Generative Ordinal AUC**, **Precision@Top-20%**, **Top-20% Regret** |\n| **`AbRank-Transfer`** (`transfer`) | Biochemical \u2192 Functional Adaptation (`Viral IC50`, `RBD Escape`, `AbAgym DMS`, `ELISA`, `DDG`) | Per-Antigen Macro **3-Class Ordinal AUC** & **Sign AUC** |\n\n---\n\n## Directory Layout\n\n- **`benchmark/`** (`801 MB` uncompressed):\n  - `assays_kd.tsv`, `assays_vhh.tsv`, `assays_cross_modal.tsv`, `assays_transfer.tsv` \u2014 Master deduplicated pointwise assay tables\n  - `splits/unseen_ag/` \u2014 Zero-leakage `train/val/test` 3-state pairs, `*_candidates.tsv`, and unfiltered `*_pointwise.tsv` panels\n  - `splits/generative/` \u2014 `generative_pairs.tsv` & `generative_panels.tsv`\n  - `splits/transfer/` \u2014 `ic50_test.tsv` & `escape_test.tsv`\n  - `splits/cross_modal/modality_test.tsv` & `splits/vhh/vhh_ranking_test.tsv`\n  - `sequences/` \u2014 Deduplicated FASTA files (`ab_heavy.fasta`, `ab_light.fasta`, `ag.fasta`, `vhh.fasta`, `vhh_ag.fasta`)\n  - `BENCHMARK_SUMMARY.md` & `benchmark_summary.json`\n- **`metadata/`** (`0.6 MB`):\n  - `croissant.json` (MLCommons Croissant 1.0 + RAI), `sources_manifest.yaml` (citations, DOIs & licenses for all 24 sources), `cofolding_manifest.tsv` (851 WT scaffolds), `antigen_catalog.tsv`, `pdb_mapping.tsv`, `structure_templates.yaml`, `constructs/`\n- **`structures_wt/`** (`394 MB`, `1,823` files):\n  - Wild-type 3D scaffolds for Track 1B WT-3D baselines: `rcsb/` (`356` PDB/mmCIF archives), `igfold/` (`548` unbound Fv/VHH models), `scaffolds/` (`851` standardized WT complex PDBs), `abagym_pdbs/` (`68` AbAgym PDBs)\n\n---\n\n## Quickstart\n\n### 1. Load Directly in Python (`kagglehub`)\n```python\nimport kagglehub\nimport pandas as pd\nfrom pathlib import Path\n\nroot = Path(kagglehub.dataset_download(\"aurlienplissier/abrank\"))\nassays_kd = pd.read_csv(root / \"benchmark/assays_kd.tsv\", sep=\"\\t\")\ntest_pairs = pd.read_csv(root / \"benchmark/splits/unseen_ag/test.tsv\", sep=\"\\t\")\n\n# Need legacy AbRank v1? Pin version 1 explicitly:\n# v1_root = Path(kagglehub.dataset_download(\"aurlienplissier/abrank/versions/4\"))\n```\n\n### 2. Evaluate Predictions in One Command (`AI-SysBio/AbRank`)\n```bash\npip install \"git+https://github.com/AI-SysBio/AbRank.git\" kagglehub\n\n# Accepts pairwise (pair_id, pred_diff[, pred_impact]) or pointwise (AbAgID, pred_score) TSVs:\npython -m abrank.evaluate --suite maturation --kaggle-dataset aurlienplissier/abrank --preds my_preds.tsv\npython -m abrank.evaluate --suite discovery  --kaggle-dataset aurlienplissier/abrank --preds my_pointwise.tsv\npython -m abrank.evaluate --suite generative --kaggle-dataset aurlienplissier/abrank --preds my_gen_preds.tsv\npython -m abrank.evaluate --suite transfer   --kaggle-dataset aurlienplissier/abrank --preds my_transfer.tsv\n```\n\n### 3. Train & Evaluate `AbLang2-Paired + ESM-2` LogiCA (`AI-SysBio/logica`)\n```bash\ngit clone https://github.com/AI-SysBio/logica.git && cd logica\npip install -e \".[all]\"\npython antibodies-abrank/scripts/02_train_ablang_esm_logica.py --kaggle-dataset aurlienplissier/abrank\npython antibodies-abrank/scripts/03_evaluate_on_abrank.py --suite maturation --kaggle-dataset aurlienplissier/abrank\n```\n\n---\n\n## Provenance & Licenses\nAbRank v2 aggregates 24 publicly released peer-reviewed antibody and nanobody datasets (including the 2026 `CC BY 4.0` AIntibody, Germinal, Abbate-GFRAL, Origin-1, and BoltzGen releases). Full citations, DOIs, and per-source licenses are documented in `metadata/sources_manifest.yaml` and `metadata/croissant.json`. Each constituent dataset retains its upstream license.",
+  "description": "# AbRank v2: Sequence- and Lineage-Disjoint 3-State Antibody\u2013Antigen Affinity Ranking Benchmark\n\n> **Version Notice \u2014 AbRank v2 replaces AbRank v1 as the default release.**\n> The original **AbRank v1** release (`AbRank_dataset.csv` and `AbRank_structures/`) remains permanently preserved and accessible via the Kaggle **Version** selector (`Versions 1\u20134`, latest v1 = `Version 4`) or programmatically via `kagglehub.dataset_download(\"aurlienplissier/abrank/versions/4\")`.\n>\n> **What changed from v1 \u2192 v2?**\n> - **Expanded & Newly Public Data (`9 \u2192 24` sources):** Adds 15 new experimental datasets \u2014 including the now-public `CC BY 4.0` **AIntibody**, **Origin-1**, **Germinal**, **BoltzGen**, **Abbate-GFRAL**, **FLAb (Kothiwal & Shanker)**, **MAGMA-seq (Kirby & Peterson)**, **AbBiBench**, **AbAgym** (45-complex DMS), and **NbBench** \u2014 expanding to `192` antigen groups, single-domain **VHH nanobodies**, and `1,354` wet-lab generative AI designs.\n> - **3-State Noise-Buffered Evaluation (`{-1, 0, +1}`):** Upgrades v1's binary `10\u00d7` ranking to empirically calibrated 3-state evaluation with a replicate-noise neutral band (`|\u0394pKd| \u2264 0.30`, `\u22642\u00d7`), jointly scoring Directional Sign, Hot-Spot Impact, and 3-Class Ordinal AUC alongside unfiltered continuous panels (`*_pointwise.tsv`).\n> - **Strict Zero-Leakage Splits & 4 Core Community Suites:** Replaces v1's single table with pre-clustered `<50%` antigen-identity and `<80%` clonal-lineage disjoint splits across `AbRank-Maturation`, `AbRank-Discovery`, `AbRank-Generative`, and `AbRank-Transfer`.\n> - **851 Wild-Type 3D Scaffolds & Standardized Hygiene:** Replaces v1's antigen-only structures with `340` experimental RCSB PDB co-crystals + `511` unbound IgFold Fv/VHH scaffolds (`structures_wt/`), strict 20-AA Fab-to-Fv / tag trimming, and MLCommons Croissant 1.0 metadata (`metadata/croissant.json`).\n\n---\n\n## Links & Companion Code\n\n- **Official Code, Curation Pipeline & Evaluator**: [github.com/AI-SysBio/AbRank](https://github.com/AI-SysBio/AbRank)\n- **Companion `AbLang2-Paired + ESM-2` LogiCA Implementation**: [github.com/AI-SysBio/logica/tree/main/antibodies-abrank](https://github.com/AI-SysBio/logica/tree/main/antibodies-abrank)\n\n---\n\n## Dataset Overview\n\nAll assay tables enforce strict 20-standard-amino-acid variable-region hygiene (`VH`, `VL`, or `VHH` + assayed antigen ectodomain) and a unified sign convention (**higher `binding_score` always means stronger binding**, e.g., `pKd = 9 - log10(Kd [nM])`):\n\n- **`120,721`** deduplicated paired-chain `KD` assays (`111,743` unique antibodies across `262` clonal lineages, `148` antigen groups)\n- **`192`** cataloged antigen groups (`161` non-viral, `31` viral) spanning `KD`, `Enrichment`, `ELISA`, `DDG`, `EC50`, `AbAgym DMS`, viral `IC50`, `RBD Escape`, and single-domain **`VHH` nanobodies**\n- **`851`** wild-type parental 3D scaffolds (`340` solved RCSB PDB co-crystals + `511` unbound IgFold Fv/VHH + RCSB antigen scaffolds) + `68` AbAgym complex PDBs\n\n### 3-State Noise-Buffered Labels (`{-1, 0, +1}`)\nWithin-assay pairs are labeled across three states calibrated against empirical replicate noise (`95.2%` of within-platform SPR replicates fall within `|\u0394pKd| \u2264 0.30`):\n- **`+1` (Improved):** `\u0394binding_score \u2265 +1.0` (`\u226510\u00d7` tighter `Kd`)\n- **`0` (Neutral):** `|\u0394binding_score| \u2264 0.30` (`\u22642\u00d7` `Kd` change)\n- **`-1` (Depleted):** `\u0394binding_score \u2264 -1.0` (`\u226510\u00d7` weaker `Kd`)\n\n### The 4 Core AbRank Community Suites\n\n| Suite (`--suite`) | Scope (`<50%` Ag, `<80%` Ab) | Headline Metrics |\n| :--- | :--- | :--- |\n| **`AbRank-Maturation`** (`maturation`) | 22-Cluster LOACO Local Edits (`12,267` `L1\u2013L3` `Kd` pairs; `5,426` impactful `\u00b11`) | Cluster-Macro **3-Class Ordinal AUC**, Sign AUC, Impact AUC |\n| **`AbRank-Discovery`** (`discovery`) | 25 Unfiltered LOACO Library Panels (`6\u2013200` clones) + `VHH` `Kd` (`11` targets) | Panel-Macro **Top-Binder AUC**, **Precision@Top-20%**, `VHH` Ord AUC |\n| **`AbRank-Generative`** (`generative`) | `1,354` Wet-Lab Generative AI Designs (`20` panels, `5,069` pairs: `IgDesign`, `Origin1`, `BoltzGen_VHH`, `Germinal`, `AIntibody`, `Shanker`) | **Generative Ordinal AUC**, **Precision@Top-20%**, **Top-20% Regret** |\n| **`AbRank-Transfer`** (`transfer`) | Biochemical \u2192 Functional Adaptation (`Viral IC50`, `RBD Escape`, `AbAgym DMS`, `ELISA`, `DDG`) | Per-Antigen Macro **3-Class Ordinal AUC** & **Sign AUC** |\n\n---\n\n## Directory Layout\n\n- **`benchmark/`** (`801 MB` uncompressed):\n  - `assays_kd.tsv`, `assays_vhh.tsv`, `assays_cross_modal.tsv`, `assays_transfer.tsv` \u2014 Master deduplicated pointwise assay tables\n  - `splits/unseen_ag/` \u2014 Zero-leakage `train/val/test` 3-state pairs, `*_candidates.tsv`, and unfiltered `*_pointwise.tsv` panels\n  - `splits/generative/` \u2014 `generative_pairs.tsv` & `generative_panels.tsv`\n  - `splits/transfer/` \u2014 `ic50_test.tsv` & `escape_test.tsv`\n  - `splits/cross_modal/modality_test.tsv` & `splits/vhh/vhh_ranking_test.tsv`\n  - `sequences/` \u2014 Deduplicated FASTA files (`ab_heavy.fasta`, `ab_light.fasta`, `ag.fasta`, `vhh.fasta`, `vhh_ag.fasta`)\n  - `BENCHMARK_SUMMARY.md` & `benchmark_summary.json`\n- **`metadata/`** (`0.6 MB`):\n  - `croissant.json` (MLCommons Croissant 1.0 + RAI), `sources_manifest.yaml` (citations, DOIs & licenses for all 24 sources), `cofolding_manifest.tsv` (851 WT scaffolds), `antigen_catalog.tsv`, `pdb_mapping.tsv`, `structure_templates.yaml`, `constructs/`\n- **`structures_wt/`** (`394 MB`, `1,823` files):\n  - Wild-type 3D scaffolds for Track 1B WT-3D baselines: `rcsb/` (`356` PDB/mmCIF archives), `igfold/` (`548` unbound Fv/VHH models), `scaffolds/` (`851` standardized WT complex PDBs), `abagym_pdbs/` (`68` AbAgym PDBs)\n\n---\n\n## Quickstart\n\n### 1. Load Directly in Python (`kagglehub`)\n```python\nimport kagglehub\nimport pandas as pd\nfrom pathlib import Path\n\nroot = Path(kagglehub.dataset_download(\"aurlienplissier/abrank\"))\nassays_kd = pd.read_csv(root / \"benchmark/assays_kd.tsv\", sep=\"\\t\")\ntest_pairs = pd.read_csv(root / \"benchmark/splits/unseen_ag/test.tsv\", sep=\"\\t\")\n\n# Need legacy AbRank v1? Pin version 1 explicitly:\n# v1_root = Path(kagglehub.dataset_download(\"aurlienplissier/abrank/versions/4\"))\n```\n\n### 2. Evaluate Predictions in One Command (`AI-SysBio/AbRank`)\n```bash\npip install \"git+https://github.com/AI-SysBio/AbRank.git\" kagglehub\n\n# Accepts pairwise (pair_id, pred_diff[, pred_impact]) or pointwise (AbAgID, pred_score) TSVs:\npython -m abrank.evaluate --suite maturation --kaggle-dataset aurlienplissier/abrank --preds my_preds.tsv\npython -m abrank.evaluate --suite discovery  --kaggle-dataset aurlienplissier/abrank --preds my_pointwise.tsv\npython -m abrank.evaluate --suite generative --kaggle-dataset aurlienplissier/abrank --preds my_gen_preds.tsv\npython -m abrank.evaluate --suite transfer   --kaggle-dataset aurlienplissier/abrank --preds my_transfer.tsv\n```\n\n### 3. Train & Evaluate `AbLang2-Paired + ESM-2` LogiCA (`AI-SysBio/logica`)\n```bash\ngit clone https://github.com/AI-SysBio/logica.git && cd logica\npip install -e \".[all]\"\npython antibodies-abrank/scripts/02_train_ablang_esm_logica.py --kaggle-dataset aurlienplissier/abrank\npython antibodies-abrank/scripts/03_evaluate_on_abrank.py --suite maturation --kaggle-dataset aurlienplissier/abrank\n```\n\n---\n\n## Provenance & Licenses\nAbRank v2 aggregates 24 publicly released peer-reviewed antibody and nanobody datasets (including the 2026 `CC BY 4.0` AIntibody, Germinal, Abbate-GFRAL, Origin-1, and BoltzGen releases). Full citations, DOIs, and per-source licenses are documented in `metadata/sources_manifest.yaml` and `metadata/croissant.json`. Each constituent dataset retains its upstream license.",
   "keywords": [
     "biology",
     "chemistry",
     "computer science",
     "deep learning",
     "healthcare"
+  ],
+  "resources": [
+    {
+      "path": "benchmark/BENCHMARK_SUMMARY.md",
+      "description": "Human-readable markdown summary of dataset counts, source breakdown, and 3-state split statistics."
+    },
+    {
+      "path": "benchmark/assays_cross_modal.tsv",
+      "description": "Master cross-modal binding table spanning Enrichment (incl. NbBench Galectin-3 VHH), AbAgym 45-complex DMS, AbDesign ELISA & DDG, and FLAb-Kothiwal EC50 (79,879 assays).",
+      "schema": {
+        "fields": [
+          {
+            "name": "Ab_name",
+            "description": "Original antibody or nanobody identifier from the upstream experimental study.",
+            "type": "string"
+          },
+          {
+            "name": "WT_Abname",
+            "description": "Wild-type parental antibody name used to group mutational series.",
+            "type": "string"
+          },
+          {
+            "name": "WT_PDB",
+            "description": "Experimental RCSB PDB identifier (4-character code) of the wild-type complex, if solved.",
+            "type": "string"
+          },
+          {
+            "name": "Ag_name",
+            "description": "Original antigen name reported in the source study.",
+            "type": "string"
+          },
+          {
+            "name": "Ag_group",
+            "description": "Canonical harmonized antigen group identifier unifying synonymous target names across sources.",
+            "type": "string"
+          },
+          {
+            "name": "Ag_type",
+            "description": "High-level target category: Viral or Non-Viral.",
+            "type": "string"
+          },
+          {
+            "name": "Assay_modality",
+            "description": "Experimental binding assay type (KD, Enrichment, ELISA, DDG, EC50, DMS, IC50, or Escape).",
+            "type": "string"
+          },
+          {
+            "name": "raw_value",
+            "description": "Original numeric measurement reported by the upstream study before sign/scale standardization.",
+            "type": "number"
+          },
+          {
+            "name": "raw_unit",
+            "description": "Unit or scale of raw_value (e.g., nM, M, ug/mL, kcal/mol, log_enrichment).",
+            "type": "string"
+          },
+          {
+            "name": "binding_score",
+            "description": "Standardized binding score oriented so higher always indicates stronger binding (e.g., pKd = 9 - log10(Kd [nM])).",
+            "type": "number"
+          },
+          {
+            "name": "Ab_heavy_chain_seq",
+            "description": "Standardized 20-AA variable heavy chain (VH or VHH) amino acid sequence with tags and CH1 constant domains removed.",
+            "type": "string"
+          },
+          {
+            "name": "Ab_light_chain_seq",
+            "description": "Standardized 20-AA variable light chain (VL) amino acid sequence (empty for single-domain VHH nanobodies).",
+            "type": "string"
+          },
+          {
+            "name": "Ag_seq",
+            "description": "Standardized 20-AA assayed antigen ectodomain amino acid sequence with recombinant purification tags removed.",
+            "type": "string"
+          },
+          {
+            "name": "Ag_epitope_restrictions",
+            "description": "Optional epitope region or domain annotation reported by the upstream study.",
+            "type": "string"
+          },
+          {
+            "name": "N_replicates",
+            "description": "Number of replicate measurements aggregated into this unique (Ab, Ag, Dataset, Modality) entry.",
+            "type": "integer"
+          },
+          {
+            "name": "Dataset",
+            "description": "Source dataset identifier (one of the 24 curated studies in metadata/sources_manifest.yaml).",
+            "type": "string"
+          },
+          {
+            "name": "Ab_seq",
+            "description": "Concatenated variable antibody sequence (VH|VL for paired antibodies; VHH for single-domain nanobodies).",
+            "type": "string"
+          },
+          {
+            "name": "AbID",
+            "description": "Canonical unique antibody sequence identifier across the benchmark.",
+            "type": "string"
+          },
+          {
+            "name": "AgID",
+            "description": "Canonical unique antigen sequence identifier across the benchmark.",
+            "type": "string"
+          },
+          {
+            "name": "AbAgID",
+            "description": "Canonical unique antibody-antigen complex identifier linking pointwise tables, pairwise splits, and 3D scaffolds.",
+            "type": "string"
+          },
+          {
+            "name": "AbAg_seq",
+            "description": "Full concatenated antibody and antigen sequence key used for exact deduplication.",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "path": "benchmark/assays_kd.tsv",
+      "description": "Master deduplicated paired-chain dissociation constant (KD) assay table across 16 public sources (120,721 complexes, 148 canonical antigen groups, 262 antibody clonal lineages).",
+      "schema": {
+        "fields": [
+          {
+            "name": "Ab_name",
+            "description": "Original antibody or nanobody identifier from the upstream experimental study.",
+            "type": "string"
+          },
+          {
+            "name": "WT_Abname",
+            "description": "Wild-type parental antibody name used to group mutational series.",
+            "type": "string"
+          },
+          {
+            "name": "WT_PDB",
+            "description": "Experimental RCSB PDB identifier (4-character code) of the wild-type complex, if solved.",
+            "type": "string"
+          },
+          {
+            "name": "Ag_name",
+            "description": "Original antigen name reported in the source study.",
+            "type": "string"
+          },
+          {
+            "name": "Ag_group",
+            "description": "Canonical harmonized antigen group identifier unifying synonymous target names across sources.",
+            "type": "string"
+          },
+          {
+            "name": "Ag_type",
+            "description": "High-level target category: Viral or Non-Viral.",
+            "type": "string"
+          },
+          {
+            "name": "Assay_modality",
+            "description": "Experimental binding assay type (KD, Enrichment, ELISA, DDG, EC50, DMS, IC50, or Escape).",
+            "type": "string"
+          },
+          {
+            "name": "raw_value",
+            "description": "Original numeric measurement reported by the upstream study before sign/scale standardization.",
+            "type": "number"
+          },
+          {
+            "name": "raw_unit",
+            "description": "Unit or scale of raw_value (e.g., nM, M, ug/mL, kcal/mol, log_enrichment).",
+            "type": "string"
+          },
+          {
+            "name": "binding_score",
+            "description": "Standardized binding score oriented so higher always indicates stronger binding (e.g., pKd = 9 - log10(Kd [nM])).",
+            "type": "number"
+          },
+          {
+            "name": "Ab_heavy_chain_seq",
+            "description": "Standardized 20-AA variable heavy chain (VH or VHH) amino acid sequence with tags and CH1 constant domains removed.",
+            "type": "string"
+          },
+          {
+            "name": "Ab_light_chain_seq",
+            "description": "Standardized 20-AA variable light chain (VL) amino acid sequence (empty for single-domain VHH nanobodies).",
+            "type": "string"
+          },
+          {
+            "name": "Ag_seq",
+            "description": "Standardized 20-AA assayed antigen ectodomain amino acid sequence with recombinant purification tags removed.",
+            "type": "string"
+          },
+          {
+            "name": "Ag_epitope_restrictions",
+            "description": "Optional epitope region or domain annotation reported by the upstream study.",
+            "type": "string"
+          },
+          {
+            "name": "N_replicates",
+            "description": "Number of replicate measurements aggregated into this unique (Ab, Ag, Dataset, Modality) entry.",
+            "type": "integer"
+          },
+          {
+            "name": "Dataset",
+            "description": "Source dataset identifier (one of the 24 curated studies in metadata/sources_manifest.yaml).",
+            "type": "string"
+          },
+          {
+            "name": "Ab_seq",
+            "description": "Concatenated variable antibody sequence (VH|VL for paired antibodies; VHH for single-domain nanobodies).",
+            "type": "string"
+          },
+          {
+            "name": "AbID",
+            "description": "Canonical unique antibody sequence identifier across the benchmark.",
+            "type": "string"
+          },
+          {
+            "name": "AgID",
+            "description": "Canonical unique antigen sequence identifier across the benchmark.",
+            "type": "string"
+          },
+          {
+            "name": "AbAgID",
+            "description": "Canonical unique antibody-antigen complex identifier linking pointwise tables, pairwise splits, and 3D scaffolds.",
+            "type": "string"
+          },
+          {
+            "name": "AbAg_seq",
+            "description": "Full concatenated antibody and antigen sequence key used for exact deduplication.",
+            "type": "string"
+          },
+          {
+            "name": "Ab_lineage",
+            "description": "Connected-component antibody clonal lineage cluster ID (>=80% paired Fv or VHH sequence identity).",
+            "type": "string"
+          },
+          {
+            "name": "Ag_cluster",
+            "description": "Connected-component homologous antigen cluster ID (>=50% global identity or >=25 AA shared subdomain).",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "path": "benchmark/assays_transfer.tsv",
+      "description": "Master functional viral neutralization (CATNAP HIV-1, AbCoV, Shanker IC50) and SARS-CoV-2 RBD Escape DMS table (229,738 assays).",
+      "schema": {
+        "fields": [
+          {
+            "name": "Ab_name",
+            "description": "Original antibody or nanobody identifier from the upstream experimental study.",
+            "type": "string"
+          },
+          {
+            "name": "WT_Abname",
+            "description": "Wild-type parental antibody name used to group mutational series.",
+            "type": "string"
+          },
+          {
+            "name": "WT_PDB",
+            "description": "Experimental RCSB PDB identifier (4-character code) of the wild-type complex, if solved.",
+            "type": "string"
+          },
+          {
+            "name": "Ag_name",
+            "description": "Original antigen name reported in the source study.",
+            "type": "string"
+          },
+          {
+            "name": "Ag_group",
+            "description": "Canonical harmonized antigen group identifier unifying synonymous target names across sources.",
+            "type": "string"
+          },
+          {
+            "name": "Ag_type",
+            "description": "High-level target category: Viral or Non-Viral.",
+            "type": "string"
+          },
+          {
+            "name": "Assay_modality",
+            "description": "Experimental binding assay type (KD, Enrichment, ELISA, DDG, EC50, DMS, IC50, or Escape).",
+            "type": "string"
+          },
+          {
+            "name": "raw_value",
+            "description": "Original numeric measurement reported by the upstream study before sign/scale standardization.",
+            "type": "number"
+          },
+          {
+            "name": "raw_unit",
+            "description": "Unit or scale of raw_value (e.g., nM, M, ug/mL, kcal/mol, log_enrichment).",
+            "type": "string"
+          },
+          {
+            "name": "binding_score",
+            "description": "Standardized binding score oriented so higher always indicates stronger binding (e.g., pKd = 9 - log10(Kd [nM])).",
+            "type": "number"
+          },
+          {
+            "name": "Ab_heavy_chain_seq",
+            "description": "Standardized 20-AA variable heavy chain (VH or VHH) amino acid sequence with tags and CH1 constant domains removed.",
+            "type": "string"
+          },
+          {
+            "name": "Ab_light_chain_seq",
+            "description": "Standardized 20-AA variable light chain (VL) amino acid sequence (empty for single-domain VHH nanobodies).",
+            "type": "string"
+          },
+          {
+            "name": "Ag_seq",
+            "description": "Standardized 20-AA assayed antigen ectodomain amino acid sequence with recombinant purification tags removed.",
+            "type": "string"
+          },
+          {
+            "name": "Ag_epitope_restrictions",
+            "description": "Optional epitope region or domain annotation reported by the upstream study.",
+            "type": "string"
+          },
+          {
+            "name": "N_replicates",
+            "description": "Number of replicate measurements aggregated into this unique (Ab, Ag, Dataset, Modality) entry.",
+            "type": "integer"
+          },
+          {
+            "name": "Dataset",
+            "description": "Source dataset identifier (one of the 24 curated studies in metadata/sources_manifest.yaml).",
+            "type": "string"
+          },
+          {
+            "name": "Ab_seq",
+            "description": "Concatenated variable antibody sequence (VH|VL for paired antibodies; VHH for single-domain nanobodies).",
+            "type": "string"
+          },
+          {
+            "name": "AbID",
+            "description": "Canonical unique antibody sequence identifier across the benchmark.",
+            "type": "string"
+          },
+          {
+            "name": "AgID",
+            "description": "Canonical unique antigen sequence identifier across the benchmark.",
+            "type": "string"
+          },
+          {
+            "name": "AbAgID",
+            "description": "Canonical unique antibody-antigen complex identifier linking pointwise tables, pairwise splits, and 3D scaffolds.",
+            "type": "string"
+          },
+          {
+            "name": "AbAg_seq",
+            "description": "Full concatenated antibody and antigen sequence key used for exact deduplication.",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "path": "benchmark/assays_vhh.tsv",
+      "description": "Dedicated single-domain nanobody (VHH) KD master table across 8 public sources (298 complexes, 50 antigen groups).",
+      "schema": {
+        "fields": [
+          {
+            "name": "Ab_name",
+            "description": "Original antibody or nanobody identifier from the upstream experimental study.",
+            "type": "string"
+          },
+          {
+            "name": "WT_Abname",
+            "description": "Wild-type parental antibody name used to group mutational series.",
+            "type": "string"
+          },
+          {
+            "name": "WT_PDB",
+            "description": "Experimental RCSB PDB identifier (4-character code) of the wild-type complex, if solved.",
+            "type": "string"
+          },
+          {
+            "name": "Ag_name",
+            "description": "Original antigen name reported in the source study.",
+            "type": "string"
+          },
+          {
+            "name": "Ag_group",
+            "description": "Canonical harmonized antigen group identifier unifying synonymous target names across sources.",
+            "type": "string"
+          },
+          {
+            "name": "Ag_type",
+            "description": "High-level target category: Viral or Non-Viral.",
+            "type": "string"
+          },
+          {
+            "name": "Assay_modality",
+            "description": "Experimental binding assay type (KD, Enrichment, ELISA, DDG, EC50, DMS, IC50, or Escape).",
+            "type": "string"
+          },
+          {
+            "name": "raw_value",
+            "description": "Original numeric measurement reported by the upstream study before sign/scale standardization.",
+            "type": "number"
+          },
+          {
+            "name": "raw_unit",
+            "description": "Unit or scale of raw_value (e.g., nM, M, ug/mL, kcal/mol, log_enrichment).",
+            "type": "string"
+          },
+          {
+            "name": "binding_score",
+            "description": "Standardized binding score oriented so higher always indicates stronger binding (e.g., pKd = 9 - log10(Kd [nM])).",
+            "type": "number"
+          },
+          {
+            "name": "Ab_heavy_chain_seq",
+            "description": "Standardized 20-AA variable heavy chain (VH or VHH) amino acid sequence with tags and CH1 constant domains removed.",
+            "type": "string"
+          },
+          {
+            "name": "Ab_light_chain_seq",
+            "description": "Standardized 20-AA variable light chain (VL) amino acid sequence (empty for single-domain VHH nanobodies).",
+            "type": "string"
+          },
+          {
+            "name": "Ag_seq",
+            "description": "Standardized 20-AA assayed antigen ectodomain amino acid sequence with recombinant purification tags removed.",
+            "type": "string"
+          },
+          {
+            "name": "Ag_epitope_restrictions",
+            "description": "Optional epitope region or domain annotation reported by the upstream study.",
+            "type": "string"
+          },
+          {
+            "name": "N_replicates",
+            "description": "Number of replicate measurements aggregated into this unique (Ab, Ag, Dataset, Modality) entry.",
+            "type": "integer"
+          },
+          {
+            "name": "Dataset",
+            "description": "Source dataset identifier (one of the 24 curated studies in metadata/sources_manifest.yaml).",
+            "type": "string"
+          },
+          {
+            "name": "AbID",
+            "description": "Canonical unique antibody sequence identifier across the benchmark.",
+            "type": "string"
+          },
+          {
+            "name": "Ab_seq",
+            "description": "Concatenated variable antibody sequence (VH|VL for paired antibodies; VHH for single-domain nanobodies).",
+            "type": "string"
+          },
+          {
+            "name": "AgID",
+            "description": "Canonical unique antigen sequence identifier across the benchmark.",
+            "type": "string"
+          },
+          {
+            "name": "AbAgID",
+            "description": "Canonical unique antibody-antigen complex identifier linking pointwise tables, pairwise splits, and 3D scaffolds.",
+            "type": "string"
+          },
+          {
+            "name": "AbAg_seq",
+            "description": "Full concatenated antibody and antigen sequence key used for exact deduplication.",
+            "type": "string"
+          },
+          {
+            "name": "Ab_lineage",
+            "description": "Connected-component antibody clonal lineage cluster ID (>=80% paired Fv or VHH sequence identity).",
+            "type": "string"
+          },
+          {
+            "name": "Ag_cluster",
+            "description": "Connected-component homologous antigen cluster ID (>=50% global identity or >=25 AA shared subdomain).",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "path": "benchmark/benchmark_summary.json",
+      "description": "Machine-readable JSON summary of AbRank v2 assay counts, antigen/lineage clusters, and split statistics."
+    },
+    {
+      "path": "benchmark/sequences/ab_heavy.fasta",
+      "description": "Deduplicated heavy chain (VH) variable sequences referenced by AbID across core KD assays."
+    },
+    {
+      "path": "benchmark/sequences/ab_light.fasta",
+      "description": "Deduplicated light chain (VL) variable sequences referenced by AbID across core KD assays."
+    },
+    {
+      "path": "benchmark/sequences/ag.fasta",
+      "description": "Deduplicated antigen ectodomain sequences referenced by AgID across core KD assays."
+    },
+    {
+      "path": "benchmark/sequences/vhh.fasta",
+      "description": "Deduplicated single-domain nanobody (VHH) sequences across the VHH KD track."
+    },
+    {
+      "path": "benchmark/sequences/vhh_ag.fasta",
+      "description": "Deduplicated antigen sequences paired with single-domain VHH nanobodies."
+    },
+    {
+      "path": "benchmark/splits/cross_modal/modality_test.tsv",
+      "description": "Cross-modal 3-state test pairs (29,879 pairs spanning Enrichment, ELISA, DDG, EC50, and AbAgym DMS).",
+      "schema": {
+        "fields": [
+          {
+            "name": "pair_id",
+            "description": "Unique deterministic identifier for the ordered comparison (AbAgID_1, AbAgID_2).",
+            "type": "string"
+          },
+          {
+            "name": "AbAgID_1",
+            "description": "Complex identifier of the first antibody-antigen variant in the pair (maps to AbAgID in assays_*.tsv).",
+            "type": "string"
+          },
+          {
+            "name": "AbAgID_2",
+            "description": "Complex identifier of the second antibody-antigen variant in the pair (maps to AbAgID in assays_*.tsv).",
+            "type": "string"
+          },
+          {
+            "name": "binding_diff",
+            "description": "Signed difference binding_score(1) - binding_score(2); positive values mean variant 1 binds more strongly.",
+            "type": "number"
+          },
+          {
+            "name": "logKD_diff",
+            "description": "Negated binding difference (-binding_diff), corresponding to log10(Kd_1 / Kd_2) on KD tracks.",
+            "type": "number"
+          },
+          {
+            "name": "label",
+            "description": "3-state noise-buffered ground-truth label: +1 (Improved, >=10x tighter), 0 (Neutral, <=2x replicate noise band), -1 (Depleted, >=10x weaker).",
+            "type": "integer"
+          },
+          {
+            "name": "Category",
+            "description": "Mutational edit regime: L1/L2/L3 (1-3 AA edits), Candidate (same antigen, Lev > 3), or Global (cross-antigen).",
+            "type": "string"
+          },
+          {
+            "name": "Lev_distance",
+            "description": "Combined Levenshtein edit distance between variant 1 and variant 2 sequences.",
+            "type": "integer"
+          },
+          {
+            "name": "AbRank_group",
+            "description": "Evaluation stratum identifier used for balanced 50/50 sampling and macro-averaged scoring.",
+            "type": "string"
+          },
+          {
+            "name": "Ag_group_1",
+            "description": "Canonical antigen group of AbAgID_1.",
+            "type": "string"
+          },
+          {
+            "name": "Ag_group_2",
+            "description": "Canonical antigen group of AbAgID_2.",
+            "type": "string"
+          },
+          {
+            "name": "Ag_type",
+            "description": "High-level target category: Viral or Non-Viral.",
+            "type": "string"
+          },
+          {
+            "name": "Assay_modality",
+            "description": "Experimental binding assay type (KD, Enrichment, ELISA, DDG, EC50, DMS, IC50, or Escape).",
+            "type": "string"
+          },
+          {
+            "name": "Dataset_1",
+            "description": "Source dataset of AbAgID_1.",
+            "type": "string"
+          },
+          {
+            "name": "Dataset_2",
+            "description": "Source dataset of AbAgID_2.",
+            "type": "string"
+          },
+          {
+            "name": "ag_regime",
+            "description": "Whether the antigen cluster was seen or unseen relative to the core KD training split.",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "path": "benchmark/splits/generative/generative_pairs.tsv",
+      "description": "AbRank-Generative 3-state verifier pairs (5,069 pairs) across wet-lab synthesized AI antibody & VHH designs.",
+      "schema": {
+        "fields": [
+          {
+            "name": "pair_id",
+            "description": "Unique deterministic identifier for the ordered comparison (AbAgID_1, AbAgID_2).",
+            "type": "string"
+          },
+          {
+            "name": "AbAgID_1",
+            "description": "Complex identifier of the first antibody-antigen variant in the pair (maps to AbAgID in assays_*.tsv).",
+            "type": "string"
+          },
+          {
+            "name": "AbAgID_2",
+            "description": "Complex identifier of the second antibody-antigen variant in the pair (maps to AbAgID in assays_*.tsv).",
+            "type": "string"
+          },
+          {
+            "name": "binding_diff",
+            "description": "Signed difference binding_score(1) - binding_score(2); positive values mean variant 1 binds more strongly.",
+            "type": "number"
+          },
+          {
+            "name": "logKD_diff",
+            "description": "Negated binding difference (-binding_diff), corresponding to log10(Kd_1 / Kd_2) on KD tracks.",
+            "type": "number"
+          },
+          {
+            "name": "label",
+            "description": "3-state noise-buffered ground-truth label: +1 (Improved, >=10x tighter), 0 (Neutral, <=2x replicate noise band), -1 (Depleted, >=10x weaker).",
+            "type": "integer"
+          },
+          {
+            "name": "Category",
+            "description": "Mutational edit regime: L1/L2/L3 (1-3 AA edits), Candidate (same antigen, Lev > 3), or Global (cross-antigen).",
+            "type": "string"
+          },
+          {
+            "name": "Lev_distance",
+            "description": "Combined Levenshtein edit distance between variant 1 and variant 2 sequences.",
+            "type": "integer"
+          },
+          {
+            "name": "AbRank_group",
+            "description": "Evaluation stratum identifier used for balanced 50/50 sampling and macro-averaged scoring.",
+            "type": "string"
+          },
+          {
+            "name": "Ag_group_1",
+            "description": "Canonical antigen group of AbAgID_1.",
+            "type": "string"
+          },
+          {
+            "name": "Ag_group_2",
+            "description": "Canonical antigen group of AbAgID_2.",
+            "type": "string"
+          },
+          {
+            "name": "Ag_type",
+            "description": "High-level target category: Viral or Non-Viral.",
+            "type": "string"
+          },
+          {
+            "name": "Assay_modality",
+            "description": "Experimental binding assay type (KD, Enrichment, ELISA, DDG, EC50, DMS, IC50, or Escape).",
+            "type": "string"
+          },
+          {
+            "name": "Dataset_1",
+            "description": "Source dataset of AbAgID_1.",
+            "type": "string"
+          },
+          {
+            "name": "Dataset_2",
+            "description": "Source dataset of AbAgID_2.",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "path": "benchmark/splits/generative/generative_panels.tsv",
+      "description": "AbRank-Generative pointwise panels (1,354 wet-lab AI designs across IgDesign, Origin1, AIntibody, BoltzGen_VHH, Germinal, Shanker, Adaptyv_EGFR_VHH).",
+      "schema": {
+        "fields": [
+          {
+            "name": "Ab_name",
+            "description": "Original antibody or nanobody identifier from the upstream experimental study.",
+            "type": "string"
+          },
+          {
+            "name": "WT_Abname",
+            "description": "Wild-type parental antibody name used to group mutational series.",
+            "type": "string"
+          },
+          {
+            "name": "WT_PDB",
+            "description": "Experimental RCSB PDB identifier (4-character code) of the wild-type complex, if solved.",
+            "type": "string"
+          },
+          {
+            "name": "Ag_name",
+            "description": "Original antigen name reported in the source study.",
+            "type": "string"
+          },
+          {
+            "name": "Ag_group",
+            "description": "Canonical harmonized antigen group identifier unifying synonymous target names across sources.",
+            "type": "string"
+          },
+          {
+            "name": "Ag_type",
+            "description": "High-level target category: Viral or Non-Viral.",
+            "type": "string"
+          },
+          {
+            "name": "Assay_modality",
+            "description": "Experimental binding assay type (KD, Enrichment, ELISA, DDG, EC50, DMS, IC50, or Escape).",
+            "type": "string"
+          },
+          {
+            "name": "raw_value",
+            "description": "Original numeric measurement reported by the upstream study before sign/scale standardization.",
+            "type": "number"
+          },
+          {
+            "name": "raw_unit",
+            "description": "Unit or scale of raw_value (e.g., nM, M, ug/mL, kcal/mol, log_enrichment).",
+            "type": "string"
+          },
+          {
+            "name": "binding_score",
+            "description": "Standardized binding score oriented so higher always indicates stronger binding (e.g., pKd = 9 - log10(Kd [nM])).",
+            "type": "number"
+          },
+          {
+            "name": "Ab_heavy_chain_seq",
+            "description": "Standardized 20-AA variable heavy chain (VH or VHH) amino acid sequence with tags and CH1 constant domains removed.",
+            "type": "string"
+          },
+          {
+            "name": "Ab_light_chain_seq",
+            "description": "Standardized 20-AA variable light chain (VL) amino acid sequence (empty for single-domain VHH nanobodies).",
+            "type": "string"
+          },
+          {
+            "name": "Ag_seq",
+            "description": "Standardized 20-AA assayed antigen ectodomain amino acid sequence with recombinant purification tags removed.",
+            "type": "string"
+          },
+          {
+            "name": "Ag_epitope_restrictions",
+            "description": "Optional epitope region or domain annotation reported by the upstream study.",
+            "type": "string"
+          },
+          {
+            "name": "N_replicates",
+            "description": "Number of replicate measurements aggregated into this unique (Ab, Ag, Dataset, Modality) entry.",
+            "type": "integer"
+          },
+          {
+            "name": "Dataset",
+            "description": "Source dataset identifier (one of the 24 curated studies in metadata/sources_manifest.yaml).",
+            "type": "string"
+          },
+          {
+            "name": "Ab_seq",
+            "description": "Concatenated variable antibody sequence (VH|VL for paired antibodies; VHH for single-domain nanobodies).",
+            "type": "string"
+          },
+          {
+            "name": "AbID",
+            "description": "Canonical unique antibody sequence identifier across the benchmark.",
+            "type": "string"
+          },
+          {
+            "name": "AgID",
+            "description": "Canonical unique antigen sequence identifier across the benchmark.",
+            "type": "string"
+          },
+          {
+            "name": "AbAgID",
+            "description": "Canonical unique antibody-antigen complex identifier linking pointwise tables, pairwise splits, and 3D scaffolds.",
+            "type": "string"
+          },
+          {
+            "name": "AbAg_seq",
+            "description": "Full concatenated antibody and antigen sequence key used for exact deduplication.",
+            "type": "string"
+          },
+          {
+            "name": "Ab_lineage",
+            "description": "Connected-component antibody clonal lineage cluster ID (>=80% paired Fv or VHH sequence identity).",
+            "type": "string"
+          },
+          {
+            "name": "Ag_cluster",
+            "description": "Connected-component homologous antigen cluster ID (>=50% global identity or >=25 AA shared subdomain).",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "path": "benchmark/splits/transfer/escape_test.tsv",
+      "description": "AbRank-Transfer SARS-CoV-2 RBD viral escape DMS 3-state test pairs (8,336 pairs).",
+      "schema": {
+        "fields": [
+          {
+            "name": "pair_id",
+            "description": "Unique deterministic identifier for the ordered comparison (AbAgID_1, AbAgID_2).",
+            "type": "string"
+          },
+          {
+            "name": "AbAgID_1",
+            "description": "Complex identifier of the first antibody-antigen variant in the pair (maps to AbAgID in assays_*.tsv).",
+            "type": "string"
+          },
+          {
+            "name": "AbAgID_2",
+            "description": "Complex identifier of the second antibody-antigen variant in the pair (maps to AbAgID in assays_*.tsv).",
+            "type": "string"
+          },
+          {
+            "name": "binding_diff",
+            "description": "Signed difference binding_score(1) - binding_score(2); positive values mean variant 1 binds more strongly.",
+            "type": "number"
+          },
+          {
+            "name": "logKD_diff",
+            "description": "Negated binding difference (-binding_diff), corresponding to log10(Kd_1 / Kd_2) on KD tracks.",
+            "type": "number"
+          },
+          {
+            "name": "label",
+            "description": "3-state noise-buffered ground-truth label: +1 (Improved, >=10x tighter), 0 (Neutral, <=2x replicate noise band), -1 (Depleted, >=10x weaker).",
+            "type": "integer"
+          },
+          {
+            "name": "Category",
+            "description": "Mutational edit regime: L1/L2/L3 (1-3 AA edits), Candidate (same antigen, Lev > 3), or Global (cross-antigen).",
+            "type": "string"
+          },
+          {
+            "name": "Lev_distance",
+            "description": "Combined Levenshtein edit distance between variant 1 and variant 2 sequences.",
+            "type": "integer"
+          },
+          {
+            "name": "AbRank_group",
+            "description": "Evaluation stratum identifier used for balanced 50/50 sampling and macro-averaged scoring.",
+            "type": "string"
+          },
+          {
+            "name": "Ag_group_1",
+            "description": "Canonical antigen group of AbAgID_1.",
+            "type": "string"
+          },
+          {
+            "name": "Ag_group_2",
+            "description": "Canonical antigen group of AbAgID_2.",
+            "type": "string"
+          },
+          {
+            "name": "Ag_type",
+            "description": "High-level target category: Viral or Non-Viral.",
+            "type": "string"
+          },
+          {
+            "name": "Assay_modality",
+            "description": "Experimental binding assay type (KD, Enrichment, ELISA, DDG, EC50, DMS, IC50, or Escape).",
+            "type": "string"
+          },
+          {
+            "name": "Dataset_1",
+            "description": "Source dataset of AbAgID_1.",
+            "type": "string"
+          },
+          {
+            "name": "Dataset_2",
+            "description": "Source dataset of AbAgID_2.",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "path": "benchmark/splits/transfer/ic50_test.tsv",
+      "description": "AbRank-Transfer viral neutralization IC50 3-state test pairs (2,967 pairs across HIV-1 Env and Coronavirus Spike).",
+      "schema": {
+        "fields": [
+          {
+            "name": "pair_id",
+            "description": "Unique deterministic identifier for the ordered comparison (AbAgID_1, AbAgID_2).",
+            "type": "string"
+          },
+          {
+            "name": "AbAgID_1",
+            "description": "Complex identifier of the first antibody-antigen variant in the pair (maps to AbAgID in assays_*.tsv).",
+            "type": "string"
+          },
+          {
+            "name": "AbAgID_2",
+            "description": "Complex identifier of the second antibody-antigen variant in the pair (maps to AbAgID in assays_*.tsv).",
+            "type": "string"
+          },
+          {
+            "name": "binding_diff",
+            "description": "Signed difference binding_score(1) - binding_score(2); positive values mean variant 1 binds more strongly.",
+            "type": "number"
+          },
+          {
+            "name": "logKD_diff",
+            "description": "Negated binding difference (-binding_diff), corresponding to log10(Kd_1 / Kd_2) on KD tracks.",
+            "type": "number"
+          },
+          {
+            "name": "label",
+            "description": "3-state noise-buffered ground-truth label: +1 (Improved, >=10x tighter), 0 (Neutral, <=2x replicate noise band), -1 (Depleted, >=10x weaker).",
+            "type": "integer"
+          },
+          {
+            "name": "Category",
+            "description": "Mutational edit regime: L1/L2/L3 (1-3 AA edits), Candidate (same antigen, Lev > 3), or Global (cross-antigen).",
+            "type": "string"
+          },
+          {
+            "name": "Lev_distance",
+            "description": "Combined Levenshtein edit distance between variant 1 and variant 2 sequences.",
+            "type": "integer"
+          },
+          {
+            "name": "AbRank_group",
+            "description": "Evaluation stratum identifier used for balanced 50/50 sampling and macro-averaged scoring.",
+            "type": "string"
+          },
+          {
+            "name": "Ag_group_1",
+            "description": "Canonical antigen group of AbAgID_1.",
+            "type": "string"
+          },
+          {
+            "name": "Ag_group_2",
+            "description": "Canonical antigen group of AbAgID_2.",
+            "type": "string"
+          },
+          {
+            "name": "Ag_type",
+            "description": "High-level target category: Viral or Non-Viral.",
+            "type": "string"
+          },
+          {
+            "name": "Assay_modality",
+            "description": "Experimental binding assay type (KD, Enrichment, ELISA, DDG, EC50, DMS, IC50, or Escape).",
+            "type": "string"
+          },
+          {
+            "name": "Dataset_1",
+            "description": "Source dataset of AbAgID_1.",
+            "type": "string"
+          },
+          {
+            "name": "Dataset_2",
+            "description": "Source dataset of AbAgID_2.",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "path": "benchmark/splits/unseen_ag/test.tsv",
+      "description": "Zero-leakage unseen-antigen test split (1,010 balanced 3-state pairs across held-out antigen clusters and antibody lineages).",
+      "schema": {
+        "fields": [
+          {
+            "name": "pair_id",
+            "description": "Unique deterministic identifier for the ordered comparison (AbAgID_1, AbAgID_2).",
+            "type": "string"
+          },
+          {
+            "name": "AbAgID_1",
+            "description": "Complex identifier of the first antibody-antigen variant in the pair (maps to AbAgID in assays_*.tsv).",
+            "type": "string"
+          },
+          {
+            "name": "AbAgID_2",
+            "description": "Complex identifier of the second antibody-antigen variant in the pair (maps to AbAgID in assays_*.tsv).",
+            "type": "string"
+          },
+          {
+            "name": "binding_diff",
+            "description": "Signed difference binding_score(1) - binding_score(2); positive values mean variant 1 binds more strongly.",
+            "type": "number"
+          },
+          {
+            "name": "logKD_diff",
+            "description": "Negated binding difference (-binding_diff), corresponding to log10(Kd_1 / Kd_2) on KD tracks.",
+            "type": "number"
+          },
+          {
+            "name": "label",
+            "description": "3-state noise-buffered ground-truth label: +1 (Improved, >=10x tighter), 0 (Neutral, <=2x replicate noise band), -1 (Depleted, >=10x weaker).",
+            "type": "integer"
+          },
+          {
+            "name": "Category",
+            "description": "Mutational edit regime: L1/L2/L3 (1-3 AA edits), Candidate (same antigen, Lev > 3), or Global (cross-antigen).",
+            "type": "string"
+          },
+          {
+            "name": "Lev_distance",
+            "description": "Combined Levenshtein edit distance between variant 1 and variant 2 sequences.",
+            "type": "integer"
+          },
+          {
+            "name": "AbRank_group",
+            "description": "Evaluation stratum identifier used for balanced 50/50 sampling and macro-averaged scoring.",
+            "type": "string"
+          },
+          {
+            "name": "Ag_group_1",
+            "description": "Canonical antigen group of AbAgID_1.",
+            "type": "string"
+          },
+          {
+            "name": "Ag_group_2",
+            "description": "Canonical antigen group of AbAgID_2.",
+            "type": "string"
+          },
+          {
+            "name": "Ag_type",
+            "description": "High-level target category: Viral or Non-Viral.",
+            "type": "string"
+          },
+          {
+            "name": "Assay_modality",
+            "description": "Experimental binding assay type (KD, Enrichment, ELISA, DDG, EC50, DMS, IC50, or Escape).",
+            "type": "string"
+          },
+          {
+            "name": "Dataset_1",
+            "description": "Source dataset of AbAgID_1.",
+            "type": "string"
+          },
+          {
+            "name": "Dataset_2",
+            "description": "Source dataset of AbAgID_2.",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "path": "benchmark/splits/unseen_ag/test_candidates.tsv",
+      "description": "Same-antigen multi-edit Candidate pairs (Lev > 3, 583 pairs) from held-out test antigen clusters.",
+      "schema": {
+        "fields": [
+          {
+            "name": "pair_id",
+            "description": "Unique deterministic identifier for the ordered comparison (AbAgID_1, AbAgID_2).",
+            "type": "string"
+          },
+          {
+            "name": "AbAgID_1",
+            "description": "Complex identifier of the first antibody-antigen variant in the pair (maps to AbAgID in assays_*.tsv).",
+            "type": "string"
+          },
+          {
+            "name": "AbAgID_2",
+            "description": "Complex identifier of the second antibody-antigen variant in the pair (maps to AbAgID in assays_*.tsv).",
+            "type": "string"
+          },
+          {
+            "name": "binding_diff",
+            "description": "Signed difference binding_score(1) - binding_score(2); positive values mean variant 1 binds more strongly.",
+            "type": "number"
+          },
+          {
+            "name": "logKD_diff",
+            "description": "Negated binding difference (-binding_diff), corresponding to log10(Kd_1 / Kd_2) on KD tracks.",
+            "type": "number"
+          },
+          {
+            "name": "label",
+            "description": "3-state noise-buffered ground-truth label: +1 (Improved, >=10x tighter), 0 (Neutral, <=2x replicate noise band), -1 (Depleted, >=10x weaker).",
+            "type": "integer"
+          },
+          {
+            "name": "Category",
+            "description": "Mutational edit regime: L1/L2/L3 (1-3 AA edits), Candidate (same antigen, Lev > 3), or Global (cross-antigen).",
+            "type": "string"
+          },
+          {
+            "name": "Lev_distance",
+            "description": "Combined Levenshtein edit distance between variant 1 and variant 2 sequences.",
+            "type": "integer"
+          },
+          {
+            "name": "AbRank_group",
+            "description": "Evaluation stratum identifier used for balanced 50/50 sampling and macro-averaged scoring.",
+            "type": "string"
+          },
+          {
+            "name": "Ag_group_1",
+            "description": "Canonical antigen group of AbAgID_1.",
+            "type": "string"
+          },
+          {
+            "name": "Ag_group_2",
+            "description": "Canonical antigen group of AbAgID_2.",
+            "type": "string"
+          },
+          {
+            "name": "Ag_type",
+            "description": "High-level target category: Viral or Non-Viral.",
+            "type": "string"
+          },
+          {
+            "name": "Assay_modality",
+            "description": "Experimental binding assay type (KD, Enrichment, ELISA, DDG, EC50, DMS, IC50, or Escape).",
+            "type": "string"
+          },
+          {
+            "name": "Dataset_1",
+            "description": "Source dataset of AbAgID_1.",
+            "type": "string"
+          },
+          {
+            "name": "Dataset_2",
+            "description": "Source dataset of AbAgID_2.",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "path": "benchmark/splits/unseen_ag/test_pointwise.tsv",
+      "description": "Unfiltered continuous pointwise KD variants belonging to held-out test antigen clusters.",
+      "schema": {
+        "fields": [
+          {
+            "name": "Ab_name",
+            "description": "Original antibody or nanobody identifier from the upstream experimental study.",
+            "type": "string"
+          },
+          {
+            "name": "WT_Abname",
+            "description": "Wild-type parental antibody name used to group mutational series.",
+            "type": "string"
+          },
+          {
+            "name": "WT_PDB",
+            "description": "Experimental RCSB PDB identifier (4-character code) of the wild-type complex, if solved.",
+            "type": "string"
+          },
+          {
+            "name": "Ag_name",
+            "description": "Original antigen name reported in the source study.",
+            "type": "string"
+          },
+          {
+            "name": "Ag_group",
+            "description": "Canonical harmonized antigen group identifier unifying synonymous target names across sources.",
+            "type": "string"
+          },
+          {
+            "name": "Ag_type",
+            "description": "High-level target category: Viral or Non-Viral.",
+            "type": "string"
+          },
+          {
+            "name": "Assay_modality",
+            "description": "Experimental binding assay type (KD, Enrichment, ELISA, DDG, EC50, DMS, IC50, or Escape).",
+            "type": "string"
+          },
+          {
+            "name": "raw_value",
+            "description": "Original numeric measurement reported by the upstream study before sign/scale standardization.",
+            "type": "number"
+          },
+          {
+            "name": "raw_unit",
+            "description": "Unit or scale of raw_value (e.g., nM, M, ug/mL, kcal/mol, log_enrichment).",
+            "type": "string"
+          },
+          {
+            "name": "binding_score",
+            "description": "Standardized binding score oriented so higher always indicates stronger binding (e.g., pKd = 9 - log10(Kd [nM])).",
+            "type": "number"
+          },
+          {
+            "name": "Ab_heavy_chain_seq",
+            "description": "Standardized 20-AA variable heavy chain (VH or VHH) amino acid sequence with tags and CH1 constant domains removed.",
+            "type": "string"
+          },
+          {
+            "name": "Ab_light_chain_seq",
+            "description": "Standardized 20-AA variable light chain (VL) amino acid sequence (empty for single-domain VHH nanobodies).",
+            "type": "string"
+          },
+          {
+            "name": "Ag_seq",
+            "description": "Standardized 20-AA assayed antigen ectodomain amino acid sequence with recombinant purification tags removed.",
+            "type": "string"
+          },
+          {
+            "name": "Ag_epitope_restrictions",
+            "description": "Optional epitope region or domain annotation reported by the upstream study.",
+            "type": "string"
+          },
+          {
+            "name": "N_replicates",
+            "description": "Number of replicate measurements aggregated into this unique (Ab, Ag, Dataset, Modality) entry.",
+            "type": "integer"
+          },
+          {
+            "name": "Dataset",
+            "description": "Source dataset identifier (one of the 24 curated studies in metadata/sources_manifest.yaml).",
+            "type": "string"
+          },
+          {
+            "name": "Ab_seq",
+            "description": "Concatenated variable antibody sequence (VH|VL for paired antibodies; VHH for single-domain nanobodies).",
+            "type": "string"
+          },
+          {
+            "name": "AbID",
+            "description": "Canonical unique antibody sequence identifier across the benchmark.",
+            "type": "string"
+          },
+          {
+            "name": "AgID",
+            "description": "Canonical unique antigen sequence identifier across the benchmark.",
+            "type": "string"
+          },
+          {
+            "name": "AbAgID",
+            "description": "Canonical unique antibody-antigen complex identifier linking pointwise tables, pairwise splits, and 3D scaffolds.",
+            "type": "string"
+          },
+          {
+            "name": "AbAg_seq",
+            "description": "Full concatenated antibody and antigen sequence key used for exact deduplication.",
+            "type": "string"
+          },
+          {
+            "name": "Ab_lineage",
+            "description": "Connected-component antibody clonal lineage cluster ID (>=80% paired Fv or VHH sequence identity).",
+            "type": "string"
+          },
+          {
+            "name": "Ag_cluster",
+            "description": "Connected-component homologous antigen cluster ID (>=50% global identity or >=25 AA shared subdomain).",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "path": "benchmark/splits/unseen_ag/train.tsv",
+      "description": "Zero-leakage unseen-antigen training split (21,836 balanced 3-state pairs across Global and L1-L3 local mutations).",
+      "schema": {
+        "fields": [
+          {
+            "name": "pair_id",
+            "description": "Unique deterministic identifier for the ordered comparison (AbAgID_1, AbAgID_2).",
+            "type": "string"
+          },
+          {
+            "name": "AbAgID_1",
+            "description": "Complex identifier of the first antibody-antigen variant in the pair (maps to AbAgID in assays_*.tsv).",
+            "type": "string"
+          },
+          {
+            "name": "AbAgID_2",
+            "description": "Complex identifier of the second antibody-antigen variant in the pair (maps to AbAgID in assays_*.tsv).",
+            "type": "string"
+          },
+          {
+            "name": "binding_diff",
+            "description": "Signed difference binding_score(1) - binding_score(2); positive values mean variant 1 binds more strongly.",
+            "type": "number"
+          },
+          {
+            "name": "logKD_diff",
+            "description": "Negated binding difference (-binding_diff), corresponding to log10(Kd_1 / Kd_2) on KD tracks.",
+            "type": "number"
+          },
+          {
+            "name": "label",
+            "description": "3-state noise-buffered ground-truth label: +1 (Improved, >=10x tighter), 0 (Neutral, <=2x replicate noise band), -1 (Depleted, >=10x weaker).",
+            "type": "integer"
+          },
+          {
+            "name": "Category",
+            "description": "Mutational edit regime: L1/L2/L3 (1-3 AA edits), Candidate (same antigen, Lev > 3), or Global (cross-antigen).",
+            "type": "string"
+          },
+          {
+            "name": "Lev_distance",
+            "description": "Combined Levenshtein edit distance between variant 1 and variant 2 sequences.",
+            "type": "integer"
+          },
+          {
+            "name": "AbRank_group",
+            "description": "Evaluation stratum identifier used for balanced 50/50 sampling and macro-averaged scoring.",
+            "type": "string"
+          },
+          {
+            "name": "Ag_group_1",
+            "description": "Canonical antigen group of AbAgID_1.",
+            "type": "string"
+          },
+          {
+            "name": "Ag_group_2",
+            "description": "Canonical antigen group of AbAgID_2.",
+            "type": "string"
+          },
+          {
+            "name": "Ag_type",
+            "description": "High-level target category: Viral or Non-Viral.",
+            "type": "string"
+          },
+          {
+            "name": "Assay_modality",
+            "description": "Experimental binding assay type (KD, Enrichment, ELISA, DDG, EC50, DMS, IC50, or Escape).",
+            "type": "string"
+          },
+          {
+            "name": "Dataset_1",
+            "description": "Source dataset of AbAgID_1.",
+            "type": "string"
+          },
+          {
+            "name": "Dataset_2",
+            "description": "Source dataset of AbAgID_2.",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "path": "benchmark/splits/unseen_ag/train_candidates.tsv",
+      "description": "Same-antigen multi-edit Candidate pairs (Lev > 3) from the training antigen clusters.",
+      "schema": {
+        "fields": [
+          {
+            "name": "pair_id",
+            "description": "Unique deterministic identifier for the ordered comparison (AbAgID_1, AbAgID_2).",
+            "type": "string"
+          },
+          {
+            "name": "AbAgID_1",
+            "description": "Complex identifier of the first antibody-antigen variant in the pair (maps to AbAgID in assays_*.tsv).",
+            "type": "string"
+          },
+          {
+            "name": "AbAgID_2",
+            "description": "Complex identifier of the second antibody-antigen variant in the pair (maps to AbAgID in assays_*.tsv).",
+            "type": "string"
+          },
+          {
+            "name": "binding_diff",
+            "description": "Signed difference binding_score(1) - binding_score(2); positive values mean variant 1 binds more strongly.",
+            "type": "number"
+          },
+          {
+            "name": "logKD_diff",
+            "description": "Negated binding difference (-binding_diff), corresponding to log10(Kd_1 / Kd_2) on KD tracks.",
+            "type": "number"
+          },
+          {
+            "name": "label",
+            "description": "3-state noise-buffered ground-truth label: +1 (Improved, >=10x tighter), 0 (Neutral, <=2x replicate noise band), -1 (Depleted, >=10x weaker).",
+            "type": "integer"
+          },
+          {
+            "name": "Category",
+            "description": "Mutational edit regime: L1/L2/L3 (1-3 AA edits), Candidate (same antigen, Lev > 3), or Global (cross-antigen).",
+            "type": "string"
+          },
+          {
+            "name": "Lev_distance",
+            "description": "Combined Levenshtein edit distance between variant 1 and variant 2 sequences.",
+            "type": "integer"
+          },
+          {
+            "name": "AbRank_group",
+            "description": "Evaluation stratum identifier used for balanced 50/50 sampling and macro-averaged scoring.",
+            "type": "string"
+          },
+          {
+            "name": "Ag_group_1",
+            "description": "Canonical antigen group of AbAgID_1.",
+            "type": "string"
+          },
+          {
+            "name": "Ag_group_2",
+            "description": "Canonical antigen group of AbAgID_2.",
+            "type": "string"
+          },
+          {
+            "name": "Ag_type",
+            "description": "High-level target category: Viral or Non-Viral.",
+            "type": "string"
+          },
+          {
+            "name": "Assay_modality",
+            "description": "Experimental binding assay type (KD, Enrichment, ELISA, DDG, EC50, DMS, IC50, or Escape).",
+            "type": "string"
+          },
+          {
+            "name": "Dataset_1",
+            "description": "Source dataset of AbAgID_1.",
+            "type": "string"
+          },
+          {
+            "name": "Dataset_2",
+            "description": "Source dataset of AbAgID_2.",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "path": "benchmark/splits/unseen_ag/train_pointwise.tsv",
+      "description": "Unfiltered continuous pointwise KD variants belonging to training antigen clusters (for AbRank-Discovery LOACO panels and pointwise training).",
+      "schema": {
+        "fields": [
+          {
+            "name": "Ab_name",
+            "description": "Original antibody or nanobody identifier from the upstream experimental study.",
+            "type": "string"
+          },
+          {
+            "name": "WT_Abname",
+            "description": "Wild-type parental antibody name used to group mutational series.",
+            "type": "string"
+          },
+          {
+            "name": "WT_PDB",
+            "description": "Experimental RCSB PDB identifier (4-character code) of the wild-type complex, if solved.",
+            "type": "string"
+          },
+          {
+            "name": "Ag_name",
+            "description": "Original antigen name reported in the source study.",
+            "type": "string"
+          },
+          {
+            "name": "Ag_group",
+            "description": "Canonical harmonized antigen group identifier unifying synonymous target names across sources.",
+            "type": "string"
+          },
+          {
+            "name": "Ag_type",
+            "description": "High-level target category: Viral or Non-Viral.",
+            "type": "string"
+          },
+          {
+            "name": "Assay_modality",
+            "description": "Experimental binding assay type (KD, Enrichment, ELISA, DDG, EC50, DMS, IC50, or Escape).",
+            "type": "string"
+          },
+          {
+            "name": "raw_value",
+            "description": "Original numeric measurement reported by the upstream study before sign/scale standardization.",
+            "type": "number"
+          },
+          {
+            "name": "raw_unit",
+            "description": "Unit or scale of raw_value (e.g., nM, M, ug/mL, kcal/mol, log_enrichment).",
+            "type": "string"
+          },
+          {
+            "name": "binding_score",
+            "description": "Standardized binding score oriented so higher always indicates stronger binding (e.g., pKd = 9 - log10(Kd [nM])).",
+            "type": "number"
+          },
+          {
+            "name": "Ab_heavy_chain_seq",
+            "description": "Standardized 20-AA variable heavy chain (VH or VHH) amino acid sequence with tags and CH1 constant domains removed.",
+            "type": "string"
+          },
+          {
+            "name": "Ab_light_chain_seq",
+            "description": "Standardized 20-AA variable light chain (VL) amino acid sequence (empty for single-domain VHH nanobodies).",
+            "type": "string"
+          },
+          {
+            "name": "Ag_seq",
+            "description": "Standardized 20-AA assayed antigen ectodomain amino acid sequence with recombinant purification tags removed.",
+            "type": "string"
+          },
+          {
+            "name": "Ag_epitope_restrictions",
+            "description": "Optional epitope region or domain annotation reported by the upstream study.",
+            "type": "string"
+          },
+          {
+            "name": "N_replicates",
+            "description": "Number of replicate measurements aggregated into this unique (Ab, Ag, Dataset, Modality) entry.",
+            "type": "integer"
+          },
+          {
+            "name": "Dataset",
+            "description": "Source dataset identifier (one of the 24 curated studies in metadata/sources_manifest.yaml).",
+            "type": "string"
+          },
+          {
+            "name": "Ab_seq",
+            "description": "Concatenated variable antibody sequence (VH|VL for paired antibodies; VHH for single-domain nanobodies).",
+            "type": "string"
+          },
+          {
+            "name": "AbID",
+            "description": "Canonical unique antibody sequence identifier across the benchmark.",
+            "type": "string"
+          },
+          {
+            "name": "AgID",
+            "description": "Canonical unique antigen sequence identifier across the benchmark.",
+            "type": "string"
+          },
+          {
+            "name": "AbAgID",
+            "description": "Canonical unique antibody-antigen complex identifier linking pointwise tables, pairwise splits, and 3D scaffolds.",
+            "type": "string"
+          },
+          {
+            "name": "AbAg_seq",
+            "description": "Full concatenated antibody and antigen sequence key used for exact deduplication.",
+            "type": "string"
+          },
+          {
+            "name": "Ab_lineage",
+            "description": "Connected-component antibody clonal lineage cluster ID (>=80% paired Fv or VHH sequence identity).",
+            "type": "string"
+          },
+          {
+            "name": "Ag_cluster",
+            "description": "Connected-component homologous antigen cluster ID (>=50% global identity or >=25 AA shared subdomain).",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "path": "benchmark/splits/unseen_ag/val.tsv",
+      "description": "Zero-leakage unseen-antigen validation split (1,906 balanced 3-state pairs; <50% Ag identity and <80% Ab lineage overlap with train/test).",
+      "schema": {
+        "fields": [
+          {
+            "name": "pair_id",
+            "description": "Unique deterministic identifier for the ordered comparison (AbAgID_1, AbAgID_2).",
+            "type": "string"
+          },
+          {
+            "name": "AbAgID_1",
+            "description": "Complex identifier of the first antibody-antigen variant in the pair (maps to AbAgID in assays_*.tsv).",
+            "type": "string"
+          },
+          {
+            "name": "AbAgID_2",
+            "description": "Complex identifier of the second antibody-antigen variant in the pair (maps to AbAgID in assays_*.tsv).",
+            "type": "string"
+          },
+          {
+            "name": "binding_diff",
+            "description": "Signed difference binding_score(1) - binding_score(2); positive values mean variant 1 binds more strongly.",
+            "type": "number"
+          },
+          {
+            "name": "logKD_diff",
+            "description": "Negated binding difference (-binding_diff), corresponding to log10(Kd_1 / Kd_2) on KD tracks.",
+            "type": "number"
+          },
+          {
+            "name": "label",
+            "description": "3-state noise-buffered ground-truth label: +1 (Improved, >=10x tighter), 0 (Neutral, <=2x replicate noise band), -1 (Depleted, >=10x weaker).",
+            "type": "integer"
+          },
+          {
+            "name": "Category",
+            "description": "Mutational edit regime: L1/L2/L3 (1-3 AA edits), Candidate (same antigen, Lev > 3), or Global (cross-antigen).",
+            "type": "string"
+          },
+          {
+            "name": "Lev_distance",
+            "description": "Combined Levenshtein edit distance between variant 1 and variant 2 sequences.",
+            "type": "integer"
+          },
+          {
+            "name": "AbRank_group",
+            "description": "Evaluation stratum identifier used for balanced 50/50 sampling and macro-averaged scoring.",
+            "type": "string"
+          },
+          {
+            "name": "Ag_group_1",
+            "description": "Canonical antigen group of AbAgID_1.",
+            "type": "string"
+          },
+          {
+            "name": "Ag_group_2",
+            "description": "Canonical antigen group of AbAgID_2.",
+            "type": "string"
+          },
+          {
+            "name": "Ag_type",
+            "description": "High-level target category: Viral or Non-Viral.",
+            "type": "string"
+          },
+          {
+            "name": "Assay_modality",
+            "description": "Experimental binding assay type (KD, Enrichment, ELISA, DDG, EC50, DMS, IC50, or Escape).",
+            "type": "string"
+          },
+          {
+            "name": "Dataset_1",
+            "description": "Source dataset of AbAgID_1.",
+            "type": "string"
+          },
+          {
+            "name": "Dataset_2",
+            "description": "Source dataset of AbAgID_2.",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "path": "benchmark/splits/unseen_ag/val_candidates.tsv",
+      "description": "Same-antigen multi-edit Candidate pairs (Lev > 3) from the validation antigen clusters.",
+      "schema": {
+        "fields": [
+          {
+            "name": "pair_id",
+            "description": "Unique deterministic identifier for the ordered comparison (AbAgID_1, AbAgID_2).",
+            "type": "string"
+          },
+          {
+            "name": "AbAgID_1",
+            "description": "Complex identifier of the first antibody-antigen variant in the pair (maps to AbAgID in assays_*.tsv).",
+            "type": "string"
+          },
+          {
+            "name": "AbAgID_2",
+            "description": "Complex identifier of the second antibody-antigen variant in the pair (maps to AbAgID in assays_*.tsv).",
+            "type": "string"
+          },
+          {
+            "name": "binding_diff",
+            "description": "Signed difference binding_score(1) - binding_score(2); positive values mean variant 1 binds more strongly.",
+            "type": "number"
+          },
+          {
+            "name": "logKD_diff",
+            "description": "Negated binding difference (-binding_diff), corresponding to log10(Kd_1 / Kd_2) on KD tracks.",
+            "type": "number"
+          },
+          {
+            "name": "label",
+            "description": "3-state noise-buffered ground-truth label: +1 (Improved, >=10x tighter), 0 (Neutral, <=2x replicate noise band), -1 (Depleted, >=10x weaker).",
+            "type": "integer"
+          },
+          {
+            "name": "Category",
+            "description": "Mutational edit regime: L1/L2/L3 (1-3 AA edits), Candidate (same antigen, Lev > 3), or Global (cross-antigen).",
+            "type": "string"
+          },
+          {
+            "name": "Lev_distance",
+            "description": "Combined Levenshtein edit distance between variant 1 and variant 2 sequences.",
+            "type": "integer"
+          },
+          {
+            "name": "AbRank_group",
+            "description": "Evaluation stratum identifier used for balanced 50/50 sampling and macro-averaged scoring.",
+            "type": "string"
+          },
+          {
+            "name": "Ag_group_1",
+            "description": "Canonical antigen group of AbAgID_1.",
+            "type": "string"
+          },
+          {
+            "name": "Ag_group_2",
+            "description": "Canonical antigen group of AbAgID_2.",
+            "type": "string"
+          },
+          {
+            "name": "Ag_type",
+            "description": "High-level target category: Viral or Non-Viral.",
+            "type": "string"
+          },
+          {
+            "name": "Assay_modality",
+            "description": "Experimental binding assay type (KD, Enrichment, ELISA, DDG, EC50, DMS, IC50, or Escape).",
+            "type": "string"
+          },
+          {
+            "name": "Dataset_1",
+            "description": "Source dataset of AbAgID_1.",
+            "type": "string"
+          },
+          {
+            "name": "Dataset_2",
+            "description": "Source dataset of AbAgID_2.",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "path": "benchmark/splits/unseen_ag/val_pointwise.tsv",
+      "description": "Unfiltered continuous pointwise KD variants belonging to validation antigen clusters.",
+      "schema": {
+        "fields": [
+          {
+            "name": "Ab_name",
+            "description": "Original antibody or nanobody identifier from the upstream experimental study.",
+            "type": "string"
+          },
+          {
+            "name": "WT_Abname",
+            "description": "Wild-type parental antibody name used to group mutational series.",
+            "type": "string"
+          },
+          {
+            "name": "WT_PDB",
+            "description": "Experimental RCSB PDB identifier (4-character code) of the wild-type complex, if solved.",
+            "type": "string"
+          },
+          {
+            "name": "Ag_name",
+            "description": "Original antigen name reported in the source study.",
+            "type": "string"
+          },
+          {
+            "name": "Ag_group",
+            "description": "Canonical harmonized antigen group identifier unifying synonymous target names across sources.",
+            "type": "string"
+          },
+          {
+            "name": "Ag_type",
+            "description": "High-level target category: Viral or Non-Viral.",
+            "type": "string"
+          },
+          {
+            "name": "Assay_modality",
+            "description": "Experimental binding assay type (KD, Enrichment, ELISA, DDG, EC50, DMS, IC50, or Escape).",
+            "type": "string"
+          },
+          {
+            "name": "raw_value",
+            "description": "Original numeric measurement reported by the upstream study before sign/scale standardization.",
+            "type": "number"
+          },
+          {
+            "name": "raw_unit",
+            "description": "Unit or scale of raw_value (e.g., nM, M, ug/mL, kcal/mol, log_enrichment).",
+            "type": "string"
+          },
+          {
+            "name": "binding_score",
+            "description": "Standardized binding score oriented so higher always indicates stronger binding (e.g., pKd = 9 - log10(Kd [nM])).",
+            "type": "number"
+          },
+          {
+            "name": "Ab_heavy_chain_seq",
+            "description": "Standardized 20-AA variable heavy chain (VH or VHH) amino acid sequence with tags and CH1 constant domains removed.",
+            "type": "string"
+          },
+          {
+            "name": "Ab_light_chain_seq",
+            "description": "Standardized 20-AA variable light chain (VL) amino acid sequence (empty for single-domain VHH nanobodies).",
+            "type": "string"
+          },
+          {
+            "name": "Ag_seq",
+            "description": "Standardized 20-AA assayed antigen ectodomain amino acid sequence with recombinant purification tags removed.",
+            "type": "string"
+          },
+          {
+            "name": "Ag_epitope_restrictions",
+            "description": "Optional epitope region or domain annotation reported by the upstream study.",
+            "type": "string"
+          },
+          {
+            "name": "N_replicates",
+            "description": "Number of replicate measurements aggregated into this unique (Ab, Ag, Dataset, Modality) entry.",
+            "type": "integer"
+          },
+          {
+            "name": "Dataset",
+            "description": "Source dataset identifier (one of the 24 curated studies in metadata/sources_manifest.yaml).",
+            "type": "string"
+          },
+          {
+            "name": "Ab_seq",
+            "description": "Concatenated variable antibody sequence (VH|VL for paired antibodies; VHH for single-domain nanobodies).",
+            "type": "string"
+          },
+          {
+            "name": "AbID",
+            "description": "Canonical unique antibody sequence identifier across the benchmark.",
+            "type": "string"
+          },
+          {
+            "name": "AgID",
+            "description": "Canonical unique antigen sequence identifier across the benchmark.",
+            "type": "string"
+          },
+          {
+            "name": "AbAgID",
+            "description": "Canonical unique antibody-antigen complex identifier linking pointwise tables, pairwise splits, and 3D scaffolds.",
+            "type": "string"
+          },
+          {
+            "name": "AbAg_seq",
+            "description": "Full concatenated antibody and antigen sequence key used for exact deduplication.",
+            "type": "string"
+          },
+          {
+            "name": "Ab_lineage",
+            "description": "Connected-component antibody clonal lineage cluster ID (>=80% paired Fv or VHH sequence identity).",
+            "type": "string"
+          },
+          {
+            "name": "Ag_cluster",
+            "description": "Connected-component homologous antigen cluster ID (>=50% global identity or >=25 AA shared subdomain).",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "path": "benchmark/splits/vhh/vhh_pointwise.tsv",
+      "description": "Pointwise single-domain VHH nanobody KD table for continuous panel evaluation.",
+      "schema": {
+        "fields": [
+          {
+            "name": "Ab_name",
+            "description": "Original antibody or nanobody identifier from the upstream experimental study.",
+            "type": "string"
+          },
+          {
+            "name": "WT_Abname",
+            "description": "Wild-type parental antibody name used to group mutational series.",
+            "type": "string"
+          },
+          {
+            "name": "WT_PDB",
+            "description": "Experimental RCSB PDB identifier (4-character code) of the wild-type complex, if solved.",
+            "type": "string"
+          },
+          {
+            "name": "Ag_name",
+            "description": "Original antigen name reported in the source study.",
+            "type": "string"
+          },
+          {
+            "name": "Ag_group",
+            "description": "Canonical harmonized antigen group identifier unifying synonymous target names across sources.",
+            "type": "string"
+          },
+          {
+            "name": "Ag_type",
+            "description": "High-level target category: Viral or Non-Viral.",
+            "type": "string"
+          },
+          {
+            "name": "Assay_modality",
+            "description": "Experimental binding assay type (KD, Enrichment, ELISA, DDG, EC50, DMS, IC50, or Escape).",
+            "type": "string"
+          },
+          {
+            "name": "raw_value",
+            "description": "Original numeric measurement reported by the upstream study before sign/scale standardization.",
+            "type": "number"
+          },
+          {
+            "name": "raw_unit",
+            "description": "Unit or scale of raw_value (e.g., nM, M, ug/mL, kcal/mol, log_enrichment).",
+            "type": "string"
+          },
+          {
+            "name": "binding_score",
+            "description": "Standardized binding score oriented so higher always indicates stronger binding (e.g., pKd = 9 - log10(Kd [nM])).",
+            "type": "number"
+          },
+          {
+            "name": "Ab_heavy_chain_seq",
+            "description": "Standardized 20-AA variable heavy chain (VH or VHH) amino acid sequence with tags and CH1 constant domains removed.",
+            "type": "string"
+          },
+          {
+            "name": "Ab_light_chain_seq",
+            "description": "Standardized 20-AA variable light chain (VL) amino acid sequence (empty for single-domain VHH nanobodies).",
+            "type": "string"
+          },
+          {
+            "name": "Ag_seq",
+            "description": "Standardized 20-AA assayed antigen ectodomain amino acid sequence with recombinant purification tags removed.",
+            "type": "string"
+          },
+          {
+            "name": "Ag_epitope_restrictions",
+            "description": "Optional epitope region or domain annotation reported by the upstream study.",
+            "type": "string"
+          },
+          {
+            "name": "N_replicates",
+            "description": "Number of replicate measurements aggregated into this unique (Ab, Ag, Dataset, Modality) entry.",
+            "type": "integer"
+          },
+          {
+            "name": "Dataset",
+            "description": "Source dataset identifier (one of the 24 curated studies in metadata/sources_manifest.yaml).",
+            "type": "string"
+          },
+          {
+            "name": "AbID",
+            "description": "Canonical unique antibody sequence identifier across the benchmark.",
+            "type": "string"
+          },
+          {
+            "name": "Ab_seq",
+            "description": "Concatenated variable antibody sequence (VH|VL for paired antibodies; VHH for single-domain nanobodies).",
+            "type": "string"
+          },
+          {
+            "name": "AgID",
+            "description": "Canonical unique antigen sequence identifier across the benchmark.",
+            "type": "string"
+          },
+          {
+            "name": "AbAgID",
+            "description": "Canonical unique antibody-antigen complex identifier linking pointwise tables, pairwise splits, and 3D scaffolds.",
+            "type": "string"
+          },
+          {
+            "name": "AbAg_seq",
+            "description": "Full concatenated antibody and antigen sequence key used for exact deduplication.",
+            "type": "string"
+          },
+          {
+            "name": "Ab_lineage",
+            "description": "Connected-component antibody clonal lineage cluster ID (>=80% paired Fv or VHH sequence identity).",
+            "type": "string"
+          },
+          {
+            "name": "Ag_cluster",
+            "description": "Connected-component homologous antigen cluster ID (>=50% global identity or >=25 AA shared subdomain).",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "path": "benchmark/splits/vhh/vhh_ranking_test.tsv",
+      "description": "Single-domain VHH nanobody 3-state KD ranking test pairs (813 pairs across 19 antigen groups).",
+      "schema": {
+        "fields": [
+          {
+            "name": "pair_id",
+            "description": "Unique deterministic identifier for the ordered comparison (AbAgID_1, AbAgID_2).",
+            "type": "string"
+          },
+          {
+            "name": "AbAgID_1",
+            "description": "Complex identifier of the first antibody-antigen variant in the pair (maps to AbAgID in assays_*.tsv).",
+            "type": "string"
+          },
+          {
+            "name": "AbAgID_2",
+            "description": "Complex identifier of the second antibody-antigen variant in the pair (maps to AbAgID in assays_*.tsv).",
+            "type": "string"
+          },
+          {
+            "name": "binding_diff",
+            "description": "Signed difference binding_score(1) - binding_score(2); positive values mean variant 1 binds more strongly.",
+            "type": "number"
+          },
+          {
+            "name": "logKD_diff",
+            "description": "Negated binding difference (-binding_diff), corresponding to log10(Kd_1 / Kd_2) on KD tracks.",
+            "type": "number"
+          },
+          {
+            "name": "label",
+            "description": "3-state noise-buffered ground-truth label: +1 (Improved, >=10x tighter), 0 (Neutral, <=2x replicate noise band), -1 (Depleted, >=10x weaker).",
+            "type": "integer"
+          },
+          {
+            "name": "Category",
+            "description": "Mutational edit regime: L1/L2/L3 (1-3 AA edits), Candidate (same antigen, Lev > 3), or Global (cross-antigen).",
+            "type": "string"
+          },
+          {
+            "name": "Lev_distance",
+            "description": "Combined Levenshtein edit distance between variant 1 and variant 2 sequences.",
+            "type": "integer"
+          },
+          {
+            "name": "AbRank_group",
+            "description": "Evaluation stratum identifier used for balanced 50/50 sampling and macro-averaged scoring.",
+            "type": "string"
+          },
+          {
+            "name": "Ag_group_1",
+            "description": "Canonical antigen group of AbAgID_1.",
+            "type": "string"
+          },
+          {
+            "name": "Ag_group_2",
+            "description": "Canonical antigen group of AbAgID_2.",
+            "type": "string"
+          },
+          {
+            "name": "Ag_type",
+            "description": "High-level target category: Viral or Non-Viral.",
+            "type": "string"
+          },
+          {
+            "name": "Assay_modality",
+            "description": "Experimental binding assay type (KD, Enrichment, ELISA, DDG, EC50, DMS, IC50, or Escape).",
+            "type": "string"
+          },
+          {
+            "name": "Dataset_1",
+            "description": "Source dataset of AbAgID_1.",
+            "type": "string"
+          },
+          {
+            "name": "Dataset_2",
+            "description": "Source dataset of AbAgID_2.",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "path": "metadata/antigen_catalog.tsv",
+      "description": "Curated canonical antigen reference sequences and Viral/Non-Viral classification.",
+      "schema": {
+        "fields": [
+          {
+            "name": "Antigen_name",
+            "description": "Canonical reference antigen name.",
+            "type": "string"
+          },
+          {
+            "name": "Ag_type",
+            "description": "High-level target category: Viral or Non-Viral.",
+            "type": "string"
+          },
+          {
+            "name": "Ag_seq",
+            "description": "Standardized 20-AA assayed antigen ectodomain amino acid sequence with recombinant purification tags removed.",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "path": "metadata/cofolding_manifest.tsv",
+      "description": "Manifest of all 851 wild-type parental antibody/VHH-antigen scaffolds (340 solved co-crystals + 511 unresolved) with priority tiers and exact sequences.",
+      "schema": {
+        "fields": [
+          {
+            "name": "scaffold_id",
+            "description": "Unique wild-type parental 3D scaffold identifier matching structures_wt/scaffolds/<scaffold_id>.pdb.",
+            "type": "string"
+          },
+          {
+            "name": "priority_tier",
+            "description": "Co-folding evaluation priority tier (1_loaco_local, 2_candidate_and_vhh, or 3_cross_modal_and_global).",
+            "type": "string"
+          },
+          {
+            "name": "tracks",
+            "description": "Comma-separated AbRank tracks covered by this wild-type parental scaffold.",
+            "type": "string"
+          },
+          {
+            "name": "is_experimental_cocrystal",
+            "description": "True if an experimentally solved RCSB PDB antibody-antigen co-crystal exists for this WT scaffold.",
+            "type": "boolean"
+          },
+          {
+            "name": "wt_pdb_id",
+            "description": "Experimental RCSB PDB ID for solved WT co-crystals (empty if unbound/predicted).",
+            "type": "string"
+          },
+          {
+            "name": "ref_scaffold_pdb",
+            "description": "Relative path to the standardized wild-type scaffold PDB file.",
+            "type": "string"
+          },
+          {
+            "name": "n_chains",
+            "description": "Number of protein chains in the scaffold (3 for VH+VL+Ag; 2 for VHH+Ag).",
+            "type": "integer"
+          },
+          {
+            "name": "total_aa_len",
+            "description": "Total amino acid length across all chains in the WT complex.",
+            "type": "integer"
+          },
+          {
+            "name": "len_H",
+            "description": "Length of the heavy chain (VH or VHH) in amino acids.",
+            "type": "integer"
+          },
+          {
+            "name": "len_L",
+            "description": "Length of the light chain (VL) in amino acids (0 for VHH nanobodies).",
+            "type": "integer"
+          },
+          {
+            "name": "len_A",
+            "description": "Length of the antigen chain in amino acids.",
+            "type": "integer"
+          },
+          {
+            "name": "seq_H",
+            "description": "Wild-type heavy chain (VH or VHH) amino acid sequence.",
+            "type": "string"
+          },
+          {
+            "name": "seq_L",
+            "description": "Wild-type light chain (VL) amino acid sequence (empty for VHH nanobodies).",
+            "type": "string"
+          },
+          {
+            "name": "seq_A",
+            "description": "Wild-type antigen ectodomain amino acid sequence.",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "path": "metadata/constructs/BoltzGen_target_sequences.fasta",
+      "description": "Exact assayed antigen ectodomain FASTA construct used during AbRank curation (BoltzGen_target_sequences.fasta)."
+    },
+    {
+      "path": "metadata/constructs/Germinal_antigens.fasta",
+      "description": "Exact assayed antigen ectodomain FASTA construct used during AbRank curation (Germinal_antigens.fasta)."
+    },
+    {
+      "path": "metadata/constructs/Influenza_AH1_Brisbane_02_2018_ectodomain.fasta",
+      "description": "Exact assayed antigen ectodomain FASTA construct used during AbRank curation (Influenza_AH1_Brisbane_02_2018_ectodomain.fasta)."
+    },
+    {
+      "path": "metadata/constructs/SARSCoV2_MN908947.3_RBD_constructs.fasta",
+      "description": "Exact assayed antigen ectodomain FASTA construct used during AbRank curation (SARSCoV2_MN908947.3_RBD_constructs.fasta)."
+    },
+    {
+      "path": "metadata/constructs/SARSCoV2_WuhanHu1_S1.fasta",
+      "description": "Exact assayed antigen ectodomain FASTA construct used during AbRank curation (SARSCoV2_WuhanHu1_S1.fasta)."
+    },
+    {
+      "path": "metadata/constructs/Shanker_SARS_CoV_2_antigens.fasta",
+      "description": "Exact assayed antigen ectodomain FASTA construct used during AbRank curation (Shanker_SARS_CoV_2_antigens.fasta)."
+    },
+    {
+      "path": "metadata/constructs/hGFRAL_ECD_NP_997293.2_19_351.fasta",
+      "description": "Exact assayed antigen ectodomain FASTA construct used during AbRank curation (hGFRAL_ECD_NP_997293.2_19_351.fasta)."
+    },
+    {
+      "path": "metadata/croissant.json",
+      "description": "MLCommons Croissant 1.0 + Responsible AI (RAI) machine-readable dataset metadata."
+    },
+    {
+      "path": "metadata/kaggle-dataset-metadata.json",
+      "description": "Canonical Kaggle release metadata for aurlienplissier/abrank."
+    },
+    {
+      "path": "metadata/pdb_mapping.tsv",
+      "description": "Canonical mapping of RCSB PDB entries to harmonized antigen groups and antibody names.",
+      "schema": {
+        "fields": [
+          {
+            "name": "PDB_ID",
+            "description": "4-character RCSB PDB structure identifier.",
+            "type": "string"
+          },
+          {
+            "name": "Antigen_name",
+            "description": "Canonical reference antigen name.",
+            "type": "string"
+          },
+          {
+            "name": "Ag_type",
+            "description": "High-level target category: Viral or Non-Viral.",
+            "type": "string"
+          },
+          {
+            "name": "Antibody_name",
+            "description": "Canonical antibody name associated with the PDB entry.",
+            "type": "string"
+          },
+          {
+            "name": "Comment",
+            "description": "Curator annotation regarding construct, chains, or biological target.",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "path": "metadata/sources_manifest.yaml",
+      "description": "Complete provenance, citations, DOIs, upstream URLs, and licenses for all 24 raw sources."
+    },
+    {
+      "path": "metadata/structure_templates.yaml",
+      "description": "Experimental RCSB co-crystal and unbound antigen structural template mappings."
+    }
   ]
 }
