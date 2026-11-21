@@ -64,11 +64,10 @@ def build_dataset_metadata(slug: str, title: str) -> dict:
         ),
         "keywords": [
             "biology",
-            "bioinformatics",
-            "antibodies",
-            "protein language models",
-            "benchmark",
-            "drug discovery",
+            "chemistry",
+            "computer science",
+            "deep learning",
+            "healthcare",
         ],
     }
 
