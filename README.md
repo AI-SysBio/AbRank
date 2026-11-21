@@ -3,6 +3,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](pyproject.toml)
 [![Kaggle Dataset](https://img.shields.io/badge/Kaggle-aurlienplissier%2Fabrank-20BEFF.svg)](https://www.kaggle.com/datasets/aurlienplissier/abrank)
+[![Kaggle Co-Folded 3D](https://img.shields.io/badge/Kaggle_3D-aurlienplissier%2Fabrank--cofolded--3d-20BEFF.svg)](https://www.kaggle.com/datasets/aurlienplissier/abrank-cofolded-3d)
 [![Companion: LogiCA](https://img.shields.io/badge/LogiCA-AbLang2%2BESM--2-purple.svg)](https://github.com/AI-SysBio/logica/tree/main/antibodies-abrank)
 
 **AbRank v2** is a standardized, sequence- and lineage-disjoint (`<50%` antigen identity, `<80%` antibody clonal-lineage identity) benchmark for evaluating sequence-based, multi-chain PLM, 3D inverse-folding/GNN, co-folding, and generative antibody–antigen binding models across **local mutational landscapes (`L1`–`L3`)**, **same-antigen candidate ranking (`Candidate`, `Lev > 3`)**, **unfiltered continuous variant panels (`*_pointwise.tsv`)**, **cross-antigen discovery (`Global`)**, **cross-modal experimental readouts (`Enrichment`, `ELISA`, `DDG`, `EC50`, `DMS`)**, **viral neutralization & escape transfer (`IC50`, `Escape`)**, and **single-domain nanobodies (`VHH`)**.
@@ -155,7 +156,16 @@ python scripts/19_run_paratope_vs_epitope_mutation_analysis.py
 
 ### Multi-Method, 10-Pose Co-Folding Pipeline (`AF3`, `Boltz-2`, `Chai-1`, `Protenix`)
 
-To generate template-free 10-pose predicted WT complexes across all `851` parental scaffolds (`metadata/cofolding_manifest.tsv`) and evaluate `DockQ` + multi-pose `LOACO` strategies, follow [`scripts/cofolding/README.md`](scripts/cofolding/README.md):
+All **`34,040` precomputed template-free 10-pose WT complexes** (`851` scaffolds × `4` methods × `10` poses + `3,760` standardized `LOACO-Local` PDBs) are available for instant download on Kaggle at [**`aurlienplissier/abrank-cofolded-3d`**](https://www.kaggle.com/datasets/aurlienplissier/abrank-cofolded-3d) (`3.1 GB`, or pull individual methods):
+
+```bash
+# Skip GPU co-folding: download precomputed poses directly from Kaggle into data/structures/
+python scripts/cofolding/00_download_cofolded_from_kaggle.py --methods boltz2 chai1 --include-standardized
+# Or pull all 4 methods (AF3, Boltz-2, Chai-1, Protenix):
+python scripts/cofolding/00_download_cofolded_from_kaggle.py --methods all
+```
+
+To regenerate the 10-pose predicted WT complexes from scratch on your own GPU cluster (`metadata/cofolding_manifest.tsv`) and evaluate `DockQ` + multi-pose `LOACO` strategies, follow [`scripts/cofolding/README.md`](scripts/cofolding/README.md):
 
 ```bash
 PYTHONPATH=src python3 scripts/cofolding/01_generate_cofolding_inputs.py --methods af3 boltz2 chai1 protenix --num-poses 10
@@ -187,6 +197,7 @@ AbRank/
 ├── metadata/
 │   ├── croissant.json                # MLCommons Croissant 1.0 + Responsible AI (RAI) dataset metadata
 │   ├── kaggle-dataset-metadata.json  # Kaggle dataset release metadata (`aurlienplissier/abrank`)
+│   ├── kaggle-cofolded-3d-metadata.json # Companion Kaggle 3D metadata (`aurlienplissier/abrank-cofolded-3d`)
 │   ├── cofolding_manifest.tsv        # All 851 WT parental Fv/VHH + Ag scaffolds (340 solved + 511 unresolved)
 │   ├── sources_manifest.yaml         # Citations, DOIs, licenses, and download URLs for all 24 raw sources
 │   ├── antigen_catalog.tsv           # Curated reference antigen sequences
@@ -214,6 +225,9 @@ AbRank/
 ├── data/benchmark/
 │   ├── BENCHMARK_SUMMARY.md          # Full dataset & 3-state split statistics table (tracked in Git)
 │   └── benchmark_summary.json        # Machine-readable dataset & split counts (tracked in Git)
+├── notebooks/
+│   ├── abrank_v2_quickstart.ipynb            # Public Kaggle starter notebook for `aurlienplissier/abrank`
+│   └── abrank_cofolded_3d_quickstart.ipynb   # Public Kaggle explorer for `aurlienplissier/abrank-cofolded-3d`
 ├── results/                          # Reproducible JSON & Markdown benchmark reports + figures/
 └── tests/
     └── test_benchmark_integrity.py   # Pytest suite verifying schema, 3-state margins, symmetries & zero-leakage
@@ -223,6 +237,8 @@ AbRank/
 
 ## Summary Statistics & Benchmark Reports
 
+- **Kaggle Main Dataset & Starter Notebook**: [`aurlienplissier/abrank`](https://www.kaggle.com/datasets/aurlienplissier/abrank) · [AbRank v2 Quickstart Notebook](https://www.kaggle.com/code/aurlienplissier/abrank-v2-quickstart-and-3-state-evaluation)
+- **Kaggle Companion Co-Folded 3D Dataset & Explorer**: [`aurlienplissier/abrank-cofolded-3d`](https://www.kaggle.com/datasets/aurlienplissier/abrank-cofolded-3d) · [AbRank Co-Folded 3D Quickstart Notebook](https://www.kaggle.com/code/aurlienplissier/abrank-co-folded-3d-quickstart)
 - **Dataset & 3-State Split Inventory**: [`data/benchmark/BENCHMARK_SUMMARY.md`](data/benchmark/BENCHMARK_SUMMARY.md) & Croissant Metadata [`metadata/croissant.json`](metadata/croissant.json)
 - **Leave-One-Antigen-Cluster-Out (`22-Cluster LOACO`) & Controlled 3D Ablation**: [`results/LOACO_EVALUATION.md`](results/LOACO_EVALUATION.md)
 - **Generative Binder Reranking, Conditional Log-Likelihood & DPO Verifier Benchmark (`1,354` AI Designs)**: [`results/GENERATIVE_BINDER_BENCHMARK.md`](results/GENERATIVE_BINDER_BENCHMARK.md)

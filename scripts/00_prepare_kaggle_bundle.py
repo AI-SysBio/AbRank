@@ -127,7 +127,11 @@ def main() -> None:
     if not (bench_src / "assays_kd.tsv").exists():
         raise FileNotFoundError(f"Expected `{bench_src / 'assays_kd.tsv'}` not found.")
 
-    plan: list[tuple[Path, Path]] = [(bench_src, args.out_dir / "benchmark")]
+    plan: list[tuple[Path, Path]] = []
+    # Stage benchmark files directly at dataset root so Kaggle natively indexes
+    # top-level tabular files with file descriptions and column descriptors.
+    for child in sorted(bench_src.iterdir()):
+        plan.append((child, args.out_dir / child.name))
     meta_src = args.metadata_dir.expanduser().resolve()
     if meta_src.is_dir():
         plan.append((meta_src, args.out_dir / "metadata"))
@@ -154,14 +158,29 @@ def main() -> None:
     args.out_dir.mkdir(parents=True, exist_ok=True)
     for s, d in plan:
         if d.exists():
-            shutil.rmtree(d)
+            if d.is_dir():
+                shutil.rmtree(d)
+            else:
+                d.unlink()
         d.parent.mkdir(parents=True, exist_ok=True)
-        if args.mode == "hardlink":
-            shutil.copytree(s, d, copy_function=os.link)
+        if s.is_dir():
+            if args.mode == "hardlink":
+                shutil.copytree(s, d, copy_function=os.link)
+            else:
+                shutil.copytree(s, d)
         else:
-            shutil.copytree(s, d)
+            if args.mode == "hardlink":
+                os.link(s, d)
+            else:
+                shutil.copy2(s, d)
 
-    meta_json = build_dataset_metadata(args.slug, args.title)
+    # Prefer curated repo kaggle-dataset-metadata.json if present so full descriptions/schemas are preserved
+    curated_meta = meta_src / "kaggle-dataset-metadata.json"
+    if curated_meta.exists():
+        meta_json = json.loads(curated_meta.read_text(encoding="utf-8"))
+        meta_json["id"] = args.slug
+    else:
+        meta_json = build_dataset_metadata(args.slug, args.title)
     (args.out_dir / "dataset-metadata.json").write_text(
         json.dumps(meta_json, indent=2) + "\n", encoding="utf-8"
     )

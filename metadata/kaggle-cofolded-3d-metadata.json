@@ -1,0 +1,194 @@
+{
+  "title": "AbRank Co-Folded 3D: 34,040 Ab-Ag Complexes",
+  "id": "aurlienplissier/abrank-cofolded-3d",
+  "licenses": [
+    {
+      "name": "CC-BY-NC-SA-4.0"
+    }
+  ],
+  "subtitle": "10-Pose AF3, Boltz-2, Chai-1 & Protenix WT Scaffolds for AbRank v2",
+  "description": "# AbRank Co-Folded 3D: 34,040 Multi-Method, Multi-Pose WT Antibody–Antigen Complexes\n\nThis companion dataset hosts the complete **34,040 template-free all-atom co-folded wild-type (WT) antibody–antigen and nanobody–antigen complex structures** (`851` parental scaffolds × `4` structure-prediction engines × `10` diffusion poses) together with all `34,040` confidence files and `3,760` standardized `LOACO-Local` PDBs generated for the **AbRank v2** benchmark.\n\nBy keeping these multi-gigabyte 3D ensembles in a dedicated companion dataset, the main [**AbRank v2 Benchmark Dataset (`aurlienplissier/abrank`)**](https://www.kaggle.com/datasets/aurlienplissier/abrank) stays fast and lightweight (`207 MB`) for sequence/PLM and Track 1B WT-3D users, while 3D structure-modeling and co-folding users can download any subset of methods here without spending GPU cluster hours re-folding all 851 complexes.\n\n---\n\n## Related Links\n\n- **Main AbRank v2 Benchmark (Assays, Zero-Leakage Splits & Solved WT Scaffolds, `207 MB`)**: [kaggle.com/datasets/aurlienplissier/abrank](https://www.kaggle.com/datasets/aurlienplissier/abrank)\n- **Official Code, Curation, Evaluator & Co-Folding Pipeline**: [github.com/AI-SysBio/AbRank](https://github.com/AI-SysBio/AbRank)\n- **Companion `AbLang2-Paired + ESM-2` LogiCA Implementation**: [github.com/AI-SysBio/logica/tree/main/antibodies-abrank](https://github.com/AI-SysBio/logica/tree/main/antibodies-abrank)\n- **Main Benchmark Quickstart Notebook**: [AbRank v2 Quickstart and 3-State Evaluation](https://www.kaggle.com/code/aurlienplissier/abrank-v2-quickstart-and-3-state-evaluation)\n- **Co-Folded 3D Explorer Notebook**: [AbRank Co-Folded 3D Quickstart](https://www.kaggle.com/code/aurlienplissier/abrank-co-folded-3d-quickstart)\n\n---\n\n## What Is Included (8 Compact Files, `3.1 GB` Total)\n\nEvery scaffold in `cofolding_manifest.tsv` (`340` experimentally solved RCSB co-crystals + `511` unresolved targets = **`851` WT scaffolds**) was folded **template-free (`templates=[]` / templates disabled)** across **4 complementary co-folding models** with **`K = 10` poses** (`2` random seeds × `5` diffusion samples):\n\n| File | Size | Contents & Format |\n| :--- | :---: | :--- |\n| **`cofolding_manifest.tsv`** | `527 KB` | Master table of all `851` WT parental scaffolds (`priority_tier`, `tracks`, `is_experimental_cocrystal`, `wt_pdb_id`, chain lengths, `VH`/`VL`/`Ag` sequences) |\n| **`MANIFEST_structures.tsv`** | `8.9 MB` | Complete `34,040`-row index mapping `(method, scaffold, pose_index)` to archive paths and byte sizes |\n| **`MANIFEST_confidence.tsv`** | `9.2 MB` | Complete `34,040`-row index of confidence files (`pose_XX.json` for AF3/Boltz-2/Protenix; `pose_XX.npz` for Chai-1) |\n| **`af3_10poses.tgz.bin`** | `680 MB` | **AlphaFold 3** (`8,510` `.cif` poses + `8,510` summary confidence `.json` files; `templates=[]`; *non-commercial academic output terms*) |\n| **`boltz2_10poses.tgz.bin`** | `702 MB` | **Boltz-2** (`8,510` `.cif` poses + `8,510` confidence `.json` files; open-weight MIT) |\n| **`chai1_10poses.tgz.bin`** | `687 MB` | **Chai-1** (`8,510` `.cif` poses + `8,510` score `.npz` files; open-weight Apache-2.0) |\n| **`protenix_10poses.tgz.bin`** | `851 MB` | **Protenix** (`8,510` `.cif` poses + `8,510` summary confidence `.json` files; open-weight Apache-2.0) |\n| **`cofolded_standardized_loaco.tgz.bin`** | `145 MB` | **`3,760`** standardized `(H, [L], A)` PDBs for all `94` `LOACO-Local` scaffolds × `4` methods × `10` poses — ready for `ProteinMPNN`, `ESM-IF1`, `AntiFold`, `ANTIPASTI`, `GearBind`, and `PRODIGY`/`FreeSASA` |\n\n> **Why the `.tgz.bin` extension?**\n> Each `.tgz.bin` file is a **standard gzip-compressed tar archive** (`tar -czf`). The `.bin` suffix simply prevents Kaggle's upload pipeline from auto-exploding `71,842` individual `.cif`/`.json`/`.npz` files into the web UI. You do **not** need to rename them — extract directly with `tar -xzf <file>.tgz.bin` or Python's `tarfile.open(\"<file>.tgz.bin\", \"r:gz\")`!\n\n---\n\n## Quickstart\n\n### 1. One-Command Download & Extraction for `AI-SysBio/AbRank` (Skip GPU Co-Folding)\n```bash\ngit clone https://github.com/AI-SysBio/AbRank.git && cd AbRank\npip install -e \".[kaggle]\"\n\n# Download & unpack selected methods directly into data/structures/ (matches scripts/cofolding/03_ingest_and_evaluate_cofolded.py):\npython scripts/cofolding/00_download_cofolded_from_kaggle.py --methods boltz2 chai1 --include-standardized\n\n# Or download all 4 methods (34,040 poses + 3,760 standardized LOACO PDBs):\npython scripts/cofolding/00_download_cofolded_from_kaggle.py --methods all\n```\n\n### 2. Stream a Single Pose + Confidence File in Python (No Full Extraction Needed)\n```python\nimport json, tarfile\nfrom pathlib import Path\nimport kagglehub\nimport pandas as pd\n\nroot = Path(kagglehub.dataset_download(\"aurlienplissier/abrank-cofolded-3d\"))\nmanifest = pd.read_csv(root / \"cofolding_manifest.tsv\", sep=\"\\t\")\nprint(f\"Scaffolds: {len(manifest)} ({manifest['is_experimental_cocrystal'].sum()} solved co-crystals)\")\n\n# Stream a single Boltz-2 pose + confidence JSON directly from the archive:\nsid = manifest.iloc[0][\"scaffold_id\"]\nwith tarfile.open(root / \"boltz2_10poses.tgz.bin\", \"r:gz\") as tf:\n    conf = json.loads(tf.extractfile(f\"cofolded_confidence/boltz2/{sid}/pose_00.json\").read())\n    cif_text = tf.extractfile(f\"cofolded_structures/boltz2/{sid}/pose_00.cif\").read().decode()\nprint(f\"{sid} | ipTM={conf['iptm']:.3f}, pTM={conf['ptm']:.3f}, cif_lines={len(cif_text.splitlines())}\")\n```\n\n### 3. Standard Shell Extraction\n```bash\nmkdir -p data/structures\ntar -xzf boltz2_10poses.tgz.bin -C data/structures/\ntar -xzf cofolded_standardized_loaco.tgz.bin -C data/structures/\n```\n\n---\n\n## Reference Benchmark Summary (`34,040` Template-Free Poses)\n\n### Structural Pose Accuracy (`DockQ` vs. All `340` Native Experimental WT Co-Crystals)\n\n| Co-Folding Method (`templates=[]`) | All 340 Pose-0 `DockQ` | All 340 Expected 1-Pose | All 340 Top-`ipTM` `DockQ` (`%>=0.23` / `0.49` / `0.80`) | All 340 Best-of-10 `DockQ` (`%>=0.23`) | Spearman `rho(AbAg-ipTM, DockQ)` |\n| :--- | :---: | :---: | :---: | :---: | :---: |\n| **AlphaFold 3 (`af3`)** | `0.296` | `0.300` | **`0.340`** (`43.8%` / `38.2%` / `20.6%`) | **`0.415`** (`53.5%`) | `+0.684` |\n| **Protenix (`protenix`)** | `0.358` | `0.353` | **`0.380`** (`47.4%` / `43.8%` / `24.7%`) | **`0.456`** (`57.1%`) | `+0.731` |\n| **Chai-1 (`chai1`)** | `0.391` | `0.392` | **`0.395`** (`50.3%` / `45.6%` / `27.9%`) | **`0.440`** (`53.2%`) | **`+0.771`** |\n| **Boltz-2 (`boltz2`)** | **`0.561`** | **`0.516`** | **`0.550`** (`65.9%` / `63.2%` / `43.2%`) | **`0.598`** (`69.7%`) | `+0.731` |\n| **40-Pose Multi-Method Pool** | — | — | **`0.577`** (`68.8%` / `65.9%` / `45.9%`) | **`0.677`** (`77.9%`) | — |\n\n### 3D Affinity Ranking Recovery on the 18-Cluster Controlled Co-Crystal Ablation (`47` Scaffolds, 3-Class Ordinal AUC)\n\n| 3D Model | Native Co-Crystal | Unbound IgFold | `AF3` Top-1 `ipTM` | `Protenix` 10-Pose Ens | `Boltz-2` Top-1 `ipTM` | `Chai-1` Top-1 `ipTM` | `40-Pose Consensus` |\n| :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |\n| **PRODIGY+SASA (3D ZS)** | `0.581` | `0.531` | `0.575` | `0.572` | `0.570` | **`0.587`** | `0.578` |\n| **ProteinMPNN (3D ZS)** | `0.621` | `0.517` | `0.557` | `0.573` | `0.595` | **`0.640`** | `0.610` |\n| **ESM-IF1 (3D ZS)** | `0.575` | `0.491` | `0.555` | `0.550` | `0.576` | `0.573` | **`0.591`** |\n| **AntiFold (3D Ab-Ag ZS)** | `0.570` | `0.568` | `0.546` | `0.542` | `0.504` | **`0.592`** | `0.523` |\n| **ANTIPASTI (3D CNN)** | `0.602` | `0.525` | `0.569` | `0.590` | `0.611` | **`0.624`** | `0.611` |\n| **GearBind (3D GNN)** | `0.590` | `0.543` | `0.586` | `0.602` | `0.593` | **`0.618`** | `0.603` |\n\n---\n\n## Licensing & Non-Commercial Academic Terms Notice\n\n- **Dataset License**: `CC-BY-NC-SA-4.0`.\n- **Open-Weight Predicted Structures**: `boltz2_10poses.tgz.bin` (Boltz-2, MIT), `chai1_10poses.tgz.bin` (Chai-1, Apache-2.0), `protenix_10poses.tgz.bin` (Protenix, Apache-2.0), and the `.tsv` manifests are generated using open-weight models.\n- **AlphaFold 3 Output Terms**: `af3_10poses.tgz.bin` and the `af3/` directory inside `cofolded_standardized_loaco.tgz.bin` contain structures predicted with **AlphaFold 3** and are governed by Google DeepMind's AlphaFold 3 Output Terms of Use (**non-commercial academic research only**; do not use AlphaFold 3 outputs to train competing structure-prediction models or for commercial purposes). Users requiring strictly open-weight predictions should extract only `boltz2`, `chai1`, and/or `protenix`.\n- **Upstream Sequence Provenance**: All 851 scaffold sequences are derived from the 24 publicly released datasets documented in `aurlienplissier/abrank` (`metadata/sources_manifest.yaml`).",
+  "keywords": [
+    "biology",
+    "chemistry",
+    "computer science",
+    "deep learning",
+    "healthcare"
+  ],
+  "resources": [
+    {
+      "path": "cofolding_manifest.tsv",
+      "description": "Master manifest of all 851 wild-type parental antibody-antigen and nanobody-antigen scaffolds folded across AF3, Boltz-2, Chai-1, and Protenix, including priority tier, experimental co-crystal status, PDB IDs, and standardized 20-AA VH/VL/Ag sequences.",
+      "schema": {
+        "fields": [
+          {
+            "name": "scaffold_id",
+            "description": "Canonical unique wild-type parental scaffold identifier matching directory names inside the co-folded archives.",
+            "type": "string"
+          },
+          {
+            "name": "priority_tier",
+            "description": "Co-folding priority tier: 1_loaco_local (94 primary LOACO-Local scaffolds), 2_candidate_and_vhh (416 candidate & VHH scaffolds), or 3_cross_modal_and_global (341 cross-modal & global scaffolds).",
+            "type": "string"
+          },
+          {
+            "name": "tracks",
+            "description": "Semicolon-delimited list of AbRank evaluation tracks that reference this WT parental scaffold (e.g., loaco_local, candidate, vhh, cross_modal, global).",
+            "type": "string"
+          },
+          {
+            "name": "is_experimental_cocrystal",
+            "description": "Boolean indicating whether an experimentally solved RCSB PDB bound co-crystal exists for this WT complex (340 True, 511 False).",
+            "type": "boolean"
+          },
+          {
+            "name": "wt_pdb_id",
+            "description": "4-character experimental RCSB PDB identifier of the native WT complex, or NONE if no experimental co-crystal exists.",
+            "type": "string"
+          },
+          {
+            "name": "ref_scaffold_pdb",
+            "description": "Relative path to the standardized reference WT scaffold PDB (native co-crystal or unbound IgFold + antigen template) in aurlienplissier/abrank.",
+            "type": "string"
+          },
+          {
+            "name": "n_chains",
+            "description": "Number of polypeptide chains folded in the complex (3 for paired VH+VL+Ag; 2 for single-domain VHH+Ag).",
+            "type": "numeric"
+          },
+          {
+            "name": "total_aa_len",
+            "description": "Total concatenated amino acid sequence length across all folded chains (len_H + len_L + len_A).",
+            "type": "numeric"
+          },
+          {
+            "name": "len_H",
+            "description": "Amino acid length of the heavy chain variable domain (VH) or single-domain nanobody (VHH).",
+            "type": "numeric"
+          },
+          {
+            "name": "len_L",
+            "description": "Amino acid length of the light chain variable domain (VL); 0 for single-domain VHH nanobodies.",
+            "type": "numeric"
+          },
+          {
+            "name": "len_A",
+            "description": "Amino acid length of the assayed antigen ectodomain sequence.",
+            "type": "numeric"
+          },
+          {
+            "name": "seq_H",
+            "description": "Standardized 20-AA heavy chain variable domain (VH) or nanobody (VHH) sequence used as co-folding input.",
+            "type": "string"
+          },
+          {
+            "name": "seq_L",
+            "description": "Standardized 20-AA light chain variable domain (VL) sequence used as co-folding input (empty for VHH nanobodies).",
+            "type": "string"
+          },
+          {
+            "name": "seq_A",
+            "description": "Standardized 20-AA antigen ectodomain sequence used as co-folding input.",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "path": "MANIFEST_structures.tsv",
+      "description": "Complete 34,040-row inventory indexing every co-folded mmCIF structure (851 WT scaffolds x 4 methods x 10 poses) with archive paths, original solver filenames, and uncompressed byte sizes.",
+      "schema": {
+        "fields": [
+          {
+            "name": "method",
+            "description": "Template-free structure prediction engine: af3 (AlphaFold 3), boltz2 (Boltz-2), chai1 (Chai-1), or protenix (Protenix).",
+            "type": "string"
+          },
+          {
+            "name": "scaffold",
+            "description": "Wild-type parental scaffold identifier (joins directly to scaffold_id in cofolding_manifest.tsv).",
+            "type": "string"
+          },
+          {
+            "name": "pose_index",
+            "description": "Zero-based diffusion pose index (0 through 9 across 2 seeds x 5 samples; Boltz-2 pre-sorts pose 0 by confidence score).",
+            "type": "numeric"
+          },
+          {
+            "name": "bundled_name",
+            "description": "Relative structure path inside cofolded_structures/ within the method archive (e.g., af3/<scaffold>/pose_00.cif).",
+            "type": "string"
+          },
+          {
+            "name": "source_relpath",
+            "description": "Original solver output relative path prior to uniform pose_XX.cif naming (records exact seed and diffusion sample ID).",
+            "type": "string"
+          },
+          {
+            "name": "bytes",
+            "description": "Uncompressed file size in bytes of the mmCIF structure file.",
+            "type": "numeric"
+          }
+        ]
+      }
+    },
+    {
+      "path": "MANIFEST_confidence.tsv",
+      "description": "Complete 34,040-row inventory indexing every per-pose confidence and ipTM summary file (pose_XX.json for AF3/Boltz-2/Protenix; pose_XX.npz for Chai-1) across all 851 WT scaffolds.",
+      "schema": {
+        "fields": [
+          {
+            "name": "method",
+            "description": "Template-free structure prediction engine: af3, boltz2, chai1, or protenix.",
+            "type": "string"
+          },
+          {
+            "name": "scaffold",
+            "description": "Wild-type parental scaffold identifier (joins directly to scaffold_id in cofolding_manifest.tsv).",
+            "type": "string"
+          },
+          {
+            "name": "pose_index",
+            "description": "Zero-based diffusion pose index (0 through 9) matching the corresponding structure in MANIFEST_structures.tsv.",
+            "type": "numeric"
+          },
+          {
+            "name": "bundled_name",
+            "description": "Relative confidence file path inside cofolded_confidence/ within the method archive (e.g., boltz2/<scaffold>/pose_00.json or chai1/<scaffold>/pose_00.npz).",
+            "type": "string"
+          },
+          {
+            "name": "source_relpath",
+            "description": "Original solver confidence output relative path prior to uniform pose_XX.{json,npz} naming.",
+            "type": "string"
+          },
+          {
+            "name": "bytes",
+            "description": "Uncompressed file size in bytes of the JSON or NPZ confidence file.",
+            "type": "numeric"
+          }
+        ]
+      }
+    },
+    {
+      "path": "af3_10poses.tgz.bin",
+      "description": "Standard gzip-compressed tar archive (extract with `tar -xzf`) containing all 8,510 template-free AlphaFold 3 mmCIF poses (`cofolded_structures/af3/`) and 8,510 summary confidence JSONs (`cofolded_confidence/af3/`). Non-commercial academic use only under Google DeepMind AlphaFold 3 Output Terms."
+    },
+    {
+      "path": "boltz2_10poses.tgz.bin",
+      "description": "Standard gzip-compressed tar archive (extract with `tar -xzf`) containing all 8,510 template-free Boltz-2 (open-weight MIT) mmCIF poses (`cofolded_structures/boltz2/`) and 8,510 confidence JSONs (`cofolded_confidence/boltz2/`)."
+    },
+    {
+      "path": "chai1_10poses.tgz.bin",
+      "description": "Standard gzip-compressed tar archive (extract with `tar -xzf`) containing all 8,510 template-free Chai-1 (open-weight Apache-2.0) mmCIF poses (`cofolded_structures/chai1/`) and 8,510 score NPZ archives (`cofolded_confidence/chai1/`)."
+    },
+    {
+      "path": "protenix_10poses.tgz.bin",
+      "description": "Standard gzip-compressed tar archive (extract with `tar -xzf`) containing all 8,510 template-free Protenix (open-weight Apache-2.0) mmCIF poses (`cofolded_structures/protenix/`) and 8,510 summary confidence JSONs (`cofolded_confidence/protenix/`)."
+    },
+    {
+      "path": "cofolded_standardized_loaco.tgz.bin",
+      "description": "Standard gzip-compressed tar archive (extract with `tar -xzf`) containing 3,760 chain-standardized (H, [L], A) PDB structures (`cofolded_standardized/<method>/<scaffold>__pXX.pdb`) for all 94 LOACO-Local scaffolds across all 4 methods x 10 poses, ready for immediate 3D inverse-folding and GNN scoring."
+    }
+  ]
+}

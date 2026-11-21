@@ -19,9 +19,31 @@ This directory contains the turnkey pipeline for generating **multi-pose all-ato
 ## Priority Tiers in `metadata/cofolding_manifest.tsv`
 
 Every scaffold in [`metadata/cofolding_manifest.tsv`](../../metadata/cofolding_manifest.tsv) is tagged with a `priority_tier`:
-- **`1_loaco_local` (`53` WT scaffolds: `47` solved co-crystals + `6` unresolved)**: Covers **100% of the primary `12,267`-pair `LOACO-Local` benchmark and the `18`-cluster Controlled Structure Ablation**. Runs in **~30–45 minutes on 1 H100/A100 GPU**—ideal to run first and verify outputs!
-- **`2_candidate_and_vhh` (`451` WT scaffolds)**: Covers all `Candidate` (`d_Lev > 3`) and single-domain `VHH` nanobody $K_d$ scaffolds.
-- **`3_cross_modal_and_global` (`347` WT scaffolds)**: Covers `AbAgym` (45 DMS complexes), `AbDesign` ELISA/$\Delta\Delta G$, `NbBench`, and cross-antigen `Global` scaffolds (`53 + 451 + 347 = 851` total).
+- **`1_loaco_local` (`94` WT scaffolds: `47` solved co-crystals + `47` unresolved)**: Covers **100% of the primary `12,267`-pair `LOACO-Local` benchmark and the `18`-cluster Controlled Structure Ablation** (`53` core + `41` expanded `LOACO-Local` scaffolds). Ideal to run first and verify outputs!
+- **`2_candidate_and_vhh` (`416` WT scaffolds: `90` solved + `326` unresolved; `283` VHH)**: Covers all `Candidate` (`d_Lev > 3`) and single-domain `VHH` nanobody $K_d$ scaffolds.
+- **`3_cross_modal_and_global` (`341` WT scaffolds: `203` solved + `138` unresolved)**: Covers `AbAgym` (45 DMS complexes), `AbDesign` ELISA/$\Delta\Delta G$, `NbBench`, and cross-antigen `Global` scaffolds (`94 + 416 + 341 = 851` total).
+
+---
+
+## Option 0 (Fastest — Skip GPU Co-Folding): Download All 34,040 Precomputed Poses from Kaggle
+
+All **`34,040` template-free poses** (`851` WT scaffolds × `4` methods × `10` poses), **`34,040` confidence files**, and **`3,760` standardized `LOACO-Local` PDBs** are hosted in the companion Kaggle dataset [**`aurlienplissier/abrank-cofolded-3d`**](https://www.kaggle.com/datasets/aurlienplissier/abrank-cofolded-3d) (`3.1 GB` across 8 files; you can also pull individual methods):
+
+```bash
+pip install -e ".[kaggle]"
+
+# Download open-weight Boltz-2 + Chai-1 poses and 3,760 standardized LOACO PDBs:
+python scripts/cofolding/00_download_cofolded_from_kaggle.py --methods boltz2 chai1 --include-standardized
+
+# Or download all 4 methods (AF3, Boltz-2, Chai-1, Protenix — 34,040 poses total):
+python scripts/cofolding/00_download_cofolded_from_kaggle.py --methods all
+
+# Immediately run DockQ + multi-pose LOACO evaluation (Step 4 below):
+OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 \
+  PYTHONPATH=src python3 scripts/cofolding/03_ingest_and_evaluate_cofolded.py --method all --max-poses 10
+```
+
+*(Note: `af3_10poses.tgz.bin` contains AlphaFold 3 predicted outputs governed by Google DeepMind's non-commercial academic Output Terms; `boltz2`, `chai1`, and `protenix` are generated from open-weight MIT/Apache-2.0 models.)*
 
 ---
 

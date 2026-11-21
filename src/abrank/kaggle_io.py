@@ -186,7 +186,10 @@ def materialize_kaggle_into_repo(
         else:
             raise ValueError(f"Unsupported mode: {mode!r} (expected 'symlink' or 'copy').")
 
+    skip_names = {"metadata", "structures", "structures_wt", "dataset-metadata.json"}
     for child in sorted(bench_src.iterdir()):
+        if child.name in skip_names:
+            continue
         _place(child, bench_dst / child.name)
 
     materialized = {"benchmark": bench_dst}
