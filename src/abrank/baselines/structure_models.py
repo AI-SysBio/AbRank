@@ -1025,6 +1025,7 @@ class ANTIPASTI3StateTrainer:
 
     def predict_3state(self, sf: StructureSplitFeatures, sp: SplitPairTensors) -> tuple[np.ndarray, np.ndarray]:
         assert self.net is not None
+        self.net.eval()
         xo = self.odd_scaler.transform(np.concatenate([sf.struct_odd, sp.biophys_odd], axis=1)).astype(np.float32)
         xe = self.even_scaler.transform(np.concatenate([sf.struct_even, sp.impact_even], axis=1)).astype(np.float32)
         n = len(xo)
@@ -1087,7 +1088,7 @@ class _GearBind3StateNet(nn.Module):
         self.gnn1 = _GearBindRelationalLayer(hid_dim, edge_dim=20)
         self.gnn2 = _GearBindRelationalLayer(hid_dim, edge_dim=20)
         self.gnn3 = _GearBindRelationalLayer(hid_dim, edge_dim=20)
-        self.attn_pool = nn.Linear(hid_dim, 1)
+        self.attn_pool = nn.Linear(hid_dim, 1, bias=False)
 
         # Exact GearBind BindModel antisymmetric MLP([g1, g2]) - MLP([g2, g1]) + 3D ΔΔlog p residual
         self.bind_mlp = nn.Sequential(
@@ -1345,6 +1346,7 @@ class GearBind3StateTrainer:
         _precomp_g: tuple[tuple[np.ndarray, np.ndarray, np.ndarray], tuple[np.ndarray, np.ndarray, np.ndarray]] | None = None,
     ) -> tuple[np.ndarray, np.ndarray]:
         assert self.net is not None
+        self.net.eval()
         xo = self.odd_scaler.transform(sf.struct_odd).astype(np.float32)
         xe = self.even_scaler.transform(sf.struct_even).astype(np.float32)
         n = len(xo)

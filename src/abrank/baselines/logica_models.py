@@ -462,6 +462,7 @@ class _DualLMLogiCANet(nn.Module):
         n_ab_tokens: int = 6,
         n_ag_tokens: int = 3,
         dropout: float = 0.20,
+        gate_init: float = 0.10,
     ) -> None:
         super().__init__()
         self.width = width
@@ -480,9 +481,10 @@ class _DualLMLogiCANet(nn.Module):
         self.ab_to_ag = _LogiCACrossAttentionBlock(width=width, heads=heads, dropout=dropout)
         self.ag_to_ab = _LogiCACrossAttentionBlock(width=width, heads=heads, dropout=dropout)
 
-        self.gate_ab = nn.Parameter(torch.zeros(1))
-        self.gate_ag = nn.Parameter(torch.zeros(1))
-        self.gate_logit = nn.Parameter(torch.zeros(1))
+        # Small non-zero gate_init avoids Step-0 zero-gradient deadlock across cross-attention & logit shift head.
+        self.gate_ab = nn.Parameter(torch.full((1,), float(gate_init)))
+        self.gate_ag = nn.Parameter(torch.full((1,), float(gate_init)))
+        self.gate_logit = nn.Parameter(torch.full((1,), float(gate_init)))
 
         self.base_llr_proj = nn.Linear(odd_dim, 1, bias=False)
         self.ctx_logit_head = nn.Sequential(
@@ -492,7 +494,7 @@ class _DualLMLogiCANet(nn.Module):
             nn.Dropout(dropout),
             nn.Linear(width, 1, bias=False),
         )
-        nn.init.normal_(self.ctx_logit_head[-1].weight, mean=0.0, std=0.02)
+        nn.init.normal_(self.ctx_logit_head[-1].weight, mean=0.0, std=0.05)
 
         self.partner_proj_ab = nn.Linear(width, width, bias=False)
         self.partner_proj_ag = nn.Linear(width, width, bias=False)
@@ -520,8 +522,8 @@ class _DualLMLogiCANet(nn.Module):
         t_ab, t_ag = self._tokens(ab, ag)
         ab_ctx = self.ag_to_ab(t_ab, t_ag).mean(dim=1)
         ag_ctx = self.ab_to_ag(t_ag, t_ab).mean(dim=1)
-        z_ab = F.normalize(self.partner_proj_ab(t_ab.mean(dim=1) + ab_ctx), dim=-1)
-        z_ag = F.normalize(self.partner_proj_ag(t_ag.mean(dim=1) + ag_ctx), dim=-1)
+        z_ab = F.normalize(self.partner_proj_ab(t_ab.mean(dim=1) + torch.tanh(self.gate_ab) * ab_ctx), dim=-1)
+        z_ag = F.normalize(self.partner_proj_ag(t_ag.mean(dim=1) + torch.tanh(self.gate_ag) * ag_ctx), dim=-1)
         logits = torch.matmul(z_ab, z_ag.T) / tau
 
         with torch.no_grad():
@@ -755,6 +757,7 @@ class LogiCA3StateTrainer:
 
     def _neural_raw(self, sp: SplitPairTensors) -> tuple[np.ndarray, np.ndarray]:
         assert self.net is not None
+        self.net.eval()
         ab1, ab2, ag1, ag2, xo = self._prep_tensors(sp, fit=False)
         n = len(xo)
         d_out = np.zeros(n, dtype=np.float64)
@@ -792,7 +795,7 @@ class LogiCA3StateTrainer:
             ag_dim=ag1.shape[1],
             odd_dim=xo.shape[1],
         )
-        opt = torch.optim.AdamW(net.parameters(), lr=self.lr, weight_decay=self.weight_decay)
+        opt_s1 = torch.optim.AdamW(net.parameters(), lr=self.lr, weight_decay=self.weight_decay)
 
         sig_c = np.round(ab1[:, :3] * 100.0).astype(np.int32)
         _, uniq_idx = np.unique(sig_c, axis=0, return_index=True)
@@ -804,14 +807,17 @@ class LogiCA3StateTrainer:
                 u_b = p_u[s : s + 128]
                 if len(u_b) < 4:
                     continue
-                opt.zero_grad()
+                opt_s1.zero_grad()
                 loss_s1 = net.stage1_infonce_loss(
                     torch.from_numpy(ab1[u_b]),
                     torch.from_numpy(ag1[u_b]),
                 )
                 loss_s1.backward()
                 torch.nn.utils.clip_grad_norm_(net.parameters(), 2.0)
-                opt.step()
+                opt_s1.step()
+
+        # Fresh optimizer for Stage 2 so Stage-1 Adam moments do not distort Stage-2 updates.
+        opt = torch.optim.AdamW(net.parameters(), lr=self.lr, weight_decay=self.weight_decay)
 
         is_unseen_ag = _is_unseen_antigen_split(tr_sp, val_sp)
         ab_grp = ab1 if is_unseen_ag else None
@@ -831,7 +837,7 @@ class LogiCA3StateTrainer:
         best_val = -1.0
         best_state = {k: v.detach().clone() for k, v in net.state_dict().items()}
 
-        for _ in range(min(self.epochs, 10)):
+        for _ in range(self.epochs):
             net.train()
             batches = build_scaffold_grouped_batches(ag1, sub_loc_idx, self.batch_size, rng, ab_emb=ab_grp)
             for idx in batches:

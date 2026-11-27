@@ -664,7 +664,8 @@ class _ResidualAdapterNet(nn.Module):
             nn.GELU(),
         )
         self.head = nn.Linear(32, 1, bias=False)
-        nn.init.zeros_(self.head.weight)
+        # Small non-zero init preserves odd antisymmetry while allowing Step-0 gradients through the Siamese trunk.
+        nn.init.normal_(self.head.weight, mean=0.0, std=0.05)
         self.imp_head = nn.Sequential(
             nn.Linear(32 + even_dim, 32),
             nn.GELU(),
@@ -853,6 +854,7 @@ class KDResidualAdapterRanker:
         d_list, i_list = [], []
         with torch.no_grad():
             for m in self.models:
+                m.eval()
                 dl, il = m(t_ab1, t_ab2, t_ag1, t_ag2, tu_ab, tu_ag, t_meta, t_even)
                 d_list.append(dl.numpy())
                 i_list.append(torch.sigmoid(il).numpy())

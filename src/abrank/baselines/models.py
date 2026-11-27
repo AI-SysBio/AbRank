@@ -844,7 +844,7 @@ class _SiameseHybridModule(nn.Module):
             nn.Linear(hidden_dim, 64),
             nn.GELU(),
         )
-        self.dir_head = nn.Linear(64, 1)
+        self.dir_head = nn.Linear(64, 1, bias=False)
         self.imp_head = nn.Linear(64 + even_dim, 1)
         self.skip_zs = nn.Linear(zs_dim, 1, bias=False)
 
@@ -1001,6 +1001,7 @@ class NeuralPairwiseTrainer:
 
     def predict_3state(self, sp: SplitPairTensors) -> tuple[np.ndarray, np.ndarray]:
         assert self.net is not None
+        self.net.eval()
         ab1, ab2, ag1, ag2, u_ab, u_ag, zs, ev = self._prep(sp, fit=False)
         with torch.no_grad():
             t_ab1 = torch.from_numpy(ab1)

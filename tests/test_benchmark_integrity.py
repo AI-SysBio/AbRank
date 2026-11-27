@@ -660,11 +660,11 @@ def test_flagship_suites_maturation_discovery_transfer() -> None:
     assert res_tr["tracks"]["viral_ic50"]["auc_ordinal"] == pytest.approx(1.0, abs=1e-4)
 
 
-def test_logica_antisymmetry_and_zero_init() -> None:
+def test_logica_antisymmetry_and_grad_flow() -> None:
     """Verify exact odd antisymmetry (`d(A,B) = -d(B,A)`), even symmetry (`q(A,B) = q(B,A)`),
-    and zero-initialized `tanh(0)` cross-attention gates in 1D `LogiCA`."""
+    small non-zero default `gate_init`, and 100% Step-0 gradient flow in 1D `LogiCA`."""
     import torch
-    from abrank.baselines.logica_models import _DualLMLogiCANet
+    from abrank.baselines.logica_models import _DualLMLogiCANet, logica_contrastive_3state_loss
 
     rng = np.random.default_rng(7)
     n = 12
@@ -677,15 +677,43 @@ def test_logica_antisymmetry_and_zero_init() -> None:
 
     net_1d = _DualLMLogiCANet(ab_dim=64, ag_dim=48, odd_dim=16, even_dim=20)
     net_1d.eval()
-    assert float(torch.tanh(net_1d.gate_ab)) == 0.0
-    assert float(torch.tanh(net_1d.gate_ag)) == 0.0
-    assert float(torch.tanh(net_1d.gate_logit)) == 0.0
+    assert 0.0 < float(torch.tanh(net_1d.gate_ab)) < 0.2
+    assert 0.0 < float(torch.tanh(net_1d.gate_ag)) < 0.2
+    assert 0.0 < float(torch.tanh(net_1d.gate_logit)) < 0.2
 
     with torch.no_grad():
         d_f, q_f = net_1d(ab1, ab2, ag1, ag2, xo, xe)
         d_r, q_r = net_1d(ab2, ab1, ag2, ag1, -xo, xe)
     assert float(torch.max(torch.abs(d_f + d_r))) == pytest.approx(0.0, abs=1e-5)
     assert float(torch.max(torch.abs(q_f - q_r))) == pytest.approx(0.0, abs=1e-5)
+
+    # Stage-1 InfoNCE Step-0 gradient flow (every Stage-1 parameter including gates gets non-zero grad)
+    net_1d.train()
+    net_1d.zero_grad()
+    loss_s1 = net_1d.stage1_infonce_loss(ab1, ag1)
+    assert torch.isfinite(loss_s1)
+    loss_s1.backward()
+    for name, param in net_1d.named_parameters():
+        if any(k in name for k in ("proj_ab", "proj_ag", "ab_slot", "ag_slot", "ab_to_ag", "ag_to_ab", "partner_proj", "gate_ab", "gate_ag")):
+            assert param.grad is not None and float(param.grad.abs().max()) > 0.0, f"Stage-1 zero grad: {name}"
+
+    # Stage-2 3-state Step-0 gradient flow (every Stage-2 parameter including cross-attention & gates gets non-zero grad)
+    net_1d.zero_grad()
+    labels = torch.tensor([1, -1, 0, 1] * 3, dtype=torch.long)
+    weights = torch.ones(n, dtype=torch.float32)
+    dl, apo_l, _ = net_1d(ab1, ab2, ag1, ag2, xo, xe, return_apo=True)
+    loss_s2 = logica_contrastive_3state_loss(dl, apo_l, labels, weights)
+    assert torch.isfinite(loss_s2)
+    loss_s2.backward()
+    for name, param in net_1d.named_parameters():
+        if not name.startswith("partner_proj"):
+            assert param.grad is not None and float(param.grad.abs().max()) > 0.0, f"Stage-2 zero grad: {name}"
+
+    # Explicit gate_init=0.0 remains supported when opted in
+    net_zero = _DualLMLogiCANet(ab_dim=64, ag_dim=48, odd_dim=16, even_dim=20, gate_init=0.0)
+    assert float(torch.tanh(net_zero.gate_ab)) == 0.0
+    assert float(torch.tanh(net_zero.gate_ag)) == 0.0
+    assert float(torch.tanh(net_zero.gate_logit)) == 0.0
 
 
 def test_kaggle_data_dir_resolution(tmp_path: Path) -> None:
